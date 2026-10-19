@@ -1,0 +1,235 @@
+; CAL_13.J entry 0
+;
+; Not loaded by the game (CalendarFile in src/board.c gives CAL_01-CAL_12 only).
+; The picture: the same script and pictures as January (CAL_01).
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 1296 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    call clear_vars
+    sprite_init 0, image=0, attr=0, x=0, y=117, pri=2
+    sprite_init 1, image=1, attr=0, x=263, y=175, pri=0
+    sprite_init 2, image=3, attr=0, x=0, y=111, pri=1
+    sprite_animate 1, anim_04E0
+    $v9C = 1100
+    fade_in 15
+
+L_003E:
+    if $v9D != 0 goto L_0068
+    $v9E += 1
+    $v9C += 4
+    if $v9E < 55 goto L_0084
+    $v9D = 1
+    goto L_0084
+
+L_0068:
+    $v9E -= 1
+    $v9C -= 4
+    if $v9E > 0 goto L_0084
+    $v9D = 0
+
+L_0084:
+    $v00 = $v9C
+    $v00 /= 10
+    $v01 = 132
+    $v01 -= $v00
+    step_toward x=0, y=0, distance=$v01, angle=$v9B, to_x=$v00, to_y=$v01
+    $v9B += 1024
+    if $v9B >= 0 goto L_00C0
+    $v9B -= 32767
+
+L_00C0:
+    $v00 = $v9C
+    $v00 /= 10
+    $v00 += $v01
+    sprite_pos 0, $v9E, $v00
+    $v9F += 1
+    wait 1
+    if $v9F == 300 goto L_00F8
+    if $any_pressed !& CROSS|0x300 goto L_003E
+
+L_00F8:
+    fade_out 15
+    wait_fade
+    end
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $v0A = 0
+    $v0B = 0
+    $v0C = 0
+    $v0D = 0
+    $v0E = 0
+    $v0F = 0
+    $v10 = 0
+    $v11 = 0
+    $v12 = 0
+    $v13 = 0
+    $v14 = 0
+    $v15 = 0
+    $v16 = 0
+    $v17 = 0
+    $v18 = 0
+    $v19 = 0
+    $v1A = 0
+    $v1B = 0
+    $v1C = 0
+    $v1D = 0
+    $v1E = 0
+    $v1F = 0
+    $v20 = 0
+    $v21 = 0
+    $v22 = 0
+    $v23 = 0
+    $v24 = 0
+    $v25 = 0
+    $v26 = 0
+    $v27 = 0
+    $v28 = 0
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $v8C = 0
+    $v8D = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $v93 = 0
+    $v94 = 0
+    $v95 = 0
+    $v96 = 0
+    $v97 = 0
+    $v98 = 0
+    $v99 = 0
+    $v9A = 0
+    $v9B = 0
+    $v9C = 0
+    $v9D = 0
+    $v9E = 0
+    $v9F = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+anim_04E0:
+    frame 1, time=40, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=anim_04E0
+
+anim_0500:
+    ; (nothing names this)
+    frame 1, time=30, flip=0, next=NEXT
+    frame 2, time=12, flip=0, next=anim_04E0

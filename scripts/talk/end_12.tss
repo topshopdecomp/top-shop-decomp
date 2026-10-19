@@ -1,0 +1,293 @@
+; TALK.J entry 28 (LZSS-packed)
+;
+; What Santa says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2212 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 12, $l2                       ; voice: XA track 12 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Faults in all parts... repair impossible...
+    words text_0205, 4, 9                 ; 0.1 (no comment): Fault in the power reactor / Temperature rising, danger!
+    words text_022A, 4, 9                 ; 0.2 (no comment): Entering the red zone / The mission is impaired
+    words text_0251, 3, 6                 ; 1.0 a chain of 4: Store maximized successfully ♪
+    words text_0264, 3, 6                 ; 1.1 a chain of 4: No faults from merging in any store
+    words text_0281, 3, 6                 ; 1.2 a chain of 4: The ultimate weapon is complete / Stop your useless resistance
+    words text_02A8, 3, 6                 ; 2.0 a chain of 2 or 3: The merge function is working normally / Abilities up ♪
+    words text_02D1, 3, 6                 ; 2.1 a chain of 2 or 3: Interception equipment powered up successfully ∈
+    words text_02F0, 0, 5                 ; 2.2 a chain of 2 or 3: On a mission, so no comment
+    words text_0313, 0, 5                 ; 3.0 landed on a rival store closed for now: Gagaga / Sorting information
+    words text_032C, 3, 6                 ; 3.1 landed on a rival store closed for now: I'll let it slide this time ♪
+    words text_0345, 0, 5                 ; 3.2 landed on a rival store closed for now: Regular inspection is coming up...
+    words text_035C, 0, 5                 ; 4.0 landed on a rival store with lowered prices: Glad it was cheap...
+    words text_0371, 3, 6                 ; 4.1 landed on a rival store with lowered prices: Good that it was cheap ♪
+    words text_0382, 3, 6                 ; 4.2 landed on a rival store with lowered prices: Entering bargain data ♪
+    words text_039D, 0, 5                 ; 5.0 landed on its own store / opened a store: Regular maintenance finished / Ending operations
+    words text_03BE, 0, 5                 ; 5.1 landed on its own store / opened a store: Shuu~∥｜ / All functions pausing
+    words text_03E1, 1, 7                 ; 5.2 landed on its own store / opened a store: I have to rest the generator
+    words text_03FE, 0, 5                 ; 6.0 did not take the elevator: If I ride it, it will break
+    words text_0415, 1, 7                 ; 6.1 did not take the elevator: Lower efficiency than calculated...
+    words text_042E, 1, 7                 ; 6.2 did not take the elevator: I must switch to energy-saving mode
+    words text_0451, 3, 6                 ; 7.0 landed on the bank: Setting the next destination ♪
+    words text_046A, 3, 6                 ; 7.1 landed on the bank: Pay received ♭ / To be used for the mission
+    words text_048D, 3, 6                 ; 7.2 landed on the bank: Funds u-u-up ∈
+    words text_04A0, 0, 5                 ; 8.0 took the elevator: No fault in the balancer
+    words text_04B5, 3, 6                 ; 8.1 took the elevator: Saved energy ♭
+    words text_04CE, 1, 7                 ; 8.2 took the elevator: <player> can't ride / with anyone...
+    words text_04F3, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: I'll present you with a missile
+    words text_0510, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: Damage found on the body / Repairing at once
+    words text_0531, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: Large fuel consumption / Operations affected
+    words text_0556, 0, 5                 ; 10.0 shopping: got the money back: Data entry... complete
+    words text_056B, 1, 7                 ; 10.1 shopping: got the money back: In this case / should I say thank you?
+    words text_0592, 3, 6                 ; 10.2 shopping: got the money back: Count on me again ♪
+    words text_05A5, 3, 6                 ; 11.0 shopping: Damage to the chest armor plate
+    words text_05BA, 3, 6                 ; 11.1 shopping: I hate paying the bill!
+    words text_05D3, 3, 6                 ; 11.2 shopping: Shopping complete / Standing by until dinner...
+    words text_05F6, 3, 6                 ; 12.0 bought a rival's store: Because the person in charge changed
+    words text_060F, 3, 6                 ; 12.1 bought a rival's store: Bought the store / Closer to completing the mission ♪
+    words text_0634, 3, 6                 ; 12.2 bought a rival's store: It's the careless one's fault ♭
+    words text_064B, 1, 7                 ; 13.0 shopped this turn and the last: Spent too much operating money
+    words text_0660, 1, 7                 ; 13.1 shopped this turn and the last: Heat from continuous operation / Cooling needed
+    words text_0689, 4, 9                 ; 13.2 shopped this turn and the last: Starting the economy circuit...
+    words text_06A8, 3, 6                 ; 14.0 assets passed half the goal: Mission 50% complete / Heading for the next target
+    words text_06D1, 3, 6                 ; 14.1 assets passed half the goal: All functions working normally / Starting full-power operation
+    words text_06F4, 3, 6                 ; 14.2 assets passed half the goal: 50% reached at the calculated pace / Progressing smoothly
+    words text_0727, 4, 9                 ; 15.0 sold a store: The funds ran out, so it can't be helped
+    words text_0748, 4, 9                 ; 15.1 sold a store: Unexpected development... / Unpredictable, unpredictable...
+    words text_0773, 2, 8                 ; 15.2 sold a store: It should still have been useful...
+    words text_0792, 1, 7                 ; 16.0 declined a vacant lot it could not afford: Insufficient funds... / No further expansion possible
+    words text_07BF, 4, 9                 ; 16.1 declined a vacant lot it could not afford: Before I knew it / the funds were gone...
+    words text_07E8, 4, 9                 ; 16.2 declined a vacant lot it could not afford: If I can't complete the mission / it's off to the scrapyard...?
+    words text_0815, 0, 5                 ; 17.0 declined a vacant lot: Calculated: no need to buy
+    words text_0836, 0, 5                 ; 17.1 declined a vacant lot: Whiiiin / Clank, clank
+    words text_0857, 0, 5                 ; 17.2 declined a vacant lot: I'll wait and watch here...
+    words text_0870, 3, 10                ; 18.0 an event card (the default): Rocket foot
+    words text_087F, 0, 10                ; 18.1 an event card (the default): ......... ∝
+    words text_0894, 3, 10                ; 18.2 an event card (the default): Power chop
+
+text_01E6:
+    string "各部不調・・・修理不可能・・・"              ; en: Faults in all parts... repair impossible...
+
+text_0205:
+    string "動力炉ニ異常発生%K温度上昇中、危険！"          ; en: Fault in the power reactor / Temperature rising, danger!
+
+text_022A:
+    string "れっどぞーんニ突入%K任務遂行ニ支障発生"         ; en: Entering the red zone / The mission is impaired
+
+text_0251:
+    string "店ノ最大化ニ成功♪"                    ; en: Store maximized successfully ♪
+
+text_0264:
+    string "各店舗トモ合体ニヨル異常ナシ"               ; en: No faults from merging in any store
+
+text_0281:
+    string "最終兵器ガ完成シタ%K無駄ナ抵抗ハヤメロ"         ; en: The ultimate weapon is complete / Stop your useless resistance
+
+text_02A8:
+    string "合体機能ハ正常ニ作動%K能力ガあっぷスル♪"        ; en: The merge function is working normally / Abilities up ♪
+
+text_02D1:
+    string "迎撃設備ノぱわーあっぷニ成功∈"              ; en: Interception equipment powered up successfully ∈
+
+text_02F0:
+    string "任務遂行中ニツキ、こめんとハ控エル"            ; en: On a mission, so no comment
+
+text_0313:
+    string "ガガガッ%K情報ヲ整理スル"                ; en: Gagaga / Sorting information
+
+text_032C:
+    string "今回ハ見逃シテアゲヨウ♪"                 ; en: I'll let it slide this time ♪
+
+text_0345:
+    string "定期点検ガ近イナ・・・"                  ; en: Regular inspection is coming up...
+
+text_035C:
+    string "安クテ助カッタ・・・"                   ; en: Glad it was cheap...
+
+text_0371:
+    string "安クテヨカッタ♪"                     ; en: Good that it was cheap ♪
+
+text_0382:
+    string "ばーげんノでーたヲ入力中♪"                ; en: Entering bargain data ♪
+
+text_039D:
+    string "定期整備ガ終了%K行動ヲ終了シマス"            ; en: Regular maintenance finished / Ending operations
+
+text_03BE:
+    string "シュ～∥｜%K各部機能一時停止シマス"           ; en: Shuu~∥｜ / All functions pausing
+
+text_03E1:
+    string "じぇねれーたーヲ休マセナイト"               ; en: I have to rest the generator
+
+text_03FE:
+    string "乗ッタラコワレテシマウ"                  ; en: If I ride it, it will break
+
+text_0415:
+    string "計算ヨリモ低効率ダ・・・"                 ; en: Lower efficiency than calculated...
+
+text_042E:
+    string "省えねるぎーもーどニ変更シナクテハ"            ; en: I must switch to energy-saving mode
+
+text_0451:
+    string "次ノ目的地ヲ設定中デス♪"                 ; en: Setting the next destination ♪
+
+text_046A:
+    string "給料ノ支給ヲ確認♭%K任務ニ使用スル"           ; en: Pay received ♭ / To be used for the mission
+
+text_048D:
+    string "資金あぁぁぁっぷ∈"                    ; en: Funds u-u-up ∈
+
+text_04A0:
+    string "バランサーニ異常無シ"                   ; en: No fault in the balancer
+
+text_04B5:
+    string "えねるぎーヲ節約デキタ♭"                 ; en: Saved energy ♭
+
+text_04CE:
+    string "%NMYハ誰トモ一緒ニ%K乗レナイナ・・・"        ; en: <player> can't ride / with anyone...
+
+text_04F3:
+    string "みさいるヲぷれぜんとシテヤル"               ; en: I'll present you with a missile
+
+text_0510:
+    string "機体ニ損傷ヲ発見%K直チニ修理スル"            ; en: Damage found on the body / Repairing at once
+
+text_0531:
+    string "燃料ヲ大幅ニ消費%K作戦行動ニ影響アリ"          ; en: Large fuel consumption / Operations affected
+
+text_0556:
+    string "でーた入力・・・完了"                   ; en: Data entry... complete
+
+text_056B:
+    string "コノ場合%Kオ礼ヲ言ッタホウガ良イノカ？"         ; en: In this case / should I say thank you?
+
+text_0592:
+    string "マタヨロシク頼ム♪"                    ; en: Count on me again ♪
+
+text_05A5:
+    string "胸部装甲板にダメージ"                   ; en: Damage to the chest armor plate
+
+text_05BA:
+    string "勘定ノ支払イハキライダ！"                 ; en: I hate paying the bill!
+
+text_05D3:
+    string "買イ物完了%K晩御飯マデ待機中・・・"           ; en: Shopping complete / Standing by until dinner...
+
+text_05F6:
+    string "責任者ガ変更ニナッタカラ"                 ; en: Because the person in charge changed
+
+text_060F:
+    string "店ヲ買イ取ッタ%K任務遂行ニ近ヅイタ♪"          ; en: Bought the store / Closer to completing the mission ♪
+
+text_0634:
+    string "油断シテイル方ガ悪イ♭"                  ; en: It's the careless one's fault ♭
+
+text_064B:
+    string "活動資金ヲ使イスギタ"                   ; en: Spent too much operating money
+
+text_0660:
+    string "連続行動ニヨッテ熱ガ発生%K冷却ノ必要アリ"        ; en: Heat from continuous operation / Cooling needed
+
+text_0689:
+    string "節約回路ノ使用ヲ開始スル・・・"              ; en: Starting the economy circuit...
+
+text_06A8:
+    string "任務達成率５０％%K次ノたーげっとニ向カウ"        ; en: Mission 50% complete / Heading for the next target
+
+text_06D1:
+    string "各機能正常ニ作動%K全力運転開始スル"           ; en: All functions working normally / Starting full-power operation
+
+text_06F4:
+    string "計算通リノぺーすデ５０％達成%K順調ニ進行シテイマス"   ; en: 50% reached at the calculated pace / Progressing smoothly
+
+text_0727:
+    string "資金ガ底ヲツイタノデショウガナイ"             ; en: The funds ran out, so it can't be helped
+
+text_0748:
+    string "計算外展開・・・%K予測不能、予測不能・・・"       ; en: Unexpected development... / Unpredictable, unpredictable...
+
+text_0773:
+    string "マダ利用価値ガアッタハズ・・・"              ; en: It should still have been useful...
+
+text_0792:
+    string "資金不足・・・%K勢力ノ拡大ハコレ以上ハ不可能"      ; en: Insufficient funds... / No further expansion possible
+
+text_07BF:
+    string "イツノマニカ%K資金ガナクナッテイタ・・・"        ; en: Before I knew it / the funds were gone...
+
+text_07E8:
+    string "任務ガ達成出来ナイト%Kすくらっぷ行キ・・・？"      ; en: If I can't complete the mission / it's off to the scrapyard...?
+
+text_0815:
+    string "計算ノ結果、買ウ必要性ナシト判断"             ; en: Calculated: no need to buy
+
+text_0836:
+    string "ウィィィィン%Kガチャン、ガチャン"            ; en: Whiiiin / Clank, clank
+
+text_0857:
+    string "ココハ静観シテオク・・・"                 ; en: I'll wait and watch here...
+
+text_0870:
+    string "ロケットフット"                      ; en: Rocket foot
+
+text_087F:
+    string "・・・・・・・・・∝"                   ; en: ......... ∝
+
+text_0894:
+    string "ぱわーちょっぷ"                      ; en: Power chop
+    bytes 0x00    ; padding

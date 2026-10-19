@@ -1,0 +1,357 @@
+; CAL_07.J entry 0
+;
+; The calendar page of July (Board_Task steps 2100-2120, with event scenes on).
+; The picture: summer fireworks: two characters seen from behind on a hill (image 9) watch rockets
+; (image 3) burst into fireworks (images 0-2, 5-8) at random.
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 1920 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    marker "CAL_07"                       ; a name for the script; costs a frame
+    call clear_vars
+    sprite_init 30, image=0, attr=DIM, x=1, y=86, pri=2
+    sprite_init 31, image=1, attr=DIM, x=115, y=51, pri=3
+    sprite_init 32, image=2, attr=DIM, x=210, y=67, pri=4
+    sprite_init 33, image=9, attr=0, x=0, y=149, pri=0
+    set_dim 255
+
+L_0049:
+    sprite_init $vA0, image=3, attr=MIDDLE_CENTER, x=0, y=0, pri=1
+    sprite_animate $vA0, anim_076F
+    $vA0 += 1
+    if $vA0 != 6 goto L_0049
+    $vA0 = 0
+
+L_0073:
+    call rocket_new
+    $v00 = random 2400
+    $v0B[$v04] = $v00
+    $vA0 += 1
+    if $vA0 != 6 goto L_0073
+    fade_in 15
+
+L_0099:
+    $vA0 = 0
+
+L_009F:
+    call rocket_rise
+    $vA0 += 1
+    if $vA0 != 6 goto L_009F
+    $vA0 = 0
+
+L_00B9:
+    $v04 = $vA0
+    $v04 *= 6
+    $v00 = $v0A[$v04]
+    $v01 = $v0B[$v04]
+    $v02 = $v0E[$v04]
+    $v03 = $v0F[$v04]
+    $v05 = $v0C[$v04]
+    if $v01 == 30000 goto L_0117
+    $v00 /= 10
+    $v02 /= 3
+    $v00 += $v02
+    $v01 /= 10
+    sprite_pos $vA0, $v00, $v01
+
+L_0117:
+    $vA0 += 1
+    if $vA0 != 6 goto L_00B9
+    $v9F += 1
+    call fireworks_flash
+    set_dim $v9E
+    wait 1
+    $vA0 = 0
+
+L_013F:
+    $v04 = $vA0
+    $v04 *= 6
+    $v01 = $v0B[$v04]
+    if $v01 == 30000 goto L_0199
+    if $v01 >= 1500 goto L_01B3
+    $v00 = random 8
+    if $v00 != 0 goto L_01B3
+    $v0B[$v04] = 30000
+    $l0 = $v0C[$v04]
+    sprite_scale $vA0, $l0, $l0
+    sprite_animate $vA0, anim_074F
+    goto L_01B3
+
+L_0199:
+    sprite_get_state $vA0, $v00
+    if $v00 != 0 goto L_01B3
+    sprite_animate $vA0, anim_076F
+    call rocket_new
+
+L_01B3:
+    $vA0 += 1
+    if $vA0 != 6 goto L_013F
+    if $v9F == 300 goto L_01D7
+    if $any_pressed !& CROSS|0x300 goto L_0099
+
+L_01D7:
+    fade_out 15
+    wait_fade
+    end
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $v0A = 0
+    $v0B = 0
+    $v0C = 0
+    $v0D = 0
+    $v0E = 0
+    $v0F = 0
+    $v10 = 0
+    $v11 = 0
+    $v12 = 0
+    $v13 = 0
+    $v14 = 0
+    $v15 = 0
+    $v16 = 0
+    $v17 = 0
+    $v18 = 0
+    $v19 = 0
+    $v1A = 0
+    $v1B = 0
+    $v1C = 0
+    $v1D = 0
+    $v1E = 0
+    $v1F = 0
+    $v20 = 0
+    $v21 = 0
+    $v22 = 0
+    $v23 = 0
+    $v24 = 0
+    $v25 = 0
+    $v26 = 0
+    $v27 = 0
+    $v28 = 0
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $v8C = 0
+    $v8D = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $v93 = 0
+    $v94 = 0
+    $v95 = 0
+    $v96 = 0
+    $v97 = 0
+    $v98 = 0
+    $v99 = 0
+    $v9A = 0
+    $v9B = 0
+    $v9C = 0
+    $v9D = 0
+    $v9E = 0
+    $v9F = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+rocket_new:
+    ; rocket $vA0: a random x along the bottom, a random size (records of 6 from $v0A)
+    $v00 = random 3200
+    $v01 = 2400
+    $v04 = $vA0
+    $v04 *= 6
+    $v0A[$v04] = $v00
+    $v0B[$v04] = $v01
+    $v00 = random 300
+    $v00 += 100
+    $v00 *= 1
+    $v0C[$v04] = $v00
+    $v00 /= 2
+    sprite_scale $vA0, $v00, $v00
+    $v00 = random 32767
+    $v0D[$v04] = $v00
+    return
+
+rocket_rise:
+    ; rocket $vA0 rises, wobbling (y = 30000: it has burst and stays)
+    $v04 = $vA0
+    $v04 *= 6
+    $v00 = $v0B[$v04]
+    if $v00 == 30000 goto L_06CF
+    $v02 = $v0C[$v04]
+    $v02 /= 8
+    $v03 = $v0D[$v04]
+    $v05 = 5
+    $v05 += $v02
+    step_toward x=0, y=0, distance=$v05, angle=$v03, to_x=$v00, to_y=$v01
+    $v0E[$v04] = $v00
+    $v0F[$v04] = $v01
+    $v00 = random 400
+    $v03 += 400
+    $v03 += $v00
+    if $v03 > 0 goto L_069F
+    $v03 -= 32767
+
+L_069F:
+    $v0D[$v04] = $v03
+    $v00 = random 10
+    $v00 += 30
+    $v00 += $v02
+    $v01 = $v0B[$v04]
+    $v01 -= $v00
+    $v0B[$v04] = $v01
+
+L_06CF:
+    return
+
+fireworks_flash:
+    ; a burst lights up the watchers: the dimming of the DIM sprites ($v9E, 255 = dark) falls to 0
+    ; and comes back, at random moments
+    if $v9B == 0 goto L_06E3
+    $v9B = random 50
+    return
+
+L_06E3:
+    if $v9C != 0 goto L_0705
+    $v9D = random 20
+    $v9D += 20
+    $v9E = 255
+    $v9C = 1
+
+L_0705:
+    if $v9C >= 2 goto L_072B
+    $v9E -= $v9D
+    if $v9E > 0 goto L_074D
+    $v9E = 0
+    $v9C = 2
+
+L_072B:
+    $v9E += $v9D
+    if $v9E < 255 goto L_074D
+    $v9E = 255
+    $v9C = 0
+    $v9B = 1
+
+L_074D:
+    return
+
+anim_074F:
+    frame 5, time=4, flip=0, next=NEXT
+    frame 6, time=5, flip=0, next=NEXT
+    frame 7, time=6, flip=0, next=NEXT
+    frame 8, time=8, flip=0, next=END
+
+anim_076F:
+    frame 3, time=4, flip=0, next=NEXT
+    frame 4, time=4, flip=0, next=anim_076F
+    bytes 0x00    ; padding

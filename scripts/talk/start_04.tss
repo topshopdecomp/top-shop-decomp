@@ -1,0 +1,306 @@
+; TALK.J entry 4 (LZSS-packed)
+;
+; What Merlin says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnStart_PickScript):
+; 0 the first month
+; 1 assets at 7/8 of the goal
+; 2 last at the start of the round, first now
+; 3 first at the start of the round, last now
+; 4 ahead: a rival store it can't afford
+; 5 ahead: a rival store in a chain of 4
+; 6 ahead: a rival store closed, without goods
+; 7 ahead: its own store without goods
+; 8 the bank on the next square
+; 9 ranked better than at the start of the round
+; 10 ranked worse
+; 11 ahead: a rival store in a chain
+; 12 ahead: a vacant lot
+; 13 ahead: a rival store costing over 1/4 of its money
+; 14 ahead: the bank
+; 15 none of its stores ahead
+; 16 ahead: its own store with free goods slots
+; 17 no direction (after the bank)
+; 18 no direction, on an elevator square
+; 19 none of these
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2384 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 4, $l2                        ; voice: XA track 4 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01F8, 3, 12                ; 0.0 the first month: I'll show you mystic power, nyo!
+    words text_0215, 3, 12                ; 0.1 the first month: The genius sorcerer is here, nyo ♪
+    words text_0230, 3, 12                ; 0.2 the first month: I've been summoned to another dimension again, nyo
+    words text_0253, 3, 1                 ; 1.0 assets at 7/8 of the goal: I'll seize victory with my own hands, nyo!
+    words text_026E, 3, 1                 ; 1.1 assets at 7/8 of the goal: Victory is right ahead, nyo
+    words text_027F, 3, 1                 ; 1.2 assets at 7/8 of the goal: With the power of magic, victory is right ahead, nyo!
+    words text_029C, 3, 1                 ; 2.0 last at the start of the round, first now: It's the magic of re-viv-al, nyo
+    words text_02B3, 3, 1                 ; 2.1 last at the start of the round, first now: Behold! Mystic power, nyo!!
+    words text_02CE, 3, 1                 ; 2.2 last at the start of the round, first now: A big comeback with the ultimate spell, nyo!
+    words text_02E9, 4, 4                 ; 3.0 first at the start of the round, last now: I'll cast a curse spell, nyo
+    words text_0304, 4, 4                 ; 3.1 first at the start of the round, last now: I want to go back to my kingdom, nyo...
+    words text_031D, 4, 4                 ; 3.2 first at the start of the round, last now: Is this the limit of my magic, nyo?
+    words text_0338, 4, 4                 ; 4.0 ahead: a rival store it can't afford: This is a plot by the Allied Forces, nyo!
+    words text_0355, 1, 2                 ; 4.1 ahead: a rival store it can't afford: I demand a do-over, nyo!
+    words text_0372, 1, 2                 ; 4.2 ahead: a rival store it can't afford: This is a dirty trap by the Restoration Army, nyo!
+    words text_0395, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Oops, nyo! / I forgot to teleport, nyo
+    words text_03BC, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: This is a plot by the Imperial Army, nyo
+    words text_03D7, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Won't you offer that place to me, nyo?
+    words text_03F0, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: The tenant restocking plan is underway, nyo ♭
+    words text_0413, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Now's the time, nyo!
+    words text_0422, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: What a relief, nyo
+    words text_042F, 1, 2                 ; 7.0 ahead: its own store without goods: Carrying out the goods restocking plan, nyo
+    words text_044A, 1, 2                 ; 7.1 ahead: its own store without goods: I'll restock right away, nyo
+    words text_045D, 1, 2                 ; 7.2 ahead: its own store without goods: I'll summon chestnut rice to carry the goods, nyo
+    words text_0480, 0, 0                 ; 8.0 the bank on the next square: I want more money, nyo
+    words text_0497, 0, 0                 ; 8.1 the bank on the next square: Can't I buy this place, nyo?
+    words text_04B2, 0, 0                 ; 8.2 the bank on the next square: Time for a break, nyo
+    words text_04BF, 3, 1                 ; 9.0 ranked better than at the start of the round: Level u-u-up, nyo!
+    words text_04D8, 3, 1                 ; 9.1 ranked better than at the start of the round: Carelessness is forbidden, nyo
+    words text_04E9, 3, 1                 ; 9.2 ranked better than at the start of the round: Magical points up, nyo!
+    words text_0508, 1, 2                 ; 10.0 ranked worse: Level down, nyo...
+    words text_051F, 2, 3                 ; 10.1 ranked worse: Unforgivable, nyo!
+    words text_052E, 1, 2                 ; 10.2 ranked worse: I'll gain experience / and rank up, nyo!
+    words text_0557, 1, 2                 ; 11.0 ahead: a rival store in a chain: This is a plot by the Empire, nyo
+    words text_0572, 1, 2                 ; 11.1 ahead: a rival store in a chain: I'll bring disaster on this store, nyo
+    words text_058F, 1, 2                 ; 11.2 ahead: a rival store in a chain: The earth's energy flows badly here, nyo / they'd better move soon, nyo
+    words text_05C0, 0, 0                 ; 12.0 ahead: a vacant lot: I want to expand my kingdom's territory, / nyo!
+    words text_05E9, 0, 0                 ; 12.1 ahead: a vacant lot: One step closer to my ambition, nyo
+    words text_0602, 0, 0                 ; 12.2 ahead: a vacant lot: I want this place as a key base, nyo
+    words text_061F, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I'll teach you magic, / so make the goods free, nyo
+    words text_064C, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: May I cast a curse spell, nyo?
+    words text_066F, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I'll destroy this store, nyo! / .... (someday, nyo)
+    words text_06A0, 0, 0                 ; 14.0 ahead: the bank: I'll grow my money and get even, nyo
+    words text_06BF, 0, 0                 ; 14.1 ahead: the bank: Let's decide on a plan, nyo / ... (I'm getting sleepy, nyo)
+    words text_06EE, 0, 0                 ; 14.2 ahead: the bank: Isn't there a good plan, nyo?
+    words text_0705, 1, 2                 ; 15.0 none of its stores ahead: I'm boxed in on every side, nyo... / Is this an enemy trap, nyo?
+    words text_0736, 1, 2                 ; 15.1 none of its stores ahead: Isn't there a spell to make / a store my own, nyo?
+    words text_075D, 1, 2                 ; 15.2 none of its stores ahead: I want a High-Speed Travel spell, nyo
+    words text_0780, 0, 0                 ; 16.0 ahead: its own store with free goods slots: The goods restocking plan is underway, nyo
+    words text_079D, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Preparing to intercept, nyo
+    words text_07B0, 0, 0                 ; 16.2 ahead: its own store with free goods slots: I'll cast the Stop-at-Store spell, nyo / .... (will it work, nyo?)
+    words text_07ED, 0, 0                 ; 17.0 no direction (after the bank): I'll choose the way with my crystal ball, nyo / ... (it broke, nyo)
+    words text_082E, 0, 0                 ; 17.1 no direction (after the bank): I'll choose the way by magic, nyo / ... (I forgot the spell, nyo)
+    words text_0869, 0, 0                 ; 17.2 no direction (after the bank): Whichever way I go, I won't regret it, / nyo
+    words text_0892, 0, 0                 ; 18.0 no direction, on an elevator square: This door leads to another dimension, nyo / ... (just kidding, nyo)
+    words text_08CB, 0, 0                 ; 18.1 no direction, on an elevator square: I wish the elevator led to / an underground labyrinth, nyo
+    words text_08FC, 0, 0                 ; 18.2 no direction, on an elevator square: Riding the elevator looks fun, nyo
+    words text_091F, 1, 10                ; 19.0 none of these: I want some doping, nyo
+    words text_0934, 1, 10                ; 19.1 none of these: I'm blue, nyo
+    words text_0941, 0, 10                ; 19.2 none of these: I'll do my best, nyo
+
+text_01F8:
+    string "神秘の力を見せてやるにょー！"               ; en: I'll show you mystic power, nyo!
+
+text_0215:
+    string "天才まどーし参上だにょー♪"                ; en: The genius sorcerer is here, nyo ♪
+
+text_0230:
+    string "また異次元に召喚されてしまったにょ"            ; en: I've been summoned to another dimension again, nyo
+
+text_0253:
+    string "勝利を我が手につかむにょ！"                ; en: I'll seize victory with my own hands, nyo!
+
+text_026E:
+    string "勝利は目前だにょ"                     ; en: Victory is right ahead, nyo
+
+text_027F:
+    string "魔法の力で勝利は目前だにょ！"               ; en: With the power of magic, victory is right ahead, nyo!
+
+text_029C:
+    string "フッカーツの魔法だにょ"                  ; en: It's the magic of re-viv-al, nyo
+
+text_02B3:
+    string "これぞ！神秘の力にょー！！"                ; en: Behold! Mystic power, nyo!!
+
+text_02CE:
+    string "究極魔法で大逆転だにょー！"                ; en: A big comeback with the ultimate spell, nyo!
+
+text_02E9:
+    string "ノロイの魔法をかけるにょー"                ; en: I'll cast a curse spell, nyo
+
+text_0304:
+    string "王国に帰りたいにょ・・・"                 ; en: I want to go back to my kingdom, nyo...
+
+text_031D:
+    string "我が魔力もここまでかにょ？"                ; en: Is this the limit of my magic, nyo?
+
+text_0338:
+    string "これは連合軍の陰謀だにょー！"               ; en: This is a plot by the Allied Forces, nyo!
+
+text_0355:
+    string "やりなおしを要求するにょー！"               ; en: I demand a do-over, nyo!
+
+text_0372:
+    string "これは維新軍の卑劣なワナだにょー！"            ; en: This is a dirty trap by the Restoration Army, nyo!
+
+text_0395:
+    string "しまったにょ！%Kテレポートし忘れたにょ"         ; en: Oops, nyo! / I forgot to teleport, nyo
+
+text_03BC:
+    string "これは皇国軍の陰謀だにょー"                ; en: This is a plot by the Imperial Army, nyo
+
+text_03D7:
+    string "そこを献上しないかにょ？"                 ; en: Won't you offer that place to me, nyo?
+
+text_03F0:
+    string "テナント補充計画を進行させるにょ♭"            ; en: The tenant restocking plan is underway, nyo ♭
+
+text_0413:
+    string "今のうちにょ！"                      ; en: Now's the time, nyo!
+
+text_0422:
+    string "ひと安心にょ"                       ; en: What a relief, nyo
+
+text_042F:
+    string "商品補充計画を実行するにょ"                ; en: Carrying out the goods restocking plan, nyo
+
+text_044A:
+    string "すぐに仕入れるにょ"                    ; en: I'll restock right away, nyo
+
+text_045D:
+    string "栗ご飯を召喚して商品を運ばせるにょ"            ; en: I'll summon chestnut rice to carry the goods, nyo
+
+text_0480:
+    string "もっとお金が欲しいにょ"                  ; en: I want more money, nyo
+
+text_0497:
+    string "ここは買い取れないかにょ？"                ; en: Can't I buy this place, nyo?
+
+text_04B2:
+    string "休憩するにょ"                       ; en: Time for a break, nyo
+
+text_04BF:
+    string "レベルアッーープにょー！"                 ; en: Level u-u-up, nyo!
+
+text_04D8:
+    string "油断は禁物だにょ"                     ; en: Carelessness is forbidden, nyo
+
+text_04E9:
+    string "マジカルポイントアップにょー！"              ; en: Magical points up, nyo!
+
+text_0508:
+    string "レベルダウンにょ・・・"                  ; en: Level down, nyo...
+
+text_051F:
+    string "許さんにょー！"                      ; en: Unforgivable, nyo!
+
+text_052E:
+    string "経験値をためて%K順位アップするんだにょ！"        ; en: I'll gain experience / and rank up, nyo!
+
+text_0557:
+    string "これは帝国軍の陰謀だにょー"                ; en: This is a plot by the Empire, nyo
+
+text_0572:
+    string "この店に災いを招いてやるにょ"               ; en: I'll bring disaster on this store, nyo
+
+text_058F:
+    string "地脈の流れが悪いにょ%K早く引っ越した方がいいにょ"    ; en: The earth's energy flows badly here, nyo / they'd better move soon, nyo
+
+text_05C0:
+    string "我が王国の領土を増やしたいんだ%Kにょー！"        ; en: I want to expand my kingdom's territory, / nyo!
+
+text_05E9:
+    string "野望に１歩、前進したにょ"                 ; en: One step closer to my ambition, nyo
+
+text_0602:
+    string "重要拠点に、ここは欲しいにょ"               ; en: I want this place as a key base, nyo
+
+text_061F:
+    string "魔法を教えるから%K商品を無料にして欲しいにょ"      ; en: I'll teach you magic, / so make the goods free, nyo
+
+text_064C:
+    string "ノロイの魔法を唱えてもいいかにょ？"            ; en: May I cast a curse spell, nyo?
+
+text_066F:
+    string "この店を壊してやるにょ！%K・・・・（いつかにょ）"    ; en: I'll destroy this store, nyo! / .... (someday, nyo)
+
+text_06A0:
+    string "所持金を増やして仕返しするにょ"              ; en: I'll grow my money and get even, nyo
+
+text_06BF:
+    string "作戦を決めるにょ%K・・・（眠くなってきたにょ）"     ; en: Let's decide on a plan, nyo / ... (I'm getting sleepy, nyo)
+
+text_06EE:
+    string "良い作戦は無いかにょ？"                  ; en: Isn't there a good plan, nyo?
+
+text_0705:
+    string "八方ふさがりだにょ・・・%Kこれは敵のワナかにょ？"    ; en: I'm boxed in on every side, nyo... / Is this an enemy trap, nyo?
+
+text_0736:
+    string "店を自分の物にする魔法は%K無いかにょ？"         ; en: Isn't there a spell to make / a store my own, nyo?
+
+text_075D:
+    string "コーソク・イドーの呪文がほしいにょ"            ; en: I want a High-Speed Travel spell, nyo
+
+text_0780:
+    string "商品補充計画を進行させるにょ"               ; en: The goods restocking plan is underway, nyo
+
+text_079D:
+    string "迎撃準備をするにょ"                    ; en: Preparing to intercept, nyo
+
+text_07B0:
+    string "ミセニ・トマールの呪文をかけるにょ%K・・・・（効くかにょ？）"  ; en: I'll cast the Stop-at-Store spell, nyo / .... (will it work, nyo?)
+
+text_07ED:
+    string "どっちに進むか水晶占いで決めるにょ%K・・・（割れてしまったにょ）"  ; en: I'll choose the way with my crystal ball, nyo / ... (it broke, nyo)
+
+text_082E:
+    string "どっちに進むか魔法で決めるにょ%K・・・（呪文を忘れたにょ）"  ; en: I'll choose the way by magic, nyo / ... (I forgot the spell, nyo)
+
+text_0869:
+    string "どっちに進んでも後悔しない様に%Kするにょ"        ; en: Whichever way I go, I won't regret it, / nyo
+
+text_0892:
+    string "この扉は異次元につながっているにょ%K・・・（ウソだにょ）"  ; en: This door leads to another dimension, nyo / ... (just kidding, nyo)
+
+text_08CB:
+    string "エレベーターが地下迷宮につながって%Kたらいいにょ"    ; en: I wish the elevator led to / an underground labyrinth, nyo
+
+text_08FC:
+    string "エレベーターに乗ると楽しそうだにょ"            ; en: Riding the elevator looks fun, nyo
+
+text_091F:
+    string "ドーピングしたいにょ"                   ; en: I want some doping, nyo
+
+text_0934:
+    string "ブルーだにょ"                       ; en: I'm blue, nyo
+
+text_0941:
+    string "ガンバるにょ"                       ; en: I'll do my best, nyo
+    words 0    ; padding

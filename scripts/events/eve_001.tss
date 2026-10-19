@@ -1,0 +1,56 @@
+; EVE_001.J entry 0
+;
+; Played when a story stage is lost (Board_Task step 12004). (Event 1 itself is
+; never drawn.)
+;
+; What it says: "[<player>] / Meow-hiss-meow...."
+;
+; 276 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    marker "EVE_001"                      ; a name for the script; costs a frame
+    talk_clear
+    fade_in 20
+    wait_fade
+    sprite_init 0, image=2, attr=MIDDLE_CENTER, x=-100, y=-100, pri=1
+    sprite_init 1, image=0, attr=0, x=-100, y=-100, pri=2
+    sprite_path 0, path_007A
+    sprite_path 1, path_00A8
+    talk "【%NMY】%KMeow-hiss-meow…."       ; [<player>] / Meow-hiss-meow....
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 0, 15                         ; voice: XA track 15 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+path_007A:
+    step speed=-1, x=380, y=119, anim=anim_0098, next=NEXT  ; jump to 380, 119
+    step speed=8, x=240, y=119, anim=anim_0098, next=path_008E  ; move to 240, 119, 8 pixels a frame
+
+path_008E:
+    step speed=0, x=100, y=0, anim=anim_0098, next=path_008E  ; wait 100 frames
+
+anim_0098:
+    frame 2, time=6, flip=0, next=NEXT
+    frame 3, time=6, flip=0, next=anim_0098
+
+path_00A8:
+    step speed=0, x=64, y=0, anim=anim_010C, next=NEXT  ; wait 64 frames
+    step speed=-1, x=32, y=-32, anim=anim_010C, next=NEXT  ; jump to 32, -32
+    step speed=5, x=32, y=-17, anim=anim_010C, next=NEXT  ; move to 32, -17, 5 pixels a frame
+    step speed=6, x=32, y=-11, anim=anim_010C, next=NEXT  ; move to 32, -11, 6 pixels a frame
+    step speed=7, x=32, y=-4, anim=anim_010C, next=NEXT  ; move to 32, -4, 7 pixels a frame
+    step speed=8, x=32, y=4, anim=anim_010C, next=NEXT  ; move to 32, 4, 8 pixels a frame
+    step speed=9, x=32, y=13, anim=anim_010C, next=NEXT  ; move to 32, 13, 9 pixels a frame
+    step speed=10, x=32, y=23, anim=anim_010C, next=NEXT  ; move to 32, 23, 10 pixels a frame
+    step speed=10, x=32, y=48, anim=anim_010C, next=path_0102  ; move to 32, 48, 10 pixels a frame
+
+path_0102:
+    step speed=0, x=100, y=0, anim=anim_010C, next=path_0102  ; wait 100 frames
+
+anim_010C:
+    frame 0, time=4, flip=0, next=anim_010C

@@ -1,0 +1,47 @@
+; CAL_11.J entry 0
+;
+; The calendar page of November (Board_Task steps 2100-2120, with event scenes on).
+; The picture: November: the frog prince, the cactus under a November sign and a character in a
+; bandana (images 0-11) take turns.
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 200 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    sprite_init 0, image=0, attr=0, x=208, y=160, pri=0
+    sprite_init 1, image=4, attr=0, x=112, y=176, pri=1
+    sprite_init 2, image=9, attr=0, x=0, y=160, pri=2
+    sprite_animate 0, anim_0066
+    sprite_animate 1, anim_008E
+    sprite_animate 2, anim_00B6
+    fade_in 15
+
+L_0040:
+    $v9F += 1
+    wait 1
+    if $v9F == 300 goto L_005E
+    if $any_pressed !& CROSS|0x300 goto L_0040
+
+L_005E:
+    fade_out 15
+    wait_fade
+    end
+
+anim_0066:
+    frame 1, time=24, flip=0, next=NEXT
+    frame 2, time=6, flip=0, next=NEXT
+    frame 3, time=6, flip=0, next=NEXT
+    frame 2, time=12, flip=0, next=NEXT
+    frame 0, time=6, flip=0, next=anim_0066
+
+anim_008E:
+    frame 4, time=12, flip=0, next=NEXT
+    frame 5, time=6, flip=0, next=NEXT
+    frame 6, time=6, flip=0, next=NEXT
+    frame 7, time=6, flip=0, next=NEXT
+    frame 8, time=6, flip=0, next=anim_008E
+
+anim_00B6:
+    frame 9, time=6, flip=0, next=NEXT
+    frame 10, time=6, flip=0, next=anim_00B6
+    words 0    ; padding

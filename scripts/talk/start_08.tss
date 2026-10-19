@@ -1,0 +1,306 @@
+; TALK.J entry 8 (LZSS-packed)
+;
+; What Chat says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnStart_PickScript):
+; 0 the first month
+; 1 assets at 7/8 of the goal
+; 2 last at the start of the round, first now
+; 3 first at the start of the round, last now
+; 4 ahead: a rival store it can't afford
+; 5 ahead: a rival store in a chain of 4
+; 6 ahead: a rival store closed, without goods
+; 7 ahead: its own store without goods
+; 8 the bank on the next square
+; 9 ranked better than at the start of the round
+; 10 ranked worse
+; 11 ahead: a rival store in a chain
+; 12 ahead: a vacant lot
+; 13 ahead: a rival store costing over 1/4 of its money
+; 14 ahead: the bank
+; 15 none of its stores ahead
+; 16 ahead: its own store with free goods slots
+; 17 no direction (after the bank)
+; 18 no direction, on an elevator square
+; 19 none of these
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2464 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 8, $l2                        ; voice: XA track 8 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01F8, 3, 12                ; 0.0 the first month: I'll take the top ratings, pi-pi ♪
+    words text_0213, 3, 12                ; 0.1 the first month: Pi-pip ★ Watch TV, okay ♪
+    words text_022C, 3, 12                ; 0.2 the first month: My picture tube is heavy, pi-pip ≦ / I want to be a flat-screen TV, pi-pip!
+    words text_0265, 3, 1                 ; 1.0 assets at 7/8 of the goal: Just a little more to my / target ratings, pi-pip ♪
+    words text_028C, 3, 1                 ; 1.1 assets at 7/8 of the goal: I'll get remodeled into a flat TV, pi-pip
+    words text_02AB, 3, 1                 ; 1.2 assets at 7/8 of the goal: Digital broadcasting is starting, pi-pip
+    words text_02C6, 3, 1                 ; 2.0 last at the start of the round, first now: My ratings suddenly went up, pi-pip ♪
+    words text_02E7, 3, 1                 ; 2.1 last at the start of the round, first now: I've become hugely popular, pi-pip ★
+    words text_02FE, 3, 1                 ; 2.2 last at the start of the round, first now: Nothing can stop me now, pi-pip ∈
+    words text_031F, 4, 4                 ; 3.0 first at the start of the round, last now: Nobody's watching me, pi-pip ≦
+    words text_033A, 4, 4                 ; 3.1 first at the start of the round, last now: Pi-pip! The reception is a mess
+    words text_0359, 4, 4                 ; 3.2 first at the start of the round, last now: Zzzzzzzz.... / Please stand by ≦
+    words text_0392, 4, 4                 ; 4.0 ahead: a rival store it can't afford: Looks like the broadcast will be canceled, pi-pip
+    words text_03AB, 1, 2                 ; 4.1 ahead: a rival store it can't afford: <player>'s / let's go big, pi-pip
+    words text_03CE, 1, 2                 ; 4.2 ahead: a rival store it can't afford: We are in a critical situation / (apparently in news mode)
+    words text_0409, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Pi-pip! Found a dangerous store...
+    words text_0426, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: Big stores are hard to avoid, pi-pip
+    words text_0445, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Pi-pip! / I'll zoom through in hyper mode!
+    words text_0472, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: Closed for now, pi-pip ♪
+    words text_0481, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Closed stores are mine~ pip ♭
+    words text_04A0, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: It's taking a break, pi-pip ★
+    words text_04B1, 1, 2                 ; 7.0 ahead: its own store without goods: Can't I put goods on the airwaves, pi-pip?
+    words text_04D2, 1, 2                 ; 7.1 ahead: its own store without goods: Can't I restock / through TV shopping, pi-pip?
+    words text_0503, 1, 2                 ; 7.2 ahead: its own store without goods: The one in charge of restocking... / was me, pi-pip?
+    words text_052A, 0, 0                 ; 8.0 the bank on the next square: I want you to be my sponsor, pi-pip
+    words text_0549, 0, 0                 ; 8.1 the bank on the next square: Does a bank make money, pi-pip?
+    words text_0564, 0, 0                 ; 8.2 the bank on the next square: I want money, pi-pip
+    words text_0577, 3, 1                 ; 9.0 ranked better than at the start of the round: Pip! / A home run~ ♪
+    words text_0598, 3, 1                 ; 9.1 ranked better than at the start of the round: Pi-pip! / The comeback worked~ ♪
+    words text_05B9, 3, 1                 ; 9.2 ranked better than at the start of the round: Pip! / A long shot! A long shot came in~ ♪
+    words text_05DA, 1, 2                 ; 10.0 ranked worse: Noise on the screen, pi-pip
+    words text_05F5, 0, 0                 ; 10.1 ranked worse: S-und c-ts o-t, pip ≦ / (the sound cuts out, pi-pip)
+    words text_0624, 1, 2                 ; 10.2 ranked worse: Pip, falling right now, pi-pip
+    words text_0643, 1, 2                 ; 11.0 ahead: a rival store in a chain: Pip! Tricks don't work / on <player>, pi-pip ★
+    words text_066A, 1, 2                 ; 11.1 ahead: a rival store in a chain: Pip? Is something there... pi-pip?
+    words text_0687, 1, 2                 ; 11.2 ahead: a rival store in a chain: That much is nothing, pi-pip ☆
+    words text_06A6, 0, 0                 ; 12.0 ahead: a vacant lot: I'll be a street TV, pi-pip
+    words text_06BD, 0, 0                 ; 12.1 ahead: a vacant lot: Hel-lo, this is <player> TV / pi-pip ♪
+    words text_06E0, 0, 0                 ; 12.2 ahead: a vacant lot: Pi-pip! / Do I have money left to buy a store?
+    words text_0707, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: That's too cruel, pi-pip ≦
+    words text_0722, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I can't buy that, pi-pip!
+    words text_073D, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: Won't you make it cheaper if I run your ads, / pi-pip ≦
+    words text_076A, 0, 0                 ; 14.0 ahead: the bank: Pi! I want to go collect my pay, pi-pip
+    words text_0787, 0, 0                 ; 14.1 ahead: the bank: Can I make it to the bank, pi-pip?
+    words text_07A8, 2, 3                 ; 14.2 ahead: the bank: Wooooooooh / (↑ getting excited about something...)
+    words text_07DB, 1, 2                 ; 15.0 none of its stores ahead: I can't find / <player>'s stores, pi-pip ≦
+    words text_07FE, 1, 2                 ; 15.1 none of its stores ahead: The screen went blank, pi-pip
+    words text_0819, 1, 2                 ; 15.2 none of its stores ahead: Is this a foreign land / <player> doesn't know, pi-pip ≦
+    words text_0844, 0, 0                 ; 16.0 ahead: its own store with free goods slots: I want to put out a VCR, pi-pip
+    words text_0861, 2, 3                 ; 16.1 ahead: its own store with free goods slots: <player> is not merchandise, pi-pip!
+    words text_087C, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Can <player> itself / be sold, pi-pip?
+    words text_089D, 0, 0                 ; 17.0 no direction (after the bank): Tell me! / Which way is heaven, pi-pip?
+    words text_08BC, 0, 0                 ; 17.1 no direction (after the bank): The signals are crossed, pi-pip ≦
+    words text_08D5, 0, 0                 ; 17.2 no direction (after the bank): Pi-pip? Freedom to choose the channel...!?
+    words text_08F6, 0, 0                 ; 18.0 no direction, on an elevator square: Pi-pip! / A change of mood in the elevator ♪
+    words text_0919, 0, 0                 ; 18.1 no direction, on an elevator square: Wipe wipe ♪ / Cleaning my screen once in a while, pi-pip ★
+    words text_0948, 0, 0                 ; 18.2 no direction, on an elevator square: Pi-pip? / Is my antenna all right, pi-pip
+    words text_096B, 3, 10                ; 19.0 none of these: Hungry, pi-pip
+    words text_0976, 1, 10                ; 19.1 none of these: The picture's not good, pi-pip
+    words text_098B, 3, 10                ; 19.2 none of these: A talking TV, pip
+
+text_01F8:
+    string "最高視聴率はもらうピピッ♪"                ; en: I'll take the top ratings, pi-pi ♪
+
+text_0213:
+    string "ピピッ★テレビ見てねー♪"                 ; en: Pi-pip ★ Watch TV, okay ♪
+
+text_022C:
+    string "ブラウン管が重いピピッ≦%K薄型テレビになりた～いピピッ！"  ; en: My picture tube is heavy, pi-pip ≦ / I want to be a flat-screen TV, pi-pip!
+
+text_0265:
+    string "目標視聴率まで%Kあとちょっとだピピッ♪"         ; en: Just a little more to my / target ratings, pi-pip ♪
+
+text_028C:
+    string "薄型ＴＶに改造してもらうピピッ"              ; en: I'll get remodeled into a flat TV, pi-pip
+
+text_02AB:
+    string "デジタル放送開始だっピピッ"                ; en: Digital broadcasting is starting, pi-pip
+
+text_02C6:
+    string "いきなり視聴率が上がったピピッ♪"             ; en: My ratings suddenly went up, pi-pip ♪
+
+text_02E7:
+    string "大人気になったピピッ★"                  ; en: I've become hugely popular, pi-pip ★
+
+text_02FE:
+    string "もう止めることは出来ないピピッ∈"             ; en: Nothing can stop me now, pi-pip ∈
+
+text_031F:
+    string "誰も見てくれないっピピッ≦"                ; en: Nobody's watching me, pi-pip ≦
+
+text_033A:
+    string "ピピッ！電波状態がメチャクチャ"              ; en: Pi-pip! The reception is a mess
+
+text_0359:
+    string "ザァァァァァァァ・・・・%Kそのまましばらくお待ち下さい≦"  ; en: Zzzzzzzz.... / Please stand by ≦
+
+text_0392:
+    string "放送中止になりそうピピッ"                 ; en: Looks like the broadcast will be canceled, pi-pip
+
+text_03AB:
+    string "%NMYの%Kどーんといってみようピピッ"         ; en: <player>'s / let's go big, pi-pip
+
+text_03CE:
+    string "危機的状況に陥ってます%K（ニュースモードになってるらしい）"  ; en: We are in a critical situation / (apparently in news mode)
+
+text_0409:
+    string "ピピッ！危ないお店発見・・・"               ; en: Pi-pip! Found a dangerous store...
+
+text_0426:
+    string "おっきいお店は避けにくいピピッ"              ; en: Big stores are hard to avoid, pi-pip
+
+text_0445:
+    string "ピピッ！%Kハイパーモードで一気に通り抜ける！"      ; en: Pi-pip! / I'll zoom through in hyper mode!
+
+text_0472:
+    string "休業中ピピッ♪"                      ; en: Closed for now, pi-pip ♪
+
+text_0481:
+    string "休業中のお店は僕のもの～ピッ♭"              ; en: Closed stores are mine~ pip ♭
+
+text_04A0:
+    string "お休みだピピッ★"                     ; en: It's taking a break, pi-pip ★
+
+text_04B1:
+    string "商品を電波に乗せられないピピッ？"             ; en: Can't I put goods on the airwaves, pi-pip?
+
+text_04D2:
+    string "ＴＶショッピングで%K仕入れちゃダメなのかピピッ？"    ; en: Can't I restock / through TV shopping, pi-pip?
+
+text_0503:
+    string "仕入れ担当者は・・・%K僕だったピピッ？"         ; en: The one in charge of restocking... / was me, pi-pip?
+
+text_052A:
+    string "スポンサーになって欲しいピピッ"              ; en: I want you to be my sponsor, pi-pip
+
+text_0549:
+    string "銀行って儲かるのかピピッ？"                ; en: Does a bank make money, pi-pip?
+
+text_0564:
+    string "お金が欲しいピピッ"                    ; en: I want money, pi-pip
+
+text_0577:
+    string "ピッ！%Kホームランがでましたー♪"            ; en: Pip! / A home run~ ♪
+
+text_0598:
+    string "ピピッ！%K逆転に成功しましたー♪"            ; en: Pi-pip! / The comeback worked~ ♪
+
+text_05B9:
+    string "ピッ！%K大穴！大穴が出ましたー♪"            ; en: Pip! / A long shot! A long shot came in~ ♪
+
+text_05DA:
+    string "画面にノイズが入るっピピッ"                ; en: Noise on the screen, pi-pip
+
+text_05F5:
+    string "お・がとぎ・る・ピッ≦%K（音がとぎれるピピッ）"     ; en: S-und c-ts o-t, pip ≦ / (the sound cuts out, pi-pip)
+
+text_0624:
+    string "ピッ、ただいま落下中ぅぅピピッ"              ; en: Pip, falling right now, pi-pip
+
+text_0643:
+    string "ピッ！%NMYに小細工は%K効かないピピッ★"       ; en: Pip! Tricks don't work / on <player>, pi-pip ★
+
+text_066A:
+    string "ピッ？何かある・・・ピピッ？"               ; en: Pip? Is something there... pi-pip?
+
+text_0687:
+    string "そのくらいじゃ平気だよピピッ☆"              ; en: That much is nothing, pi-pip ☆
+
+text_06A6:
+    string "街頭テレビやるっピピッ"                  ; en: I'll be a street TV, pi-pip
+
+text_06BD:
+    string "ど～も～%NMYテレビでーす%Kピピッ♪"         ; en: Hel-lo, this is <player> TV / pi-pip ♪
+
+text_06E0:
+    string "ピピッ！%Kお店買うお金残ってるかなぁ？"         ; en: Pi-pip! / Do I have money left to buy a store?
+
+text_0707:
+    string "あんまりの仕打ちだピピッ≦"                ; en: That's too cruel, pi-pip ≦
+
+text_0722:
+    string "あんなの買えないっピピッ！"                ; en: I can't buy that, pi-pip!
+
+text_073D:
+    string "ＣＭ流す代わりに安くしてくれないか%Kピピッ≦"      ; en: Won't you make it cheaper if I run your ads, / pi-pip ≦
+
+text_076A:
+    string "ピ！給料取りに行きたいピピッ"               ; en: Pi! I want to go collect my pay, pi-pip
+
+text_0787:
+    string "銀行までたどり着けるかなピピッ？"             ; en: Can I make it to the bank, pi-pip?
+
+text_07A8:
+    string "うぉぉぉぉぉぉ%K（↑なんかエキサイトしてる・・・）"   ; en: Wooooooooh / (↑ getting excited about something...)
+
+text_07DB:
+    string "%NMYのお店が%K見当たらないピピッ≦"         ; en: I can't find / <player>'s stores, pi-pip ≦
+
+text_07FE:
+    string "画面が映らなくなったピピッ"                ; en: The screen went blank, pi-pip
+
+text_0819:
+    string "ここは%NMYが知らない%K異国の土地かピピッ≦"     ; en: Is this a foreign land / <player> doesn't know, pi-pip ≦
+
+text_0844:
+    string "ビデオデッキを置きたいピピッ"               ; en: I want to put out a VCR, pi-pip
+
+text_0861:
+    string "%NMYは品物じゃないピピッ！"              ; en: <player> is not merchandise, pi-pip!
+
+text_087C:
+    string "%NMY自身は販売できるか%Kピピッ？"          ; en: Can <player> itself / be sold, pi-pip?
+
+text_089D:
+    string "教えて！%Kどっちが天国ピピッ？"             ; en: Tell me! / Which way is heaven, pi-pip?
+
+text_08BC:
+    string "電波が混信してるピピッ≦"                 ; en: The signals are crossed, pi-pip ≦
+
+text_08D5:
+    string "ピピッ？番組選択の自由・・・！？"             ; en: Pi-pip? Freedom to choose the channel...!?
+
+text_08F6:
+    string "ピピッ！%Kエレベーターで気分転換♪"           ; en: Pi-pip! / A change of mood in the elevator ♪
+
+text_0919:
+    string "ふきふき♪%Kたまには画面をキレイにふくピピッ★"     ; en: Wipe wipe ♪ / Cleaning my screen once in a while, pi-pip ★
+
+text_0948:
+    string "ピピッ？%Kアンテナは平気かなピピッ"           ; en: Pi-pip? / Is my antenna all right, pi-pip
+
+text_096B:
+    string "腹ぺピピッ"                        ; en: Hungry, pi-pip
+
+text_0976:
+    string "映りが良くないピピッ"                   ; en: The picture's not good, pi-pip
+
+text_098B:
+    string "しゃべるテレビッピ"                    ; en: A talking TV, pip
+    words 0    ; padding

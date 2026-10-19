@@ -1,0 +1,293 @@
+; TALK.J entry 22 (LZSS-packed)
+;
+; What Rob says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 1900 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 6, $l2                        ; voice: XA track 6 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Looks like it's hopeless now~
+    words text_01FF, 1, 7                 ; 0.1 (no comment): I was just off my game this time~
+    words text_021C, 4, 9                 ; 0.2 (no comment): My board's getting wrecked~ ≦
+    words text_0237, 3, 6                 ; 1.0 a chain of 4: Oh! This doesn't look shabby at all~
+    words text_0256, 3, 6                 ; 1.1 a chain of 4: My store really got big~
+    words text_0277, 3, 6                 ; 1.2 a chain of 4: I guess this is a big lead~
+    words text_0298, 3, 6                 ; 2.0 a chain of 2 or 3: They merged~
+    words text_02A5, 3, 6                 ; 2.1 a chain of 2 or 3: I guess this is a normal size~
+    words text_02C0, 3, 6                 ; 2.2 a chain of 2 or 3: Would bigger be better~
+    words text_02DB, 0, 5                 ; 3.0 landed on a rival store closed for now: I have time on my hands~
+    words text_02EE, 3, 6                 ; 3.1 landed on a rival store closed for now: Today was really easy~
+    words text_0307, 0, 5                 ; 3.2 landed on a rival store closed for now: Nothing to do, so what now?
+    words text_0328, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Oh! A buy~
+    words text_0339, 0, 5                 ; 4.1 landed on a rival store with lowered prices: Do they make a profit like this~
+    words text_0354, 3, 6                 ; 4.2 landed on a rival store with lowered prices: It'd be a loss not to buy, right
+    words text_036F, 0, 5                 ; 5.0 landed on its own store / opened a store: I'll rest here today~
+    words text_0388, 1, 7                 ; 5.1 landed on its own store / opened a store: Did I have anything to do?
+    words text_039D, 3, 6                 ; 5.2 landed on its own store / opened a store: I'm kind of bored~
+    words text_03B4, 1, 7                 ; 6.0 did not take the elevator: Not using it is a shortcut~
+    words text_03CB, 0, 5                 ; 6.1 did not take the elevator: Well, that's how the world goes~
+    words text_03E2, 4, 9                 ; 6.2 did not take the elevator: No use complaining~
+    words text_03FF, 3, 6                 ; 7.0 landed on the bank: I got my pay~
+    words text_0410, 3, 6                 ; 7.1 landed on the bank: I'll play all day today~
+    words text_0425, 3, 6                 ; 7.2 landed on the bank: Getting money makes you happy~
+    words text_0442, 0, 5                 ; 8.0 took the elevator: This is nice once in a while?
+    words text_0461, 1, 7                 ; 8.1 took the elevator: I'm not / that fond of elevators~
+    words text_048C, 0, 5                 ; 8.2 took the elevator: Right! Where to next~
+    words text_04A5, 1, 7                 ; 9.0 shopping cost a fifth of its money or more: This store's a little risky~
+    words text_04C0, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: I wanted to avoid it~
+    words text_04D7, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: I came somewhere bad~
+    words text_04F6, 3, 6                 ; 10.0 shopping: got the money back: Yes~ pure profit~
+    words text_0509, 3, 6                 ; 10.1 shopping: got the money back: Really? Really? ♪
+    words text_051C, 3, 6                 ; 10.2 shopping: got the money back: Sorry to make you go out of your way~
+    words text_0531, 3, 6                 ; 11.0 shopping: Now that's cool
+    words text_0542, 0, 5                 ; 11.1 shopping: I can't get serious?!
+    words text_055B, 1, 7                 ; 11.2 shopping: Can't win...
+    words text_056A, 0, 5                 ; 12.0 bought a rival's store: This place is my store now
+    words text_0583, 3, 6                 ; 12.1 bought a rival's store: Hey! Sorry about that
+    words text_0594, 3, 6                 ; 12.2 bought a rival's store: Just give up already ♪
+    words text_05AD, 1, 7                 ; 13.0 shopped this turn and the last: No money~
+    words text_05BC, 1, 7                 ; 13.1 shopped this turn and the last: I have to save a little~
+    words text_05D3, 4, 9                 ; 13.2 shopped this turn and the last: Why is it~ / that I end up spending money?
+    words text_05F6, 3, 6                 ; 14.0 assets passed half the goal: Half, huh~ still a long way~
+    words text_060D, 3, 6                 ; 14.1 assets passed half the goal: This is where it really starts~
+    words text_0628, 3, 6                 ; 14.2 assets passed half the goal: Half is no big deal
+    words text_0645, 1, 7                 ; 15.0 sold a store: I've had no luck lately~
+    words text_065E, 1, 7                 ; 15.1 sold a store: Well, I don't need it anyway...
+    words text_0679, 4, 9                 ; 15.2 sold a store: The store turned into money~
+    words text_0692, 4, 9                 ; 16.0 declined a vacant lot it could not afford: I really have no money~
+    words text_06AD, 2, 8                 ; 16.1 declined a vacant lot it could not afford: Can't even use a card, no good
+    words text_06CC, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Couldn't buy the store~
+    words text_06E3, 1, 7                 ; 17.0 declined a vacant lot: I want a new board too, / so I'll hold back today~
+    words text_070E, 3, 6                 ; 17.1 declined a vacant lot: Shall I show I can afford it~?
+    words text_0729, 2, 8                 ; 17.2 declined a vacant lot: That's not very cool~
+    words text_0744, 3, 10                ; 18.0 an event card (the default): I want to go snowboarding
+    words text_0755, 3, 10                ; 18.1 an event card (the default): Itchy knees!!
+    words text_0762, 3, 10                ; 18.2 an event card (the default): It's <player>
+
+text_01E6:
+    string "なんかもうダメそうだね～"                 ; en: Looks like it's hopeless now~
+
+text_01FF:
+    string "今回は調子がわるかったのさ～"               ; en: I was just off my game this time~
+
+text_021C:
+    string "ボードがぼろぼろになる～≦"                ; en: My board's getting wrecked~ ≦
+
+text_0237:
+    string "おっ！これなら見劣りしないね～"              ; en: Oh! This doesn't look shabby at all~
+
+text_0256:
+    string "ホント僕のお店も大きくなったね～"             ; en: My store really got big~
+
+text_0277:
+    string "これで大きくリードってとこかな～"             ; en: I guess this is a big lead~
+
+text_0298:
+    string "合体したよ～"                       ; en: They merged~
+
+text_02A5:
+    string "これなら普通の大きさかな～"                ; en: I guess this is a normal size~
+
+text_02C0:
+    string "もっと大きい方がいいかな～"                ; en: Would bigger be better~
+
+text_02DB:
+    string "暇もてあましだね～"                    ; en: I have time on my hands~
+
+text_02EE:
+    string "ホント今日は楽だったね～"                 ; en: Today was really easy~
+
+text_0307:
+    string "やることないけど、どーしよーか？"             ; en: Nothing to do, so what now?
+
+text_0328:
+    string "おっ！買いだね～"                     ; en: Oh! A buy~
+
+text_0339:
+    string "こんなんで儲けでてるのか～"                ; en: Do they make a profit like this~
+
+text_0354:
+    string "買わないと損でしょ、やっぱ"                ; en: It'd be a loss not to buy, right
+
+text_036F:
+    string "今日はここで休んじゃお～"                 ; en: I'll rest here today~
+
+text_0388:
+    string "やることあったっけ？"                   ; en: Did I have anything to do?
+
+text_039D:
+    string "な～んか暇なんだよね～"                  ; en: I'm kind of bored~
+
+text_03B4:
+    string "使わない方が近道だね～"                  ; en: Not using it is a shortcut~
+
+text_03CB:
+    string "ま、これも世の常かな～"                  ; en: Well, that's how the world goes~
+
+text_03E2:
+    string "文句言ってもしょうがないね～"               ; en: No use complaining~
+
+text_03FF:
+    string "給料もらったよ～"                     ; en: I got my pay~
+
+text_0410:
+    string "今日は遊びまくるよ～"                   ; en: I'll play all day today~
+
+text_0425:
+    string "お金ってもらうとうれし～ね～"               ; en: Getting money makes you happy~
+
+text_0442:
+    string "たまにはこういうのもいいかな？"              ; en: This is nice once in a while?
+
+text_0461:
+    string "エレベーターって%Kあんまり好きじゃないよ～"       ; en: I'm not / that fond of elevators~
+
+text_048C:
+    string "さっ！次はどこ行くんだ～"                 ; en: Right! Where to next~
+
+text_04A5:
+    string "ちょっとやばいね～このお店"                ; en: This store's a little risky~
+
+text_04C0:
+    string "避けて通りたかったね～"                  ; en: I wanted to avoid it~
+
+text_04D7:
+    string "まずいところに来ちゃったよね～"              ; en: I came somewhere bad~
+
+text_04F6:
+    string "やりぃ～まる儲け～"                    ; en: Yes~ pure profit~
+
+text_0509:
+    string "ホント？ホントに♪"                    ; en: Really? Really? ♪
+
+text_051C:
+    string "気ぃ使わせて悪いね～"                   ; en: Sorry to make you go out of your way~
+
+text_0531:
+    string "クールだねこりゃ"                     ; en: Now that's cool
+
+text_0542:
+    string "本気になりきれないぞ？！"                 ; en: I can't get serious?!
+
+text_055B:
+    string "勝てねぇ・・・"                      ; en: Can't win...
+
+text_056A:
+    string "僕のお店になったよここは"                 ; en: This place is my store now
+
+text_0583:
+    string "ヘイ！悪かったね"                     ; en: Hey! Sorry about that
+
+text_0594:
+    string "ホントあきらめてくれよ♪"                 ; en: Just give up already ♪
+
+text_05AD:
+    string "お金がないね～"                      ; en: No money~
+
+text_05BC:
+    string "少し節約しなくちゃね～"                  ; en: I have to save a little~
+
+text_05D3:
+    string "なんでかね～%Kお金使っちゃうのは？"           ; en: Why is it~ / that I end up spending money?
+
+text_05F6:
+    string "半分かーまだまだだね～"                  ; en: Half, huh~ still a long way~
+
+text_060D:
+    string "ホントここからが勝負かな～"                ; en: This is where it really starts~
+
+text_0628:
+    string "半分なんて大した事ないでしょ"               ; en: Half is no big deal
+
+text_0645:
+    string "ホント最近ついてないね～"                 ; en: I've had no luck lately~
+
+text_065E:
+    string "まぁ、必要ないけどね・・・"                ; en: Well, I don't need it anyway...
+
+text_0679:
+    string "お店がお金に変わったね～"                 ; en: The store turned into money~
+
+text_0692:
+    string "ホントお金がないんだよね～"                ; en: I really have no money~
+
+text_06AD:
+    string "カードも使えないなんてダメだね"              ; en: Can't even use a card, no good
+
+text_06CC:
+    string "お店、買えなかったね～"                  ; en: Couldn't buy the store~
+
+text_06E3:
+    string "新しいボードも欲しいし%K今日はガマンだね～"       ; en: I want a new board too, / so I'll hold back today~
+
+text_070E:
+    string "ホント余裕でもみせよ～か？"                ; en: Shall I show I can afford it~?
+
+text_0729:
+    string "ちょっとクールじゃないね～"                ; en: That's not very cool~
+
+text_0744:
+    string "スノボしたいよん"                     ; en: I want to go snowboarding
+
+text_0755:
+    string "ひざかゆ！！"                       ; en: Itchy knees!!
+
+text_0762:
+    string "%NMYだ"                        ; en: It's <player>
+    bytes 0x00, 0x00, 0x00    ; padding

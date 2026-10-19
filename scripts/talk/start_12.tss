@@ -1,0 +1,305 @@
+; TALK.J entry 12 (LZSS-packed)
+;
+; What Santa says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnStart_PickScript):
+; 0 the first month
+; 1 assets at 7/8 of the goal
+; 2 last at the start of the round, first now
+; 3 first at the start of the round, last now
+; 4 ahead: a rival store it can't afford
+; 5 ahead: a rival store in a chain of 4
+; 6 ahead: a rival store closed, without goods
+; 7 ahead: its own store without goods
+; 8 the bank on the next square
+; 9 ranked better than at the start of the round
+; 10 ranked worse
+; 11 ahead: a rival store in a chain
+; 12 ahead: a vacant lot
+; 13 ahead: a rival store costing over 1/4 of its money
+; 14 ahead: the bank
+; 15 none of its stores ahead
+; 16 ahead: its own store with free goods slots
+; 17 no direction (after the bank)
+; 18 no direction, on an elevator square
+; 19 none of these
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2216 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 12, $l2                       ; voice: XA track 12 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01F8, 3, 12                ; 0.0 the first month: Mission confirmed / Booting up...
+    words text_0215, 3, 12                ; 0.1 the first month: All parts normal, condition green / Game start!
+    words text_0246, 3, 12                ; 0.2 the first month: Anchor launch signal green
+    words text_0263, 3, 1                 ; 1.0 assets at 7/8 of the goal: Critical point close, the match is decided ♪
+    words text_0280, 3, 1                 ; 1.1 assets at 7/8 of the goal: Starting count-down ♪
+    words text_029B, 3, 1                 ; 1.2 assets at 7/8 of the goal: No faults in any part / Continuing the mission ♭
+    words text_02C4, 3, 1                 ; 2.0 last at the start of the round, first now: Booster power full!!
+    words text_02DD, 3, 1                 ; 2.1 last at the start of the round, first now: Maximum output!!
+    words text_02EA, 3, 1                 ; 2.2 last at the start of the round, first now: Be amazed at <player>'s power!
+    words text_02FF, 4, 4                 ; 3.0 first at the start of the round, last now: Booster malfunction...
+    words text_0314, 4, 4                 ; 3.1 first at the start of the round, last now: Out of fuel... / Crashing...
+    words text_0337, 4, 4                 ; 3.2 first at the start of the round, last now: Fault in the leg joints / Requesting repair
+    words text_035A, 4, 4                 ; 4.0 ahead: a rival store it can't afford: Sensor reaction! / Proceeding is dangerous! Dangerous!
+    words text_0387, 1, 2                 ; 4.1 ahead: a rival store it can't afford: The joint oil is running out...
+    words text_03A4, 1, 2                 ; 4.2 ahead: a rival store it can't afford: If I stop at that store / my energy goes to 0...
+    words text_03CB, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Very large enemy found / Beginning evasive action
+    words text_03F8, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: I will shake it off at top speed!
+    words text_0417, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Prepare money for emergencies!
+    words text_0436, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: ....... ★
+    words text_0447, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Pi-pi-pip! Search complete
+    words text_045C, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: Rule check: "Motivation 0"
+    words text_0473, 1, 2                 ; 7.0 ahead: its own store without goods: No goods confirmed in <player>'s store
+    words text_048E, 1, 2                 ; 7.1 ahead: its own store without goods: Urgent goods restocking requested
+    words text_04AB, 1, 2                 ; 7.2 ahead: its own store without goods: The goods are gone...
+    words text_04C4, 0, 0                 ; 8.0 the bank on the next square: Will upgrade parts with my pay
+    words text_04E7, 0, 0                 ; 8.1 the bank on the next square: Funds needed to carry out the operation ∈
+    words text_0506, 0, 0                 ; 8.2 the bank on the next square: How much is this pay?
+    words text_051F, 3, 1                 ; 9.0 ranked better than at the start of the round: Power up ♪
+    words text_052E, 3, 1                 ; 9.1 ranked better than at the start of the round: Speed up ♭
+    words text_053F, 3, 1                 ; 9.2 ranked better than at the start of the round: Output up ∈
+    words text_054C, 1, 2                 ; 10.0 ranked worse: Power down...
+    words text_055F, 1, 2                 ; 10.1 ranked worse: Speed down...
+    words text_0574, 1, 2                 ; 10.2 ranked worse: Malfunction! Malfunction!
+    words text_0589, 1, 2                 ; 11.0 ahead: a rival store in a chain: Large enemy confirmed / Preparing to intercept
+    words text_05A6, 1, 2                 ; 11.1 ahead: a rival store in a chain: No problem... continuing the mission
+    words text_05C3, 1, 2                 ; 11.2 ahead: a rival store in a chain: Obstacle found... beginning evasive action
+    words text_05E0, 0, 0                 ; 12.0 ahead: a vacant lot: Switching to assault mode
+    words text_05F7, 0, 0                 ; 12.1 ahead: a vacant lot: I want to increase my number of stores...
+    words text_0612, 0, 0                 ; 12.2 ahead: a vacant lot: More stores will give me the advantage...
+    words text_062F, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: Stopping at a luxury store is dangerous...
+    words text_064A, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Funds may decrease / considering countermeasures....
+    words text_0671, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: Anti-expensive-goods laser ready to fire
+    words text_068C, 0, 0                 ; 14.0 ahead: the bank: Target: bank confirmed, launching!
+    words text_06A5, 3, 1                 ; 14.1 ahead: the bank: Bank found! Going to collect my pay ♪
+    words text_06C4, 0, 0                 ; 14.2 ahead: the bank: Adjusting speed / Now charging into the bank
+    words text_06E9, 1, 2                 ; 15.0 none of its stores ahead: No signal of <player>'s / stores nearby...
+    words text_070A, 1, 2                 ; 15.1 none of its stores ahead: Warning! / Retreat from this area required
+    words text_0731, 1, 2                 ; 15.2 none of its stores ahead: Now inside enemy territory / Escape mode on, escape mode on
+    words text_0762, 0, 0                 ; 16.0 ahead: its own store with free goods slots: Restocking interception goods
+    words text_0779, 0, 0                 ; 16.1 ahead: its own store with free goods slots: System check in progress...
+    words text_0792, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Switching to restocking mode... complete
+    words text_07AF, 0, 0                 ; 17.0 no direction (after the bank): Analyzing... / This way is safe ♪
+    words text_07CC, 0, 0                 ; 17.1 no direction (after the bank): Auto-map system confirmed working ♪
+    words text_07EB, 0, 0                 ; 17.2 no direction (after the bank): Gaoooooon!!
+    words text_0800, 0, 0                 ; 18.0 no direction, on an elevator square: Calculated that a rocket burst is / faster than the elevator
+    words text_082D, 0, 0                 ; 18.1 no direction, on an elevator square: I want to rest once in a while...
+    words text_084A, 0, 0                 ; 18.2 no direction, on an elevator square: Is it possible to ride the elevator?
+    words text_086B, 1, 10                ; 19.0 none of these: The oil isn't flowing well
+    words text_0884, 3, 10                ; 19.1 none of these: ......... ∝
+    words text_0899, 3, 10                ; 19.2 none of these: Power chop
+
+text_01F8:
+    string "任務カクニン%K起動スル・・・"              ; en: Mission confirmed / Booting up...
+
+text_0215:
+    string "各部正常コンディショングリーン%Kゲームスタート！"    ; en: All parts normal, condition green / Game start!
+
+text_0246:
+    string "アンカー射出シグナルグリーン"               ; en: Anchor launch signal green
+
+text_0263:
+    string "臨界点マジカ、勝負ハ着イタ♪"               ; en: Critical point close, the match is decided ♪
+
+text_0280:
+    string "かうんとだうんヲ開始スル♪"                ; en: Starting count-down ♪
+
+text_029B:
+    string "各部異常ナシ%Kヒキツヅキ任務ヲ続行スル♭"        ; en: No faults in any part / Continuing the mission ♭
+
+text_02C4:
+    string "ぶーすたーぱわー全開！！"                 ; en: Booster power full!!
+
+text_02DD:
+    string "出力最大！！"                       ; en: Maximum output!!
+
+text_02EA:
+    string "%NMYノぱわーニ驚ケ！"                 ; en: Be amazed at <player>'s power!
+
+text_02FF:
+    string "ぶーすたー不調・・・"                   ; en: Booster malfunction...
+
+text_0314:
+    string "燃料ガ切レタ・・・%K墜落スル・・・"           ; en: Out of fuel... / Crashing...
+
+text_0337:
+    string "脚部関節ニ異常発生%K修理ヲ要請スル"           ; en: Fault in the leg joints / Requesting repair
+
+text_035A:
+    string "せんさーニ反応！%Kコノママ進ムト危険！危険！"      ; en: Sensor reaction! / Proceeding is dangerous! Dangerous!
+
+text_0387:
+    string "関節ノおいるガキレソウ・・・"               ; en: The joint oil is running out...
+
+text_03A4:
+    string "アノ店ニ止マルト%Kえねるぎーガ０・・・"         ; en: If I stop at that store / my energy goes to 0...
+
+text_03CB:
+    string "超大型ノ敵ヲ発見%Kコレヨリ回避行動ニ入リマス"      ; en: Very large enemy found / Beginning evasive action
+
+text_03F8:
+    string "最高速度デ振リ切ッテミセマス！"              ; en: I will shake it off at top speed!
+
+text_0417:
+    string "オカネヲ用意シテ有事ニ備エヨ！"              ; en: Prepare money for emergencies!
+
+text_0436:
+    string "・・・・・・・★"                     ; en: ....... ★
+
+text_0447:
+    string "ピピピッ！さーち完了"                   ; en: Pi-pi-pip! Search complete
+
+text_045C:
+    string "るーる確認「ヤルキ０」"                  ; en: Rule check: "Motivation 0"
+
+text_0473:
+    string "%NMYノ店ニ品物ヲ確認デキズ"              ; en: No goods confirmed in <player>'s store
+
+text_048E:
+    string "至急ニ商品補充ノ必要性ヲ求ム"               ; en: Urgent goods restocking requested
+
+text_04AB:
+    string "商品ガナクナッテル・・・"                 ; en: The goods are gone...
+
+text_04C4:
+    string "給料デぱーつノぐれーどあっぷヲ行ウ"            ; en: Will upgrade parts with my pay
+
+text_04E7:
+    string "作戦遂行ニ必要ナ資金ガ必要ダ∈"              ; en: Funds needed to carry out the operation ∈
+
+text_0506:
+    string "今回ノ給料ハイクラ出ル？"                 ; en: How much is this pay?
+
+text_051F:
+    string "パワーアップ♪"                      ; en: Power up ♪
+
+text_052E:
+    string "スピードアップ♭"                     ; en: Speed up ♭
+
+text_053F:
+    string "出力アップ∈"                       ; en: Output up ∈
+
+text_054C:
+    string "パワーダウン・・・"                    ; en: Power down...
+
+text_055F:
+    string "スピードダウン・・・"                   ; en: Speed down...
+
+text_0574:
+    string "故障発生！故障発生！"                   ; en: Malfunction! Malfunction!
+
+text_0589:
+    string "大型ノ敵ヲ確認%K迎撃準備開始"              ; en: Large enemy confirmed / Preparing to intercept
+
+text_05A6:
+    string "問題ナシ・・・任務ヲ続行スル"               ; en: No problem... continuing the mission
+
+text_05C3:
+    string "障害ヲ発見・・・回避行動開始"               ; en: Obstacle found... beginning evasive action
+
+text_05E0:
+    string "強襲モード切リ替エマス"                  ; en: Switching to assault mode
+
+text_05F7:
+    string "店ノ数ヲ充実サセタイ・・・"                ; en: I want to increase my number of stores...
+
+text_0612:
+    string "店ヲ増ヤシテ有利ニスル・・・"               ; en: More stores will give me the advantage...
+
+text_062F:
+    string "高級店ニ止マルト危険・・・"                ; en: Stopping at a luxury store is dangerous...
+
+text_064A:
+    string "資金ガ減ル可能性アリ%K対策検討・・・・"         ; en: Funds may decrease / considering countermeasures....
+
+text_0671:
+    string "対高額商品れーざー発射用意"                ; en: Anti-expensive-goods laser ready to fire
+
+text_068C:
+    string "たーげっと銀行確認発進！"                 ; en: Target: bank confirmed, launching!
+
+text_06A5:
+    string "銀行発見！給料ノ回収ニ向カウ♪"              ; en: Bank found! Going to collect my pay ♪
+
+text_06C4:
+    string "速度調節開始%Kコレヨリ銀行ニ突入スル"          ; en: Adjusting speed / Now charging into the bank
+
+text_06E9:
+    string "周囲ニ%NMYノ%K店ノ反応ナシ・・・"          ; en: No signal of <player>'s / stores nearby...
+
+text_070A:
+    string "警告！%Kコノえりあカラノ退却ノ必要アリ"         ; en: Warning! / Retreat from this area required
+
+text_0731:
+    string "現在、敵勢力圏内%K脱出もーど作動・脱出もーど作動"    ; en: Now inside enemy territory / Escape mode on, escape mode on
+
+text_0762:
+    string "迎撃用商品ヲ補充シマス"                  ; en: Restocking interception goods
+
+text_0779:
+    string "しすてむチェック中・・・"                 ; en: System check in progress...
+
+text_0792:
+    string "仕入レもーどニ移行・・・完了"               ; en: Switching to restocking mode... complete
+
+text_07AF:
+    string "分析中・・・%Kコッチガ安全♪"              ; en: Analyzing... / This way is safe ♪
+
+text_07CC:
+    string "おーとまっぷしすてむ作動確認♪"              ; en: Auto-map system confirmed working ♪
+
+text_07EB:
+    string "ガオォォォォォン！！"                   ; en: Gaoooooon!!
+
+text_0800:
+    string "えれべーたヨリろけっと噴射ノ方ガ%K速イトデタ"      ; en: Calculated that a rocket burst is / faster than the elevator
+
+text_082D:
+    string "タマニハ休マセテ欲シイ・・・"               ; en: I want to rest once in a while...
+
+text_084A:
+    string "えれべーたーニ乗ルコトガ可能カ？"             ; en: Is it possible to ride the elevator?
+
+text_086B:
+    string "おいるノ滑リガ良クナイゾ"                 ; en: The oil isn't flowing well
+
+text_0884:
+    string "・・・・・・・・・∝"                   ; en: ......... ∝
+
+text_0899:
+    string "ぱわーちょっぷ"                      ; en: Power chop

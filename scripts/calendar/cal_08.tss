@@ -1,0 +1,139 @@
+; CAL_08.J entry 0
+;
+; The calendar page of August (Board_Task steps 2100-2120, with event scenes on).
+; The picture: the beach: a parasol (image 0), bubbles, a green dragon, the TV robot, the cactus
+; buried in the sand and a surfer chased by sharks (images 2-9).
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 908 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+; NOTE 0x013E: the step's next, 0x0000, is an instruction, not a path step: what got there would read it as one
+
+L_0000:
+    sprite_init 0, image=0, attr=0, x=0, y=80, pri=0
+    sprite_init 1, image=2, attr=0, x=145, y=128, pri=1
+    sprite_init 2, image=3, attr=0, x=96, y=160, pri=2
+    sprite_init 3, image=5, attr=0, x=256, y=144, pri=3
+    sprite_init 4, image=7, attr=0, x=168, y=160, pri=4
+    sprite_init 5, image=9, attr=0, x=320, y=120, pri=5
+    sprite_animate 2, anim_00CC
+    sprite_animate 3, anim_00EC
+    sprite_animate 4, anim_0104
+    sprite_path 1, path_0148
+    sprite_path 5, path_0134
+    fade_in 15
+
+L_0076:
+    $v9F += 1
+    wait 1
+    if $v9F != 178 goto L_00A0
+    sprite_scale 5, 128, 128
+    sprite_pos 5, 50, 110
+    sprite_path 5, path_013E
+
+L_00A0:
+    if $v9F == 300 goto L_00B4
+    if $any_pressed !& CROSS|0x300 goto L_0076
+
+L_00B4:
+    fade_out 15
+    wait_fade
+    end
+
+anim_00BC:
+    frame 2, time=1, flip=0, next=END
+
+anim_00C4:
+    frame 1, time=1, flip=0, next=END
+
+anim_00CC:
+    frame 4, time=6, flip=0, next=NEXT
+    frame 3, time=19, flip=0, next=NEXT
+    frame 4, time=20, flip=0, next=NEXT
+    frame 3, time=19, flip=0, next=anim_00CC
+
+anim_00EC:
+    frame 5, time=30, flip=0, next=anim_00F4
+
+anim_00F4:
+    frame 6, time=6, flip=0, next=NEXT
+    frame 5, time=58, flip=0, next=anim_00F4
+
+anim_0104:
+    frame 7, time=8, flip=0, next=NEXT
+    frame 8, time=8, flip=0, next=anim_0104
+
+anim_0114:
+    frame 9, time=8, flip=0, next=NEXT
+    frame 10, time=8, flip=0, next=anim_0114
+
+anim_0124:
+    frame 9, time=2, flip=FLIP_X, next=NEXT
+    frame 10, time=2, flip=FLIP_X, next=anim_0124
+
+path_0134:
+    step speed=3, x=-212, y=120, anim=anim_0114, next=END  ; move to -212, 120, 3 pixels a frame
+
+path_013E:
+    step speed=1, x=420, y=110, anim=anim_0124, next=L_0000  ; move to 420, 110, 1 pixels a frame
+
+path_0148:
+    step speed=0, x=3, y=0, anim=anim_00BC, next=NEXT  ; wait 3 frames
+    step speed=-1, x=145, y=128, anim=anim_00C4, next=NEXT  ; jump to 145, 128
+    step speed=-1, x=148, y=124, anim=anim_00C4, next=NEXT  ; jump to 148, 124
+    step speed=-1, x=152, y=121, anim=anim_00C4, next=NEXT  ; jump to 152, 121
+    step speed=-1, x=156, y=118, anim=anim_00C4, next=NEXT  ; jump to 156, 118
+    step speed=-1, x=160, y=115, anim=anim_00C4, next=NEXT  ; jump to 160, 115
+    step speed=-1, x=164, y=113, anim=anim_00C4, next=NEXT  ; jump to 164, 113
+    step speed=-1, x=168, y=110, anim=anim_00C4, next=NEXT  ; jump to 168, 110
+    step speed=-1, x=172, y=108, anim=anim_00C4, next=NEXT  ; jump to 172, 108
+    step speed=-1, x=175, y=106, anim=anim_00C4, next=NEXT  ; jump to 175, 106
+    step speed=-1, x=180, y=104, anim=anim_00C4, next=NEXT  ; jump to 180, 104
+    step speed=-1, x=184, y=102, anim=anim_00C4, next=NEXT  ; jump to 184, 102
+    step speed=-1, x=188, y=101, anim=anim_00C4, next=NEXT  ; jump to 188, 101
+    step speed=-1, x=192, y=100, anim=anim_00C4, next=NEXT  ; jump to 192, 100
+    step speed=-1, x=196, y=100, anim=anim_00C4, next=NEXT  ; jump to 196, 100
+    step speed=-1, x=200, y=100, anim=anim_00C4, next=NEXT  ; jump to 200, 100
+    step speed=-1, x=204, y=100, anim=anim_00C4, next=NEXT  ; jump to 204, 100
+    step speed=-1, x=208, y=100, anim=anim_00C4, next=NEXT  ; jump to 208, 100
+    step speed=-1, x=212, y=101, anim=anim_00C4, next=NEXT  ; jump to 212, 101
+    step speed=-1, x=216, y=102, anim=anim_00C4, next=NEXT  ; jump to 216, 102
+    step speed=-1, x=220, y=104, anim=anim_00C4, next=NEXT  ; jump to 220, 104
+    step speed=-1, x=224, y=106, anim=anim_00C4, next=NEXT  ; jump to 224, 106
+    step speed=-1, x=228, y=108, anim=anim_00C4, next=NEXT  ; jump to 228, 108
+    step speed=-1, x=232, y=110, anim=anim_00C4, next=NEXT  ; jump to 232, 110
+    step speed=-1, x=236, y=113, anim=anim_00C4, next=NEXT  ; jump to 236, 113
+    step speed=-1, x=240, y=115, anim=anim_00C4, next=NEXT  ; jump to 240, 115
+    step speed=-1, x=244, y=118, anim=anim_00BC, next=NEXT  ; jump to 244, 118
+    step speed=-1, x=247, y=121, anim=anim_00BC, next=NEXT  ; jump to 247, 121
+    step speed=-1, x=250, y=124, anim=anim_00BC, next=NEXT  ; jump to 250, 124
+    step speed=0, x=3, y=0, anim=anim_00BC, next=NEXT  ; wait 3 frames
+    step speed=-1, x=250, y=124, anim=anim_00C4, next=NEXT  ; jump to 250, 124
+    step speed=-1, x=247, y=121, anim=anim_00C4, next=NEXT  ; jump to 247, 121
+    step speed=-1, x=244, y=118, anim=anim_00C4, next=NEXT  ; jump to 244, 118
+    step speed=-1, x=240, y=115, anim=anim_00C4, next=NEXT  ; jump to 240, 115
+    step speed=-1, x=236, y=113, anim=anim_00C4, next=NEXT  ; jump to 236, 113
+    step speed=-1, x=232, y=110, anim=anim_00C4, next=NEXT  ; jump to 232, 110
+    step speed=-1, x=228, y=108, anim=anim_00C4, next=NEXT  ; jump to 228, 108
+    step speed=-1, x=224, y=106, anim=anim_00C4, next=NEXT  ; jump to 224, 106
+    step speed=-1, x=220, y=104, anim=anim_00C4, next=NEXT  ; jump to 220, 104
+    step speed=-1, x=216, y=102, anim=anim_00C4, next=NEXT  ; jump to 216, 102
+    step speed=-1, x=212, y=101, anim=anim_00C4, next=NEXT  ; jump to 212, 101
+    step speed=-1, x=208, y=100, anim=anim_00C4, next=NEXT  ; jump to 208, 100
+    step speed=-1, x=204, y=100, anim=anim_00C4, next=NEXT  ; jump to 204, 100
+    step speed=-1, x=200, y=100, anim=anim_00C4, next=NEXT  ; jump to 200, 100
+    step speed=-1, x=196, y=100, anim=anim_00C4, next=NEXT  ; jump to 196, 100
+    step speed=-1, x=192, y=100, anim=anim_00C4, next=NEXT  ; jump to 192, 100
+    step speed=-1, x=188, y=101, anim=anim_00C4, next=NEXT  ; jump to 188, 101
+    step speed=-1, x=184, y=102, anim=anim_00C4, next=NEXT  ; jump to 184, 102
+    step speed=-1, x=180, y=104, anim=anim_00C4, next=NEXT  ; jump to 180, 104
+    step speed=-1, x=175, y=106, anim=anim_00C4, next=NEXT  ; jump to 175, 106
+    step speed=-1, x=172, y=108, anim=anim_00C4, next=NEXT  ; jump to 172, 108
+    step speed=-1, x=168, y=110, anim=anim_00C4, next=NEXT  ; jump to 168, 110
+    step speed=-1, x=164, y=113, anim=anim_00C4, next=NEXT  ; jump to 164, 113
+    step speed=-1, x=160, y=115, anim=anim_00C4, next=NEXT  ; jump to 160, 115
+    step speed=-1, x=156, y=118, anim=anim_00C4, next=NEXT  ; jump to 156, 118
+    step speed=-1, x=152, y=121, anim=anim_00BC, next=NEXT  ; jump to 152, 121
+    step speed=-1, x=148, y=124, anim=anim_00BC, next=NEXT  ; jump to 148, 124
+    step speed=-1, x=145, y=128, anim=anim_00BC, next=path_0148  ; jump to 145, 128

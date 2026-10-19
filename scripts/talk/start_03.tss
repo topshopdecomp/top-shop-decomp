@@ -1,0 +1,306 @@
+; TALK.J entry 3 (LZSS-packed)
+;
+; What Gummi says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnStart_PickScript):
+; 0 the first month
+; 1 assets at 7/8 of the goal
+; 2 last at the start of the round, first now
+; 3 first at the start of the round, last now
+; 4 ahead: a rival store it can't afford
+; 5 ahead: a rival store in a chain of 4
+; 6 ahead: a rival store closed, without goods
+; 7 ahead: its own store without goods
+; 8 the bank on the next square
+; 9 ranked better than at the start of the round
+; 10 ranked worse
+; 11 ahead: a rival store in a chain
+; 12 ahead: a vacant lot
+; 13 ahead: a rival store costing over 1/4 of its money
+; 14 ahead: the bank
+; 15 none of its stores ahead
+; 16 ahead: its own store with free goods slots
+; 17 no direction (after the bank)
+; 18 no direction, on an elevator square
+; 19 none of these
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2268 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 3, $l2                        ; voice: XA track 3 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01F8, 3, 12                ; 0.0 the first month: I'll do my best this time too, myon
+    words text_0213, 3, 12                ; 0.1 the first month: Ready, go, myon
+    words text_0228, 3, 12                ; 0.2 the first month: I'll blow the wind of a king, myon ★
+    words text_0243, 3, 1                 ; 1.0 assets at 7/8 of the goal: Wind of the king! Blow soon, myon!
+    words text_0260, 3, 1                 ; 1.1 assets at 7/8 of the goal: Victory into my hands! Myon
+    words text_0279, 3, 1                 ; 1.2 assets at 7/8 of the goal: Easy, easy ♪ / I'll run straight on like this, myon.
+    words text_02A0, 3, 1                 ; 2.0 last at the start of the round, first now: This is what <player> can do, myon ♪
+    words text_02BB, 3, 1                 ; 2.1 last at the start of the round, first now: This is where the king belongs, myon
+    words text_02D6, 3, 1                 ; 2.2 last at the start of the round, first now: If only it rains, this is nothing, myon ♭
+    words text_02F5, 4, 4                 ; 3.0 first at the start of the round, last now: Ke? Kerooooo?!
+    words text_030C, 4, 4                 ; 3.1 first at the start of the round, last now: It must be a dream, myon / (pinch) Ouch, myon ≦
+    words text_0343, 4, 4                 ; 3.2 first at the start of the round, last now: ..No comment, myon
+    words text_035C, 4, 4                 ; 4.0 ahead: a rival store it can't afford: I don't want to go, myon
+    words text_036F, 1, 2                 ; 4.1 ahead: a rival store it can't afford: It's... no good... myon ≦ / I have to do something, myon
+    words text_03A4, 1, 2                 ; 4.2 ahead: a rival store it can't afford: What do I do.. myon
+    words text_03B9, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Kero? Looks bad, myon ∵
+    words text_03D2, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: Danger level 120%!!! Myon
+    words text_03F1, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: You mustn't build big stores, myon
+    words text_0410, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: In the name of the prince, / I'll buy it out, myon ♭
+    words text_043B, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: I'll take the store that's taking a break, myon
+    words text_045E, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: I'll take the closed store, / myon ♪
+    words text_0483, 1, 2                 ; 7.0 ahead: its own store without goods: The store is empty, myon ≦ / It has to be restocked, myon
+    words text_04B6, 1, 2                 ; 7.1 ahead: its own store without goods: Why is there nothing, myon?
+    words text_04D1, 1, 2                 ; 7.2 ahead: its own store without goods: Shock!! / There's no-thing at a-all, myon ≦
+    words text_04F8, 0, 0                 ; 8.0 the bank on the next square: Let's stop by the bank, myon ★
+    words text_0513, 0, 0                 ; 8.1 the bank on the next square: There's lots of money here, myon ♪
+    words text_0532, 0, 0                 ; 8.2 the bank on the next square: I want money, myon ★
+    words text_0547, 3, 1                 ; 9.0 ranked better than at the start of the round: Easy peasy, myon ♪
+    words text_0562, 3, 1                 ; 9.1 ranked better than at the start of the round: This is nothing yet, myon
+    words text_0583, 3, 1                 ; 9.2 ranked better than at the start of the round: Fight and go!! Myon
+    words text_059E, 1, 2                 ; 10.0 ranked worse: Give me water, myon ≦
+    words text_05B1, 1, 2                 ; 10.1 ranked worse: Tell me it's a mistake, myon ≦
+    words text_05D0, 1, 2                 ; 10.2 ranked worse: My pride is in tatters, myon / (apparently sulking ≦)
+    words text_0601, 0, 0                 ; 11.0 ahead: a rival store in a chain: Hmph, not yet, myon
+    words text_0618, 1, 2                 ; 11.1 ahead: a rival store in a chain: Still all right, myon
+    words text_062D, 0, 0                 ; 11.2 ahead: a rival store in a chain: Totally fine, myo-on ☆
+    words text_0642, 0, 0                 ; 12.0 ahead: a vacant lot: Anybody there-e? Myon
+    words text_0659, 0, 0                 ; 12.1 ahead: a vacant lot: Is it a bargain, myon?
+    words text_066C, 3, 1                 ; 12.2 ahead: a vacant lot: Myomyo! / Found a free store, myon ♭
+    words text_0697, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: These goods are too pricey for me, myon
+    words text_06AE, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Ooh? Amazing goods, myon...
+    words text_06CD, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I can't buy something that expensive, myon
+    words text_06F0, 0, 0                 ; 14.0 ahead: the bank: Did I have business at the bank, myon?
+    words text_070B, 3, 1                 ; 14.1 ahead: the bank: The bank looks like an oasis, myon
+    words text_072E, 0, 0                 ; 14.2 ahead: the bank: If I can reach the bank I have a chance, myon
+    words text_074D, 1, 2                 ; 15.0 none of its stores ahead: Where are my stores, myon?
+    words text_0766, 1, 2                 ; 15.1 none of its stores ahead: Nothing but rivals, myon...
+    words text_0785, 1, 2                 ; 15.2 none of its stores ahead: Hey, aren't there any stores of mine, myon?
+    words text_07A8, 0, 0                 ; 16.0 ahead: its own store with free goods slots: Hmph, this is perfect, myon
+    words text_07C3, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Can I restock, myon?
+    words text_07D8, 0, 0                 ; 16.2 ahead: its own store with free goods slots: I have to restock once in a while, myon
+    words text_07F7, 0, 0                 ; 17.0 no direction (after the bank): Which way will the king's wind blow, myon?
+    words text_0816, 0, 0                 ; 17.1 no direction (after the bank): I'll decide with a calm, clear mind, myon
+    words text_0831, 0, 0                 ; 17.2 no direction (after the bank): Father! / Which way should I go, myon?
+    words text_0858, 0, 0                 ; 18.0 no direction, on an elevator square: Easy, easy, taking it easy, myon ♪
+    words text_0873, 0, 0                 ; 18.1 no direction, on an elevator square: I can't decide where to go, myon
+    words text_088C, 0, 0                 ; 18.2 no direction, on an elevator square: I'd hate to get caught in the doors, myon ≦ / Mmm, dangerous~
+    words text_08BB, 3, 10                ; 19.0 none of these: Gero gero gero~ ∥
+    words text_08CC, 3, 10                ; 19.1 none of these: Kero?
+    words text_08D3, 3, 10                ; 19.2 none of these: Keron
+
+text_01F8:
+    string "今回もがんばっていくみょん"                ; en: I'll do my best this time too, myon
+
+text_0213:
+    string "レディーゴーだみょん"                   ; en: Ready, go, myon
+
+text_0228:
+    string "王者の風を吹かせるみょん★"                ; en: I'll blow the wind of a king, myon ★
+
+text_0243:
+    string "王者の風よ！早く吹けみょん！"               ; en: Wind of the king! Blow soon, myon!
+
+text_0260:
+    string "勝利を我が手に！だみょん"                 ; en: Victory into my hands! Myon
+
+text_0279:
+    string "楽勝、楽勝♪%Kこのまま突っ走るみょん。"         ; en: Easy, easy ♪ / I'll run straight on like this, myon.
+
+text_02A0:
+    string "これが%NMYの実力だみょん♪"              ; en: This is what <player> can do, myon ♪
+
+text_02BB:
+    string "ここが王者の居場所だみょん"                ; en: This is where the king belongs, myon
+
+text_02D6:
+    string "雨さえ降ればこんなもんみょん♭"              ; en: If only it rains, this is nothing, myon ♭
+
+text_02F5:
+    string "け？けろぉぉぉぉぉ？！"                  ; en: Ke? Kerooooo?!
+
+text_030C:
+    string "きっと夢に決まってるみょん%K（ぎゅぅぅう）痛いみょん≦"  ; en: It must be a dream, myon / (pinch) Ouch, myon ≦
+
+text_0343:
+    string "・・ノーコメントだみょん"                 ; en: ..No comment, myon
+
+text_035C:
+    string "行きたくないみょん"                    ; en: I don't want to go, myon
+
+text_036F:
+    string "もう・・だめ・・みょん≦%Kなんとかしなくちゃだみょん"  ; en: It's... no good... myon ≦ / I have to do something, myon
+
+text_03A4:
+    string "どうしよう・・みょん"                   ; en: What do I do.. myon
+
+text_03B9:
+    string "ケロ？ヤバそうだみょん∵"                 ; en: Kero? Looks bad, myon ∵
+
+text_03D2:
+    string "ピンチ度１２０％！！！だみょん"              ; en: Danger level 120%!!! Myon
+
+text_03F1:
+    string "大きなお店は作っちゃだめみょん"              ; en: You mustn't build big stores, myon
+
+text_0410:
+    string "王子の名において%K買い取ってあげるみょん♭"       ; en: In the name of the prince, / I'll buy it out, myon ♭
+
+text_043B:
+    string "お休み中のお店はもらっちゃうみょん"            ; en: I'll take the store that's taking a break, myon
+
+text_045E:
+    string "休業中のお店は%Kもらっちゃうみょん♪"          ; en: I'll take the closed store, / myon ♪
+
+text_0483:
+    string "お店カラッポだみょん≦%K補充しなくちゃダメだみょん"   ; en: The store is empty, myon ≦ / It has to be restocked, myon
+
+text_04B6:
+    string "なんで何も無いんだみょん？"                ; en: Why is there nothing, myon?
+
+text_04D1:
+    string "ガーン！！%Kな～んに～もな～いみょん≦"         ; en: Shock!! / There's no-thing at a-all, myon ≦
+
+text_04F8:
+    string "銀行によってこーだみょん★"                ; en: Let's stop by the bank, myon ★
+
+text_0513:
+    string "ここにはお金がイッパイみょん♪"              ; en: There's lots of money here, myon ♪
+
+text_0532:
+    string "お金が欲しいみょん★"                   ; en: I want money, myon ★
+
+text_0547:
+    string "チョロイ、チョロイみょん♪"                ; en: Easy peasy, myon ♪
+
+text_0562:
+    string "まだまだこんなもんじゃないみょん"             ; en: This is nothing yet, myon
+
+text_0583:
+    string "ふぁいとだゴー！！だみょん"                ; en: Fight and go!! Myon
+
+text_059E:
+    string "水をくれだみょん≦"                    ; en: Give me water, myon ≦
+
+text_05B1:
+    string "間違いだって言ってくれみょん≦"              ; en: Tell me it's a mistake, myon ≦
+
+text_05D0:
+    string "プライド、ズタボロみょん%K（いじけてるらしい≦）"    ; en: My pride is in tatters, myon / (apparently sulking ≦)
+
+text_0601:
+    string "ふっ、まだまだだみょん"                  ; en: Hmph, not yet, myon
+
+text_0618:
+    string "まだまだ大丈夫みょん"                   ; en: Still all right, myon
+
+text_062D:
+    string "全然平気だみょーん☆"                   ; en: Totally fine, myo-on ☆
+
+text_0642:
+    string "誰か居ますかー？みょん"                  ; en: Anybody there-e? Myon
+
+text_0659:
+    string "お買い得かみょん？"                    ; en: Is it a bargain, myon?
+
+text_066C:
+    string "みょみょ！%Kフリーのお店を見っけたみょん♭"       ; en: Myomyo! / Found a free store, myon ♭
+
+text_0697:
+    string "僕には高い商品だみょん"                  ; en: These goods are too pricey for me, myon
+
+text_06AE:
+    string "おぉ？すごい商品だみょん・・・"              ; en: Ooh? Amazing goods, myon...
+
+text_06CD:
+    string "あんな高い物、僕には買えないみょん"            ; en: I can't buy something that expensive, myon
+
+text_06F0:
+    string "銀行に用事あったかみょん？"                ; en: Did I have business at the bank, myon?
+
+text_070B:
+    string "銀行はまるでオアシスに見えるみょん"            ; en: The bank looks like an oasis, myon
+
+text_072E:
+    string "銀行に行ければ勝機があるみょん"              ; en: If I can reach the bank I have a chance, myon
+
+text_074D:
+    string "僕のお店はどこだみょん？"                 ; en: Where are my stores, myon?
+
+text_0766:
+    string "ライバルばっかりだみょん・・・"              ; en: Nothing but rivals, myon...
+
+text_0785:
+    string "おーい、僕のお店はないのかみょん？"            ; en: Hey, aren't there any stores of mine, myon?
+
+text_07A8:
+    string "ふっ、これでバッチリみょん"                ; en: Hmph, this is perfect, myon
+
+text_07C3:
+    string "補充できるかみょん？"                   ; en: Can I restock, myon?
+
+text_07D8:
+    string "たまには補充しなくちゃだみょん"              ; en: I have to restock once in a while, myon
+
+text_07F7:
+    string "王者の風はどっちに吹くみょん？"              ; en: Which way will the king's wind blow, myon?
+
+text_0816:
+    string "明鏡止水の心で決めるみょん"                ; en: I'll decide with a calm, clear mind, myon
+
+text_0831:
+    string "父さん！%Kどっちにいけばイイかみょん？"         ; en: Father! / Which way should I go, myon?
+
+text_0858:
+    string "らく、らく、楽するみょん♪"                ; en: Easy, easy, taking it easy, myon ♪
+
+text_0873:
+    string "どこに行こうか迷うみょん"                 ; en: I can't decide where to go, myon
+
+text_088C:
+    string "扉に挟まれたらやだみょん≦%Kん～でんじゃらす～"     ; en: I'd hate to get caught in the doors, myon ≦ / Mmm, dangerous~
+
+text_08BB:
+    string "ゲロゲロゲロ～∥"                     ; en: Gero gero gero~ ∥
+
+text_08CC:
+    string "ケロ？"                          ; en: Kero?
+
+text_08D3:
+    string "けろん"                          ; en: Keron
+    words 0    ; padding

@@ -1,0 +1,32 @@
+// Hand-maintained symbol overrides (take precedence: tools/export_symbols.py skips these names).
+// type:u32 = data holding pointers between other fields; emitted as words so the
+// pointers become relocations (found by tools/audit_shift.py).
+g_stageDefs = 0x800ACD14; // type:u32
+g_eventCards = 0x800ABF9C; // type:u32
+D_800AC134 = 0x800AC134; // type:u32
+// libsnd pitch tables (halfwords; their first word 0x800E8000 is not a pointer)
+D_800AE664 = 0x800AE664; // type:u16
+D_800AE784 = 0x800AE784; // type:u16
+D_800ABFA4 = 0x800ABFA4; // type:u32
+D_800ABFBC = 0x800ABFBC; // type:u32
+D_800ABFE4 = 0x800ABFE4; // type:u32
+D_800AC004 = 0x800AC004; // type:u32
+D_800AC02C = 0x800AC02C; // type:u32
+D_800AC05C = 0x800AC05C; // type:u32
+D_800AC08C = 0x800AC08C; // type:u32
+D_800AC0A4 = 0x800AC0A4; // type:u32
+D_800AC104 = 0x800AC104; // type:u32
+// Labels inside SDK code that data/jump tables point at, and a byte the SDK addresses
+// with an unpaired hi/lo (see config/reloc_addrs.txt). Not in Ghidra's symbol table.
+D_800908C0 = 0x800908C0; // type:label
+D_80090920 = 0x80090920; // type:label
+D_80090950 = 0x80090950; // type:label
+D_80090980 = 0x80090980; // type:label
+D_8009F28C = 0x8009F28C; // type:label
+D_8009F2A4 = 0x8009F2A4; // type:label
+D_800A3590 = 0x800A3590; // type:label
+D_800A359C = 0x800A359C; // type:label
+D_800B1CA5 = 0x800B1CA5;
+// the event card pictures (LZSS archive after k_eventCardArchiveOffsets): bytes, one word of
+// which happens to equal a BSS address
+D_800AB92C = 0x800AB92C; // type:u8

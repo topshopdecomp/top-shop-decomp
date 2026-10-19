@@ -1,0 +1,293 @@
+; TALK.J entry 17 (LZSS-packed)
+;
+; What Maiko says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 1864 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 1, $l2                        ; voice: XA track 1 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): I hate repeating a year~!!
+    words text_01F9, 1, 7                 ; 0.1 (no comment): A rendezvous somewhere just like this
+    words text_0214, 4, 9                 ; 0.2 (no comment): Horoscopes are liars~
+    words text_0229, 3, 6                 ; 1.0 a chain of 4: Everyone! Stop at / <player>'s stores a lot ☆
+    words text_0256, 3, 6                 ; 1.1 a chain of 4: Stop by / <player>'s stores lots ♪
+    words text_0277, 3, 6                 ; 1.2 a chain of 4: Everyone! / Leave it to <player> ☆
+    words text_0294, 3, 6                 ; 2.0 a chain of 2 or 3: Kyaa~∥｜ feeling great, vroom vroo-om
+    words text_02B5, 3, 6                 ; 2.1 a chain of 2 or 3: Look look ∈ they merged ☆
+    words text_02D0, 3, 6                 ; 2.2 a chain of 2 or 3: Ah, it's the best ☆
+    words text_02E5, 0, 5                 ; 3.0 landed on a rival store closed for now: Good-night beam
+    words text_02F4, 3, 6                 ; 3.1 landed on a rival store closed for now: A day off? Yay~∥｜
+    words text_030B, 3, 6                 ; 3.2 landed on a rival store closed for now: That's so moving ☆
+    words text_0320, 3, 6                 ; 4.0 landed on a rival store with lowered prices: The service gets 100 out of 100 ☆
+    words text_033B, 3, 6                 ; 4.1 landed on a rival store with lowered prices: OK, OK, go, go
+    words text_0352, 3, 6                 ; 4.2 landed on a rival store with lowered prices: I love shopping~ ☆
+    words text_0367, 0, 5                 ; 5.0 landed on its own store / opened a store: A little rest here today
+    words text_037A, 0, 5                 ; 5.1 landed on its own store / opened a store: Earn lots of money ☆
+    words text_0393, 0, 5                 ; 5.2 landed on its own store / opened a store: Let's protect the earth's environment
+    words text_03AC, 4, 9                 ; 6.0 did not take the elevator: It's fine not to ride it~
+    words text_03C3, 0, 5                 ; 6.1 did not take the elevator: What the heck!!
+    words text_03D6, 1, 7                 ; 6.2 did not take the elevator: I just can't get motivated
+    words text_03EB, 3, 6                 ; 7.0 landed on the bank: Let's go to the candy store in Asakusa
+    words text_040A, 3, 6                 ; 7.1 landed on the bank: Ya~∥｜y, payday ♪
+    words text_041F, 3, 6                 ; 7.2 landed on the bank: I want to go wild today ♪
+    words text_043C, 1, 7                 ; 8.0 took the elevator: I feel sick~... ugh...
+    words text_0459, 1, 7                 ; 8.1 took the elevator: Elevators are no good~ ≦
+    words text_0474, 1, 7                 ; 8.2 took the elevator: Huh? Where am I?
+    words text_0487, 1, 7                 ; 9.0 shopping cost a fifth of its money or more: Why? Why? Whyyy?
+    words text_04A2, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: Be nice to <player> ≦
+    words text_04B7, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: How come? Why? Hey?
+    words text_04D0, 3, 6                 ; 10.0 shopping: got the money back: Totally satisfied~
+    words text_04E3, 3, 6                 ; 10.1 shopping: got the money back: Thanks, darling ♪
+    words text_04F6, 3, 6                 ; 10.2 shopping: got the money back: Pure profit ♪
+    words text_0505, 0, 5                 ; 11.0 shopping: I want a little discount ∝
+    words text_051A, 0, 5                 ; 11.1 shopping: I don't want to spend money~ ♪
+    words text_0531, 0, 5                 ; 11.2 shopping: No way~ ∥
+    words text_053A, 0, 5                 ; 12.0 bought a rival's store: From today <player> is the manager ♪
+    words text_0551, 0, 5                 ; 12.1 bought a rival's store: Listen to what <player> says ♪
+    words text_056A, 3, 6                 ; 12.2 bought a rival's store: I really bought a good place ☆
+    words text_0585, 4, 9                 ; 13.0 shopped this turn and the last: Kyan! I've had enough~
+    words text_059C, 1, 7                 ; 13.1 shopped this turn and the last: I don't want to waste money~
+    words text_05B5, 4, 9                 ; 13.2 shopped this turn and the last: Kyan! Somebody help me~
+    words text_05D0, 3, 6                 ; 14.0 assets passed half the goal: Halfway to the yakiniku pa-arty
+    words text_05EF, 0, 5                 ; 14.1 assets passed half the goal: Now you know what humans can do ☆
+    words text_060A, 3, 6                 ; 14.2 assets passed half the goal: I want the yakiniku pa-arty soon
+    words text_0629, 4, 9                 ; 15.0 sold a store: Come back, my shop ≦
+    words text_0642, 4, 9                 ; 15.1 sold a store: Kya~∥｜n
+    words text_064F, 4, 9                 ; 15.2 sold a store: Give it back~∥｜ ≦
+    words text_0662, 2, 8                 ; 16.0 declined a vacant lot it could not afford: I don't care if I can't buy it!!
+    words text_067F, 1, 7                 ; 16.1 declined a vacant lot it could not afford: Kyan! Not enough money~ ≦
+    words text_069C, 1, 7                 ; 16.2 declined a vacant lot it could not afford: I really do want it though..
+    words text_06BB, 1, 7                 ; 17.0 declined a vacant lot: Hang in there for a while?
+    words text_06D0, 1, 7                 ; 17.1 declined a vacant lot: Will there be something better tomorrow?
+    words text_06EF, 1, 7                 ; 17.2 declined a vacant lot: Was it okay to buy it? ☆
+    words text_070E, 3, 10                ; 18.0 an event card (the default): Gotta try hard~
+    words text_071F, 3, 10                ; 18.1 an event card (the default): Fight-o! Fight-o!
+    words text_0734, 3, 10                ; 18.2 an event card (the default): Gyahahahahahaha
+
+text_01E6:
+    string "留年大嫌いィ～！！"                    ; en: I hate repeating a year~!!
+
+text_01F9:
+    string "このままどこかでランデブー"                ; en: A rendezvous somewhere just like this
+
+text_0214:
+    string "星占いのうそつきィ～"                   ; en: Horoscopes are liars~
+
+text_0229:
+    string "みんな！%NMYのお店に%Kバリバリ止まってねぇ☆"    ; en: Everyone! Stop at / <player>'s stores a lot ☆
+
+text_0256:
+    string "%NMYのお店に%Kどんどん寄ってね♪"          ; en: Stop by / <player>'s stores lots ♪
+
+text_0277:
+    string "みんな！%K%NMYにまかせてネ☆"            ; en: Everyone! / Leave it to <player> ☆
+
+text_0294:
+    string "きゃ～∥｜気分サイコーぶんぶ～ん"             ; en: Kyaa~∥｜ feeling great, vroom vroo-om
+
+text_02B5:
+    string "みてみて∈合体しちゃった☆"                ; en: Look look ∈ they merged ☆
+
+text_02D0:
+    string "も～サイコーだねぇ☆"                   ; en: Ah, it's the best ☆
+
+text_02E5:
+    string "おやすみビーム"                      ; en: Good-night beam
+
+text_02F4:
+    string "やすみ？　うれし～∥｜"                  ; en: A day off? Yay~∥｜
+
+text_030B:
+    string "それってカンゲキィ☆"                   ; en: That's so moving ☆
+
+text_0320:
+    string "サービス１００点満点だね☆"                ; en: The service gets 100 out of 100 ☆
+
+text_033B:
+    string "おけ・おけ・ゴー・ゴー"                  ; en: OK, OK, go, go
+
+text_0352:
+    string "ショッピングすき～☆"                   ; en: I love shopping~ ☆
+
+text_0367:
+    string "今日はここで一休み"                    ; en: A little rest here today
+
+text_037A:
+    string "いっぱいお金を稼いでね☆"                 ; en: Earn lots of money ☆
+
+text_0393:
+    string "地球の環境を守りましょう"                 ; en: Let's protect the earth's environment
+
+text_03AC:
+    string "乗らなくってもイイの～"                  ; en: It's fine not to ride it~
+
+text_03C3:
+    string "なんのこっちゃ！！"                    ; en: What the heck!!
+
+text_03D6:
+    string "やる気が出ないッスよ"                   ; en: I just can't get motivated
+
+text_03EB:
+    string "浅草の駄菓子屋さんにレッツゴー"              ; en: Let's go to the candy store in Asakusa
+
+text_040A:
+    string "わ～∥｜い給料日ィ♪"                   ; en: Ya~∥｜y, payday ♪
+
+text_041F:
+    string "今日はパァーっとやりたいネ♪"               ; en: I want to go wild today ♪
+
+text_043C:
+    string "気持ち悪ぅ～・・・ウェ・・・"               ; en: I feel sick~... ugh...
+
+text_0459:
+    string "エレベーターってだめぇ～≦"                ; en: Elevators are no good~ ≦
+
+text_0474:
+    string "あれ？ここはどこ？"                    ; en: Huh? Where am I?
+
+text_0487:
+    string "なんで？なんで？なんでぇ？"                ; en: Why? Why? Whyyy?
+
+text_04A2:
+    string "%NMYに優しくしてよ≦"                 ; en: Be nice to <player> ≦
+
+text_04B7:
+    string "どうして？なんで？ねえ？"                 ; en: How come? Why? Hey?
+
+text_04D0:
+    string "だ～いまんぞくぅ～"                    ; en: Totally satisfied~
+
+text_04E3:
+    string "ありがとダーリン♪"                    ; en: Thanks, darling ♪
+
+text_04F6:
+    string "まるもうけッ♪"                      ; en: Pure profit ♪
+
+text_0505:
+    string "おまけしてほしいな∝"                   ; en: I want a little discount ∝
+
+text_051A:
+    string "お金、使いたくな～い♪"                  ; en: I don't want to spend money~ ♪
+
+text_0531:
+    string "やだ～∥"                         ; en: No way~ ∥
+
+text_053A:
+    string "今日から%NMYが店長よ♪"                ; en: From today <player> is the manager ♪
+
+text_0551:
+    string "%NMYの言うこと聞いてよ♪"               ; en: Listen to what <player> says ♪
+
+text_056A:
+    string "ホントいい所買っちゃった☆"                ; en: I really bought a good place ☆
+
+text_0585:
+    string "きゃん！もうやだよぉ～"                  ; en: Kyan! I've had enough~
+
+text_059C:
+    string "無駄使いしたくないよぉ～"                 ; en: I don't want to waste money~
+
+text_05B5:
+    string "きゃん！だれか助けてよぉ～"                ; en: Kyan! Somebody help me~
+
+text_05D0:
+    string "焼き肉ぱ～てぇ～まであと半分ネ"              ; en: Halfway to the yakiniku pa-arty
+
+text_05EF:
+    string "人間の実力おもいしったか☆"                ; en: Now you know what humans can do ☆
+
+text_060A:
+    string "焼き肉ぱ～てぇ～はやくしたいネ"              ; en: I want the yakiniku pa-arty soon
+
+text_0629:
+    string "かむばっくまいしょっぷ≦"                 ; en: Come back, my shop ≦
+
+text_0642:
+    string "きゃ～∥｜ん"                       ; en: Kya~∥｜n
+
+text_064F:
+    string "かえしてよ～∥｜≦"                    ; en: Give it back~∥｜ ≦
+
+text_0662:
+    string "買えなくても別にいいもん！！"               ; en: I don't care if I can't buy it!!
+
+text_067F:
+    string "きゃん！おかねが足りない～≦"               ; en: Kyan! Not enough money~ ≦
+
+text_069C:
+    string "ホントは欲しいんだけどなぁ・・"              ; en: I really do want it though..
+
+text_06BB:
+    string "しばらくの辛抱かな？"                   ; en: Hang in there for a while?
+
+text_06D0:
+    string "明日はもっといいことあるかな？"              ; en: Will there be something better tomorrow?
+
+text_06EF:
+    string "買っちゃっても平気だったかな☆"              ; en: Was it okay to buy it? ☆
+
+text_070E:
+    string "ガンバんなきゃ～"                     ; en: Gotta try hard~
+
+text_071F:
+    string "ファイの！ファイの！"                   ; en: Fight-o! Fight-o!
+
+text_0734:
+    string "ぎゃははははははは"                    ; en: Gyahahahahahaha
+    bytes 0x00    ; padding

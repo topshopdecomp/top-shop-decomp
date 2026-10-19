@@ -1,0 +1,293 @@
+; TALK.J entry 16 (LZSS-packed)
+;
+; What Meower says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 1860 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 0, $l2                        ; voice: XA track 0 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 7                 ; 0.0 (no comment): A pinch, nyan...
+    words text_01F9, 4, 9                 ; 0.1 (no comment): Let's keep it fun, nyan... ≦
+    words text_0214, 4, 9                 ; 0.2 (no comment): At the bottom of misfortune, nyan...
+    words text_022F, 3, 6                 ; 1.0 a chain of 4: Good my sho-op, nyan ♪≧
+    words text_024E, 3, 6                 ; 1.1 a chain of 4: Ultra nyan-derful, nyan ♪≧
+    words text_026D, 3, 6                 ; 1.2 a chain of 4: Efficiency all together, nyan ♪≧
+    words text_0286, 3, 6                 ; 2.0 a chain of 2 or 3: Grea-at power-up, nyan ≧
+    words text_02A3, 3, 6                 ; 2.1 a chain of 2 or 3: They merged, so I want to go to a southern island, nyan /
+    words text_02C8, 3, 6                 ; 2.2 a chain of 2 or 3: Gra-ade up, nyan ≧
+    words text_02DF, 0, 5                 ; 3.0 landed on a rival store closed for now: I'm doing good business, nyan ≧
+    words text_02FA, 3, 6                 ; 3.1 landed on a rival store closed for now: Waste is business's natural enemy, nyan ≧
+    words text_0317, 3, 6                 ; 3.2 landed on a rival store closed for now: Overspending is business's natural enemy, nyan ≧
+    words text_0334, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Cheap makes me happy, nyan
+    words text_0349, 0, 5                 ; 4.1 landed on a rival store with lowered prices: So cheap I could faint, nyan
+    words text_0360, 0, 5                 ; 4.2 landed on a rival store with lowered prices: Cheap, nyan ≧
+    words text_036D, 0, 5                 ; 5.0 landed on its own store / opened a store: It's a safe zone, nyan
+    words text_037E, 3, 6                 ; 5.1 landed on its own store / opened a store: Today's a fun day, nyan ≧
+    words text_0397, 3, 6                 ; 5.2 landed on its own store / opened a store: Airplane, vroo~∥｜m
+    words text_03AA, 4, 9                 ; 6.0 did not take the elevator: I won't use it this time, nyan!
+    words text_03C1, 1, 7                 ; 6.1 did not take the elevator: I made a mistake, nyan ≦
+    words text_03D2, 1, 7                 ; 6.2 did not take the elevator: What do I do, nyan...
+    words text_03E9, 3, 6                 ; 7.0 landed on the bank: Feels like a picnic, nyan ≧
+    words text_0402, 3, 6                 ; 7.1 landed on the bank: I'm happy, nyan ≧
+    words text_0413, 3, 6                 ; 7.2 landed on the bank: Party tonight, nyan ≧
+    words text_0428, 0, 5                 ; 8.0 took the elevator: A safe zone for now, nyan ≧
+    words text_0445, 0, 5                 ; 8.1 took the elevator: Next I'll change direction, nyan ≧
+    words text_045A, 4, 9                 ; 8.2 took the elevator: Totally dizzy, nyan
+    words text_0473, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: I'm annoyed, nyan
+    words text_0482, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: Feeling down, nyan...
+    words text_0497, 2, 8                 ; 9.2 shopping cost a fifth of its money or more: Bomb goes boo-oom, nyan
+    words text_04B0, 3, 6                 ; 10.0 shopping: got the money back: Thank yo-ou, nyanyanya ≧
+    words text_04C9, 3, 6                 ; 10.1 shopping: got the money back: Crying and laughing, nyan
+    words text_04D8, 3, 6                 ; 10.2 shopping: got the money back: Beetle buzzi~∥｜ng
+    words text_04ED, 0, 5                 ; 11.0 shopping: Shopping time, nyan
+    words text_04FC, 1, 7                 ; 11.1 shopping: I don't want to go shopping, nyan ≧
+    words text_051B, 0, 5                 ; 11.2 shopping: I forgot to buy canned mackerel, nyan
+    words text_0534, 3, 6                 ; 12.0 bought a rival's store: Store mana-ager, nyan
+    words text_0547, 3, 6                 ; 12.1 bought a rival's store: Like a store manager, nyan ♪
+    words text_055C, 3, 6                 ; 12.2 bought a rival's store: The management changed, nyan ♪
+    words text_0575, 4, 9                 ; 13.0 shopped this turn and the last: Nyanyanyanyanya...
+    words text_0590, 4, 9                 ; 13.1 shopped this turn and the last: Somehow I'm sad, nyan...
+    words text_05AD, 1, 7                 ; 13.2 shopped this turn and the last: Business is down the drain, nyan
+    words text_05C4, 3, 6                 ; 14.0 assets passed half the goal: Celebrating passing halfway, nyan
+    words text_05E3, 3, 6                 ; 14.1 assets passed half the goal: The cat-teaser dance, nyan
+    words text_05FC, 3, 6                 ; 14.2 assets passed half the goal: Halfway more and I win, nyan
+    words text_0617, 4, 9                 ; 15.0 sold a store: And I didn't want to sell, nyan...
+    words text_0634, 2, 8                 ; 15.1 sold a store: Give me catnip, nyan
+    words text_0647, 4, 9                 ; 15.2 sold a store: My stores are vanishing, nyan
+    words text_065E, 1, 7                 ; 16.0 declined a vacant lot it could not afford: Got to endure this, nyan...
+    words text_0677, 0, 5                 ; 16.1 declined a vacant lot it could not afford: I'll get through on willpower, nyan
+    words text_068C, 1, 7                 ; 16.2 declined a vacant lot it could not afford: I want it so badly, nyan...
+    words text_06AB, 0, 5                 ; 17.0 declined a vacant lot: The sun will surely rise tomorrow too, nyan
+    words text_06CA, 1, 7                 ; 17.1 declined a vacant lot: Once in a while I want to eat / something other than canned cat food, nyan
+    words text_06F5, 0, 5                 ; 17.2 declined a vacant lot: Enduring burns calories nicely, nyan
+    words text_0718, 3, 10                ; 18.0 an event card (the default): Nyango~∥｜
+    words text_0727, 3, 10                ; 18.1 an event card (the default): Nya~nya
+    words text_0734, 3, 10                ; 18.2 an event card (the default): I want to eat a goldfish~!
+
+text_01E6:
+    string "ピンチニャン・・・"                    ; en: A pinch, nyan...
+
+text_01F9:
+    string "楽しく行こうニャン・・・≦"                ; en: Let's keep it fun, nyan... ≦
+
+text_0214:
+    string "不幸のどんぞこニャン・・・"                ; en: At the bottom of misfortune, nyan...
+
+text_022F:
+    string "グッドまいしょっぷぅニャン♪≧"              ; en: Good my sho-op, nyan ♪≧
+
+text_024E:
+    string "うるとらニャンだふるニャン♪≧"              ; en: Ultra nyan-derful, nyan ♪≧
+
+text_026D:
+    string "まとめて効率化ニャン♪≧"                 ; en: Efficiency all together, nyan ♪≧
+
+text_0286:
+    string "ぐれ～とぱわ～あっぷニャン≧"               ; en: Grea-at power-up, nyan ≧
+
+text_02A3:
+    string "合体したので南の島に行きたいニャン%K"          ; en: They merged, so I want to go to a southern island, nyan /
+
+text_02C8:
+    string "ぐれ～どあっぷニャン≧"                  ; en: Gra-ade up, nyan ≧
+
+text_02DF:
+    string "いい商売してまするニャン≧"                ; en: I'm doing good business, nyan ≧
+
+text_02FA:
+    string "無駄遣いは商売の天敵ニャン≧"               ; en: Waste is business's natural enemy, nyan ≧
+
+text_0317:
+    string "使いすぎは商売の天敵ニャン≧"               ; en: Overspending is business's natural enemy, nyan ≧
+
+text_0334:
+    string "安くてうれしいニャン"                   ; en: Cheap makes me happy, nyan
+
+text_0349:
+    string "安くて気絶しそうニャン"                  ; en: So cheap I could faint, nyan
+
+text_0360:
+    string "安いニャン≧"                       ; en: Cheap, nyan ≧
+
+text_036D:
+    string "安全地帯だニャン"                     ; en: It's a safe zone, nyan
+
+text_037E:
+    string "今日は楽しい一日ニャン≧"                 ; en: Today's a fun day, nyan ≧
+
+text_0397:
+    string "ひこうきぶ～∥｜ん"                    ; en: Airplane, vroo~∥｜m
+
+text_03AA:
+    string "今回は使わないニャン！"                  ; en: I won't use it this time, nyan!
+
+text_03C1:
+    string "間違えたニャン≦"                     ; en: I made a mistake, nyan ≦
+
+text_03D2:
+    string "どうしようニャン・・・"                  ; en: What do I do, nyan...
+
+text_03E9:
+    string "ピクニック気分だニャン≧"                 ; en: Feels like a picnic, nyan ≧
+
+text_0402:
+    string "うれしいニャン≧"                     ; en: I'm happy, nyan ≧
+
+text_0413:
+    string "今夜は宴会だニャン≧"                   ; en: Party tonight, nyan ≧
+
+text_0428:
+    string "とりあえずの安全地帯ニャン≧"               ; en: A safe zone for now, nyan ≧
+
+text_0445:
+    string "次は方向転換ニャン≧"                   ; en: Next I'll change direction, nyan ≧
+
+text_045A:
+    string "思いっきりクラクラニャン"                 ; en: Totally dizzy, nyan
+
+text_0473:
+    string "むかつくニャン"                      ; en: I'm annoyed, nyan
+
+text_0482:
+    string "しょぼんニャン・・・"                   ; en: Feeling down, nyan...
+
+text_0497:
+    string "ばくだんボカぁ～ンニャン"                 ; en: Bomb goes boo-oom, nyan
+
+text_04B0:
+    string "サンキュ～ニャニャニャ≧"                 ; en: Thank yo-ou, nyanyanya ≧
+
+text_04C9:
+    string "泣き笑いニャン"                      ; en: Crying and laughing, nyan
+
+text_04D8:
+    string "カブトムシぶ～∥｜ん"                   ; en: Beetle buzzi~∥｜ng
+
+text_04ED:
+    string "お買い物ニャン"                      ; en: Shopping time, nyan
+
+text_04FC:
+    string "買い物なんてしたくないニャン≧"              ; en: I don't want to go shopping, nyan ≧
+
+text_051B:
+    string "サバ缶を買い忘れたニャン"                 ; en: I forgot to buy canned mackerel, nyan
+
+text_0534:
+    string "てんちょぉうニャン"                    ; en: Store mana-ager, nyan
+
+text_0547:
+    string "店長みたいだニャン♪"                   ; en: Like a store manager, nyan ♪
+
+text_055C:
+    string "経営者が変わったニャン♪"                 ; en: The management changed, nyan ♪
+
+text_0575:
+    string "ニャニャニャニャニャ・・・"                ; en: Nyanyanyanyanya...
+
+text_0590:
+    string "なんか、かなしいニャン・・・"               ; en: Somehow I'm sad, nyan...
+
+text_05AD:
+    string "商売上がったりだニャン"                  ; en: Business is down the drain, nyan
+
+text_05C4:
+    string "のこりはんぶん突破記念だニャン"              ; en: Celebrating passing halfway, nyan
+
+text_05E3:
+    string "ネコじゃらしの舞だニャン"                 ; en: The cat-teaser dance, nyan
+
+text_05FC:
+    string "あとはんぶんで勝ちだニャン"                ; en: Halfway more and I win, nyan
+
+text_0617:
+    string "売りたくないのにニャン・・・"               ; en: And I didn't want to sell, nyan...
+
+text_0634:
+    string "マタタビくれニャン"                    ; en: Give me catnip, nyan
+
+text_0647:
+    string "お店が消えて行くニャン"                  ; en: My stores are vanishing, nyan
+
+text_065E:
+    string "ここはガマンニャン・・・"                 ; en: Got to endure this, nyan...
+
+text_0677:
+    string "気合で乗り切るニャン"                   ; en: I'll get through on willpower, nyan
+
+text_068C:
+    string "めちゃくちゃほしいニャン・・・"              ; en: I want it so badly, nyan...
+
+text_06AB:
+    string "あしたもきっと太陽が昇るニャン"              ; en: The sun will surely rise tomorrow too, nyan
+
+text_06CA:
+    string "たまにはネコ缶以外のモノも%K食べたいニャン"       ; en: Once in a while I want to eat / something other than canned cat food, nyan
+
+text_06F5:
+    string "ガマンはカロリーの消費がいいニャン"            ; en: Enduring burns calories nicely, nyan
+
+text_0718:
+    string "ニャンご～∥｜"                      ; en: Nyango~∥｜
+
+text_0727:
+    string "ニャ～ニャっ"                       ; en: Nya~nya
+
+text_0734:
+    string "金魚喰いて～！"                      ; en: I want to eat a goldfish~!
+    bytes 0x00    ; padding

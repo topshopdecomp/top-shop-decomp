@@ -1,0 +1,293 @@
+; TALK.J entry 18 (LZSS-packed)
+;
+; What Dona says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 1812 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 2, $l2                        ; voice: XA track 2 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): It's ending, nari~
+    words text_01FB, 4, 9                 ; 0.1 (no comment): Too much water, nari~
+    words text_0210, 4, 9                 ; 0.2 (no comment): Give me one more chance, nari~
+    words text_022F, 3, 6                 ; 1.0 a chain of 4: PERFECT, nari
+    words text_0242, 3, 6                 ; 1.1 a chain of 4: INVINCIBLE, nari
+    words text_0253, 3, 6                 ; 1.2 a chain of 4: STRONGEST, nari
+    words text_0266, 3, 6                 ; 2.0 a chain of 2 or 3: How's that, nari? Amazing, right, nari
+    words text_0281, 3, 6                 ; 2.1 a chain of 2 or 3: It suits <player>, right, nari ♪
+    words text_029A, 3, 6                 ; 2.2 a chain of 2 or 3: You think better of me, right, nari ♭
+    words text_02B5, 3, 6                 ; 3.0 landed on a rival store closed for now: Thank you for taking a break / for me, nari
+    words text_02DC, 0, 5                 ; 3.1 landed on a rival store closed for now: I'll do some sunbathing, nari
+    words text_02EF, 3, 6                 ; 3.2 landed on a rival store closed for now: A break makes me happy, nari~∥｜
+    words text_030E, 1, 7                 ; 4.0 landed on a rival store with lowered prices: Prices in Japan are too high, nari...
+    words text_032D, 3, 6                 ; 4.1 landed on a rival store with lowered prices: Explosively cheap, nari ♭
+    words text_033C, 0, 5                 ; 4.2 landed on a rival store with lowered prices: Can't I stock up, nari?
+    words text_0357, 0, 5                 ; 5.0 landed on its own store / opened a store: That's all the work for today, nari
+    words text_0370, 0, 5                 ; 5.1 landed on its own store / opened a store: A short rest in my own store, nari
+    words text_0389, 0, 5                 ; 5.2 landed on its own store / opened a store: That's it for today, nari
+    words text_039E, 4, 9                 ; 6.0 did not take the elevator: It was over capacity, nari ≦
+    words text_03B7, 1, 7                 ; 6.1 did not take the elevator: I should have ridden it, nari...
+    words text_03D4, 3, 6                 ; 6.2 did not take the elevator: Not riding was the right answer, nari ♪
+    words text_03EB, 3, 6                 ; 7.0 landed on the bank: It's payday, nari
+    words text_0400, 3, 6                 ; 7.1 landed on the bank: A fulfilling day, nari
+    words text_0411, 3, 6                 ; 7.2 landed on the bank: I got money, nari~ ♭
+    words text_0428, 0, 5                 ; 8.0 took the elevator: Warp, nari
+    words text_0433, 0, 5                 ; 8.1 took the elevator: Teleport, nari
+    words text_0440, 0, 5                 ; 8.2 took the elevator: Ding! Arrived, nari
+    words text_044F, 4, 9                 ; 9.0 shopping cost a fifth of its money or more: My money is dwindling, nari
+    words text_046E, 1, 7                 ; 9.1 shopping cost a fifth of its money or more: A big shock, nari~
+    words text_0481, 4, 9                 ; 9.2 shopping cost a fifth of its money or more: This is a big problem, nari~
+    words text_0496, 3, 6                 ; 10.0 shopping: got the money back: Thank you for the refund, nari
+    words text_04AB, 3, 6                 ; 10.1 shopping: got the money back: I made a profit, nari ♪
+    words text_04B8, 3, 6                 ; 10.2 shopping: got the money back: Thanks, nari
+    words text_04C5, 0, 5                 ; 11.0 shopping: A nasty turn of events, nari
+    words text_04D4, 0, 5                 ; 11.1 shopping: I took mental damage, nari
+    words text_04EF, 2, 8                 ; 11.2 shopping: I want to strike back, nari ♪
+    words text_0500, 0, 5                 ; 12.0 bought a rival's store: I made money, nari
+    words text_0515, 0, 5                 ; 12.1 bought a rival's store: I took it over, nari ♭
+    words text_0530, 3, 6                 ; 12.2 bought a rival's store: I strengthened my base, nari ★
+    words text_0545, 1, 7                 ; 13.0 shopped this turn and the last: Business is down the drain, nari...
+    words text_055E, 1, 7                 ; 13.1 shopped this turn and the last: Money won't build up, nari...
+    words text_0579, 2, 8                 ; 13.2 shopped this turn and the last: Too many expenses, nari
+    words text_058C, 3, 6                 ; 14.0 assets passed half the goal: Ta-da-da-daaa / Halfway reached, nari
+    words text_05AD, 3, 6                 ; 14.1 assets passed half the goal: Even a cactus does it when it counts, nari ★
+    words text_05D0, 3, 6                 ; 14.2 assets passed half the goal: Cha-chaan! / Half done, nari ♭
+    words text_05F7, 4, 9                 ; 15.0 sold a store: My stores are vanishing, nari
+    words text_0612, 4, 9                 ; 15.1 sold a store: It's all my own fault, nari...
+    words text_062B, 1, 7                 ; 15.2 sold a store: Is the world to blame, nari?
+    words text_0644, 0, 5                 ; 16.0 declined a vacant lot it could not afford: I want it but I have no money, nari
+    words text_065F, 1, 7                 ; 16.1 declined a vacant lot it could not afford: I have no money, so I'll give up, nari...
+    words text_067E, 4, 9                 ; 16.2 declined a vacant lot it could not afford: ...sniff..nari ≦
+    words text_0695, 1, 7                 ; 17.0 declined a vacant lot: <player> needs patience too, nari ≦
+    words text_06B0, 0, 5                 ; 17.1 declined a vacant lot: I'm good at enduring, nari ★
+    words text_06C9, 3, 6                 ; 17.2 declined a vacant lot: <player> doesn't need it, nari
+    words text_06DE, 3, 10                ; 18.0 an event card (the default): I'm a proper plant, nari
+    words text_06F3, 3, 10                ; 18.1 an event card (the default): Everyone's a nice person, nari
+    words text_0706, 3, 10                ; 18.2 an event card (the default): Fight, nari
+
+text_01E6:
+    string "終わっちゃうなりィ～"                   ; en: It's ending, nari~
+
+text_01FB:
+    string "水のかけすぎなりィ～"                   ; en: Too much water, nari~
+
+text_0210:
+    string "もう一度チャンスをくれなりィ～"              ; en: Give me one more chance, nari~
+
+text_022F:
+    string "ＫＡＮＰＥＫＩなり"                    ; en: PERFECT, nari
+
+text_0242:
+    string "ＭＵＴＥＫＩなり"                     ; en: INVINCIBLE, nari
+
+text_0253:
+    string "ＳＡＩＫＹＯＵなり"                    ; en: STRONGEST, nari
+
+text_0266:
+    string "どうなり？すごいなりでしょ"                ; en: How's that, nari? Amazing, right, nari
+
+text_0281:
+    string "%NMYに似合うなりでしょ♪"               ; en: It suits <player>, right, nari ♪
+
+text_029A:
+    string "なんか見直したなりでしょ♭"                ; en: You think better of me, right, nari ♭
+
+text_02B5:
+    string "ボクのために休んでくれて%Kありがとなり"         ; en: Thank you for taking a break / for me, nari
+
+text_02DC:
+    string "日光浴でもするなり"                    ; en: I'll do some sunbathing, nari
+
+text_02EF:
+    string "お休みならうれしいなりィ～∥｜"              ; en: A break makes me happy, nari~∥｜
+
+text_030E:
+    string "日本の物価は高すぎるなり・・・"              ; en: Prices in Japan are too high, nari...
+
+text_032D:
+    string "安さ爆裂なり♭"                      ; en: Explosively cheap, nari ♭
+
+text_033C:
+    string "買いだめは出来ないなりか？"                ; en: Can't I stock up, nari?
+
+text_0357:
+    string "今日の仕事はここまでなり"                 ; en: That's all the work for today, nari
+
+text_0370:
+    string "自分のお店で一休みなりィ"                 ; en: A short rest in my own store, nari
+
+text_0389:
+    string "今日はここまでなりィ"                   ; en: That's it for today, nari
+
+text_039E:
+    string "定員オーバーだったなり≦"                 ; en: It was over capacity, nari ≦
+
+text_03B7:
+    string "乗っとけばヨカッタなり・・・"               ; en: I should have ridden it, nari...
+
+text_03D4:
+    string "乗らないのが正解なり♪"                  ; en: Not riding was the right answer, nari ♪
+
+text_03EB:
+    string "給料日でござ～いなり"                   ; en: It's payday, nari
+
+text_0400:
+    string "充足した日なりィ"                     ; en: A fulfilling day, nari
+
+text_0411:
+    string "お金もらったなりぃ～♭"                  ; en: I got money, nari~ ♭
+
+text_0428:
+    string "ワープなり"                        ; en: Warp, nari
+
+text_0433:
+    string "瞬間移動なり"                       ; en: Teleport, nari
+
+text_0440:
+    string "チン！到着なり"                      ; en: Ding! Arrived, nari
+
+text_044F:
+    string "ボクのマネーが減っていくなりィ"              ; en: My money is dwindling, nari
+
+text_046E:
+    string "大ショックなりィ～"                    ; en: A big shock, nari~
+
+text_0481:
+    string "これは大問題なりィ～"                   ; en: This is a big problem, nari~
+
+text_0496:
+    string "ご返金ありがとうなり"                   ; en: Thank you for the refund, nari
+
+text_04AB:
+    string "儲けたなり♪"                       ; en: I made a profit, nari ♪
+
+text_04B8:
+    string "どうもなりィ"                       ; en: Thanks, nari
+
+text_04C5:
+    string "いやな展開なり"                      ; en: A nasty turn of events, nari
+
+text_04D4:
+    string "精神的ダメージを受けたなり"                ; en: I took mental damage, nari
+
+text_04EF:
+    string "反撃したいなり♪"                     ; en: I want to strike back, nari ♪
+
+text_0500:
+    string "もうかっちゃったなり"                   ; en: I made money, nari
+
+text_0515:
+    string "乗っ取らせてもらったなり♭"                ; en: I took it over, nari ♭
+
+text_0530:
+    string "基盤を強化したなり★"                   ; en: I strengthened my base, nari ★
+
+text_0545:
+    string "商売あがったりなり・・・"                 ; en: Business is down the drain, nari...
+
+text_055E:
+    string "お金がたまらないなり・・・"                ; en: Money won't build up, nari...
+
+text_0579:
+    string "出費が多すぎるなり"                    ; en: Too many expenses, nari
+
+text_058C:
+    string "パンパカパーーーン%K半分到達なり"            ; en: Ta-da-da-daaa / Halfway reached, nari
+
+text_05AD:
+    string "サボテンだって、やる時はやるなり★"            ; en: Even a cactus does it when it counts, nari ★
+
+text_05D0:
+    string "チャチャーーン！%K半分終わったなりぃ♭"         ; en: Cha-chaan! / Half done, nari ♭
+
+text_05F7:
+    string "ボクのお店が消えていくなり"                ; en: My stores are vanishing, nari
+
+text_0612:
+    string "全部自分のせいなり・・・"                 ; en: It's all my own fault, nari...
+
+text_062B:
+    string "世の中がいけないなりか？"                 ; en: Is the world to blame, nari?
+
+text_0644:
+    string "ほしいけれどお金がないなり"                ; en: I want it but I have no money, nari
+
+text_065F:
+    string "お金がないから諦めるなり・・・"              ; en: I have no money, so I'll give up, nari...
+
+text_067E:
+    string "・・・ぐすん・・なり≦"                  ; en: ...sniff..nari ≦
+
+text_0695:
+    string "%NMYにもガマンが必要なり≦"              ; en: <player> needs patience too, nari ≦
+
+text_06B0:
+    string "ガマンするのは得意なり★"                 ; en: I'm good at enduring, nari ★
+
+text_06C9:
+    string "%NMYには必要ないなり"                 ; en: <player> doesn't need it, nari
+
+text_06DE:
+    string "ちゃんとした植物なり"                   ; en: I'm a proper plant, nari
+
+text_06F3:
+    string "みんないいひとなり"                    ; en: Everyone's a nice person, nari
+
+text_0706:
+    string "ファイトなり"                       ; en: Fight, nari
+    bytes 0x00    ; padding

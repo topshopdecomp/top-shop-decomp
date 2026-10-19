@@ -1,0 +1,246 @@
+; EVE_000.J entry 0
+;
+; Played when a player goes bankrupt (Board_Task step 10104): what the player's
+; character says. (Event 0 itself is never drawn.)
+;
+; What it says: "[<player>] / Meow-hiss-meow...." | "[<player>] / Oh my!" | "[<player>] / I demand
+; a re-count!" | "[<player>] / I can't stand anymore..." | "[<player>] / Nononononono!" |
+; "[<player>] / I can't believe it!" | ...
+;
+; 1144 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    marker "EVE_000"                      ; a name for the script; costs a frame
+    talk_clear
+    fade_in 20
+    wait_fade
+    sprite_init 0, image=IMG_FACE+1, attr=MIDDLE_CENTER, x=-100, y=-100, pri=1
+    sprite_init 1, image=0, attr=0, x=-100, y=-100, pri=2
+    portrait_face 4
+    sprite_path 0, path_03DC
+    sprite_path 1, path_040A
+    switch $char: L_0060, L_00A0, L_00D5, L_0118, L_015E, L_019A, L_01DC, L_021A, L_0256, L_029B, L_02DD, L_0324, L_035E, L_039F
+
+L_0060:
+    ; $char 0: Meower
+    talk "【%NMY】%KMeow-hiss-meow…."       ; [<player>] / Meow-hiss-meow....
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 0, 15                         ; voice: XA track 15 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_00A0:
+    ; $char 1: Maiko
+    talk "【%NMY】%KOh my!"                 ; [<player>] / Oh my!
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 1, 15                         ; voice: XA track 31 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_00D5:
+    ; $char 2: Dona
+    talk "【%NMY】%KI demand a re-count!"   ; [<player>] / I demand a re-count!
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 2, 15                         ; voice: XA track 47 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_0118:
+    ; $char 3: Gummi
+    talk "【%NMY】%KI can't stand anymore…"  ; [<player>] / I can't stand anymore...
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 3, 15                         ; voice: XA track 63 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_015E:
+    ; $char 4: Merlin
+    talk "【%NMY】%KNononononono!"          ; [<player>] / Nononononono!
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 4, 15                         ; voice: XA track 79 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_019A:
+    ; $char 5: Cindy
+    talk "【%NMY】%KI can't believe it!"    ; [<player>] / I can't believe it!
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 5, 15                         ; voice: XA track 95 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_01DC:
+    ; $char 6: Rob
+    talk "【%NMY】%KI am finished…"         ; [<player>] / I am finished...
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 6, 15                         ; voice: XA track 111 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_021A:
+    ; $char 7: Patty
+    talk "【%NMY】%KI feel sick…"           ; [<player>] / I feel sick...
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 7, 15                         ; voice: XA track 127 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_0256:
+    ; $char 8: Chat
+    talk "【%NMY】%KI am just bulky trash!"  ; [<player>] / I am just bulky trash!
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 8, 15                         ; voice: XA track 143 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_029B:
+    ; $char 9: Oilow
+    talk "【%NMY】%KI am disappearing…"     ; [<player>] / I am disappearing...
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 9, 15                         ; voice: XA track 159 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_02DD:
+    ; $char 10: Bro
+    talk "【%NMY】%KI will never play again!"  ; [<player>] / I will never play again!
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 10, 15                        ; voice: XA track 175 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_0324:
+    ; $char 11: Squosh
+    talk "【%NMY】%KHunnnnnn…."             ; [<player>] / Hunnnnnn....
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 11, 15                        ; voice: XA track 191 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_035E:
+    ; $char 12: Santa
+    talk "【%NMY】%KI am out of gas..."     ; [<player>] / I am out of gas...
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 12, 15                        ; voice: XA track 207 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+L_039F:
+    ; $char 13: Colin
+    talk "【%NMY】%KI am melting…"          ; [<player>] / I am melting...
+    talk_show 0
+    talk_open
+    talk_wait_open
+    play_xa 13, 15                        ; voice: XA track 223 (g_xaSets[1])
+    wait 80
+    wait_buttons_for CROSS|0x300, 40      ; wait for cross, 40 frames at most
+    stop_xa
+    fade_out 24
+    wait_fade
+    end
+
+path_03DC:
+    step speed=-1, x=380, y=119, anim=anim_03FA, next=NEXT  ; jump to 380, 119
+    step speed=8, x=240, y=119, anim=anim_03FA, next=path_03F0  ; move to 240, 119, 8 pixels a frame
+
+path_03F0:
+    step speed=0, x=100, y=0, anim=anim_03FA, next=path_03F0  ; wait 100 frames
+
+anim_03FA:
+    frame IMG_FACE, time=6, flip=0, next=NEXT
+    frame IMG_FACE+1, time=6, flip=0, next=anim_03FA
+
+path_040A:
+    step speed=0, x=64, y=0, anim=anim_046E, next=NEXT  ; wait 64 frames
+    step speed=-1, x=32, y=-32, anim=anim_046E, next=NEXT  ; jump to 32, -32
+    step speed=5, x=32, y=-17, anim=anim_046E, next=NEXT  ; move to 32, -17, 5 pixels a frame
+    step speed=6, x=32, y=-11, anim=anim_046E, next=NEXT  ; move to 32, -11, 6 pixels a frame
+    step speed=7, x=32, y=-4, anim=anim_046E, next=NEXT  ; move to 32, -4, 7 pixels a frame
+    step speed=8, x=32, y=4, anim=anim_046E, next=NEXT  ; move to 32, 4, 8 pixels a frame
+    step speed=9, x=32, y=13, anim=anim_046E, next=NEXT  ; move to 32, 13, 9 pixels a frame
+    step speed=10, x=32, y=23, anim=anim_046E, next=NEXT  ; move to 32, 23, 10 pixels a frame
+    step speed=10, x=32, y=64, anim=anim_046E, next=path_0464  ; move to 32, 64, 10 pixels a frame
+
+path_0464:
+    step speed=0, x=100, y=0, anim=anim_046E, next=path_0464  ; wait 100 frames
+
+anim_046E:
+    frame 1, time=4, flip=0, next=anim_046E
+    words 0    ; padding

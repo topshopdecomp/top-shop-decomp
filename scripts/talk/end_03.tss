@@ -1,0 +1,293 @@
+; TALK.J entry 19 (LZSS-packed)
+;
+; What Gummi says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2232 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 3, $l2                        ; voice: XA track 3 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Father.... ≦
+    words text_01F5, 4, 9                 ; 0.1 (no comment): Kerokero?
+    words text_0202, 1, 7                 ; 0.2 (no comment): What will happen now, myon ≦
+    words text_021F, 3, 6                 ; 1.0 a chain of 4: Fufufufufufufufufufu / A store worthy of me, myon ♪
+    words text_0252, 3, 6                 ; 1.1 a chain of 4: Ultimate and strongest! I won't lose anymore, myon ★
+    words text_0271, 3, 6                 ; 1.2 a chain of 4: With this I can win! I can win, myon ♪
+    words text_0290, 3, 6                 ; 2.0 a chain of 2 or 3: Merged! The strongest shop is born, myon ♪
+    words text_02B3, 3, 6                 ; 2.1 a chain of 2 or 3: It got bigger, myon ♪
+    words text_02C8, 3, 6                 ; 2.2 a chain of 2 or 3: Get bigger still, myon ∵
+    words text_02E3, 3, 6                 ; 3.0 landed on a rival store closed for now: It's closed, myon / I think I'll go for a dip, myon
+    words text_0310, 3, 6                 ; 3.1 landed on a rival store closed for now: A day off today, myon ♪ / It's nice once in a while, myon ∝
+    words text_0341, 3, 6                 ; 3.2 landed on a rival store closed for now: Closed of all things... / what luck, myon ∴
+    words text_0376, 3, 6                 ; 4.0 landed on a rival store with lowered prices: It's cheap, myon / A real bargain anyway, myon ☆
+    words text_039F, 3, 6                 ; 4.1 landed on a rival store with lowered prices: If it's cheap, tasty and good, / there's nothing more to say, myon ★
+    words text_03D6, 3, 6                 ; 4.2 landed on a rival store with lowered prices: I'll buy it while I can, myon ♪
+    words text_03F1, 0, 5                 ; 5.0 landed on its own store / opened a store: My new castle, myon
+    words text_0406, 3, 6                 ; 5.1 landed on its own store / opened a store: My new castle, myon / Everyone stop by, myon ♭
+    words text_0437, 3, 6                 ; 5.2 landed on its own store / opened a store: My new castle, myon / Sure to be a huge success, myon ★
+    words text_0468, 0, 5                 ; 6.0 did not take the elevator: It's fine not to ride it, myon ♪
+    words text_0483, 2, 8                 ; 6.1 did not take the elevator: It's full, myon! / They wouldn't let me on, myon!
+    words text_04AE, 1, 7                 ; 6.2 did not take the elevator: What shall I do, myon ≦
+    words text_04C3, 3, 6                 ; 7.0 landed on the bank: The world is money, money, money, myon
+    words text_04E2, 3, 6                 ; 7.1 landed on the bank: I'm a regular customer now, myon ♪
+    words text_04FB, 1, 7                 ; 7.2 landed on the bank: However much I have, it's never enough, myon ≦
+    words text_051A, 1, 7                 ; 8.0 took the elevator: What floor is this, myon?
+    words text_0533, 3, 6                 ; 8.1 took the elevator: We've arrived, myon ♪
+    words text_0546, 3, 6                 ; 8.2 took the elevator: Warp complete! Myon ♪
+    words text_055D, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: ...I'll smash it, myon!
+    words text_0576, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: Something's bothering me, myon
+    words text_058B, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: Myomyomyo-on ★∴≧?!
+    words text_05A6, 3, 6                 ; 10.0 shopping: got the money back: This is a crazy good deal, myon ♭
+    words text_05C7, 3, 6                 ; 10.1 shopping: got the money back: Did I gain a little, myon ♪
+    words text_05E4, 3, 6                 ; 10.2 shopping: got the money back: Kerokero, myon ★
+    words text_05F9, 3, 6                 ; 11.0 shopping: A present for the unfortunate common folk
+    words text_0614, 1, 7                 ; 11.1 shopping: My head is pounding, myon...
+    words text_062D, 1, 7                 ; 11.2 shopping: My drive is slowly fading, myon
+    words text_0648, 0, 5                 ; 12.0 bought a rival's store: Was buying this / the right choice, myon?
+    words text_066F, 0, 5                 ; 12.1 bought a rival's store: What use is this place, myon?
+    words text_068C, 0, 5                 ; 12.2 bought a rival's store: Sorry, myon / The world of competition is tough, myon
+    words text_06BB, 4, 9                 ; 13.0 shopped this turn and the last: I have to save a little, myon ≦
+    words text_06D6, 0, 5                 ; 13.1 shopped this turn and the last: Money is for spending, myon
+    words text_06F5, 1, 7                 ; 13.2 shopped this turn and the last: Is my money shrinking fast, myon?
+    words text_0716, 0, 5                 ; 14.0 assets passed half the goal: Hmm / It took longer than planned, myon ≦
+    words text_073D, 3, 6                 ; 14.1 assets passed half the goal: The turning point, myon ♪
+    words text_0754, 0, 5                 ; 14.2 assets passed half the goal: The road to the throne is long and steep, myon
+    words text_0773, 1, 7                 ; 15.0 sold a store: I'll use this as capital and keep trying, myon ♪
+    words text_0794, 4, 9                 ; 15.1 sold a store: To think I have to let go of this place / is a shame, myon
+    words text_07C1, 0, 5                 ; 15.2 sold a store: It's a store I don't need, myon / Make the most of it, myon
+    words text_07F8, 1, 7                 ; 16.0 declined a vacant lot it could not afford: Can't I pay with a loan, myon?
+    words text_0811, 1, 7                 ; 16.1 declined a vacant lot it could not afford: I want it but I have no money, myon ≦
+    words text_082E, 4, 9                 ; 16.2 declined a vacant lot it could not afford: Being poor is sad, myon ≦
+    words text_0845, 0, 5                 ; 17.0 declined a vacant lot: I don't need a place like this, myon
+    words text_085E, 1, 7                 ; 17.1 declined a vacant lot: Would buying it have been better, myon?
+    words text_087B, 0, 5                 ; 17.2 declined a vacant lot: I have my own ideas, myon ∵
+    words text_0898, 3, 10                ; 18.0 an event card (the default): Gero gero gero~ ∥
+    words text_08A9, 3, 10                ; 18.1 an event card (the default): Kero?
+    words text_08B0, 3, 10                ; 18.2 an event card (the default): Keron
+
+text_01E6:
+    string "父上・・・・≦"                      ; en: Father.... ≦
+
+text_01F5:
+    string "けろっけろ？"                       ; en: Kerokero?
+
+text_0202:
+    string "これからどうなるのかみょん≦"               ; en: What will happen now, myon ≦
+
+text_021F:
+    string "ふふふふふふふふふふ%K僕にふさわしいお店だみょん♪"   ; en: Fufufufufufufufufufu / A store worthy of me, myon ♪
+
+text_0252:
+    string "究極最強！もう負けないみょん★"              ; en: Ultimate and strongest! I won't lose anymore, myon ★
+
+text_0271:
+    string "これなら勝てる！勝てるみょん♪"              ; en: With this I can win! I can win, myon ♪
+
+text_0290:
+    string "合体！最強ショップの誕生だみょん♪"            ; en: Merged! The strongest shop is born, myon ♪
+
+text_02B3:
+    string "大きくなったみょん♪"                   ; en: It got bigger, myon ♪
+
+text_02C8:
+    string "もっと大きくなれだみょん∵"                ; en: Get bigger still, myon ∵
+
+text_02E3:
+    string "休業中だみょん%K水浴びに行くことにするみょん"      ; en: It's closed, myon / I think I'll go for a dip, myon
+
+text_0310:
+    string "今日はお休みみょん♪%Kたまにはいいもんだみょん∝"    ; en: A day off today, myon ♪ / It's nice once in a while, myon ∝
+
+text_0341:
+    string "クローズだなんて・・・%Kとっても運がいいんだみょん∴"  ; en: Closed of all things... / what luck, myon ∴
+
+text_0376:
+    string "安いんだみょん%Kとにかく得々なのみょん☆"        ; en: It's cheap, myon / A real bargain anyway, myon ☆
+
+text_039F:
+    string "安くて、おいしくて、いいものなら%K言うことなしみょん★"  ; en: If it's cheap, tasty and good, / there's nothing more to say, myon ★
+
+text_03D6:
+    string "今のうちに買っとくみょん♪"                ; en: I'll buy it while I can, myon ♪
+
+text_03F1:
+    string "僕の新しい城だみょん"                   ; en: My new castle, myon
+
+text_0406:
+    string "僕の新しい城だみょん%Kみんな寄っていけだみょん♭"    ; en: My new castle, myon / Everyone stop by, myon ♭
+
+text_0437:
+    string "僕の新しい城だみょん%K大繁盛間違いなしだみょん★"    ; en: My new castle, myon / Sure to be a huge success, myon ★
+
+text_0468:
+    string "乗らなくても平気だみょん♪"                ; en: It's fine not to ride it, myon ♪
+
+text_0483:
+    string "満員だみょん！%K乗せてくれなかったみょん！"       ; en: It's full, myon! / They wouldn't let me on, myon!
+
+text_04AE:
+    string "どうしようかみょん≦"                   ; en: What shall I do, myon ≦
+
+text_04C3:
+    string "世の中、かね・カネ・金だみょん"              ; en: The world is money, money, money, myon
+
+text_04E2:
+    string "もう、お得意様だみょん♪"                 ; en: I'm a regular customer now, myon ♪
+
+text_04FB:
+    string "いくらあっても足りないみょん≦"              ; en: However much I have, it's never enough, myon ≦
+
+text_051A:
+    string "ここって、何階だみょん？"                 ; en: What floor is this, myon?
+
+text_0533:
+    string "着きましたみょん♪"                    ; en: We've arrived, myon ♪
+
+text_0546:
+    string "ワープ完了！だみょん♪"                  ; en: Warp complete! Myon ♪
+
+text_055D:
+    string "・・・壊してやるみょん！"                 ; en: ...I'll smash it, myon!
+
+text_0576:
+    string "なんか気になるみょん"                   ; en: Something's bothering me, myon
+
+text_058B:
+    string "みょみょみょーん★∴≧？！"                ; en: Myomyomyo-on ★∴≧?!
+
+text_05A6:
+    string "これってムチャクチャ得だみょん♭"             ; en: This is a crazy good deal, myon ♭
+
+text_05C7:
+    string "ちょっとだけ得したかみょん♪"               ; en: Did I gain a little, myon ♪
+
+text_05E4:
+    string "けろっけろっみょん★"                   ; en: Kerokero, myon ★
+
+text_05F9:
+    string "恵まれない庶民にプレゼント"                ; en: A present for the unfortunate common folk
+
+text_0614:
+    string "頭ガンガンだみょん・・・"                 ; en: My head is pounding, myon...
+
+text_062D:
+    string "徐々にやる気が消えるみょん"                ; en: My drive is slowly fading, myon
+
+text_0648:
+    string "これって買って%K正解だったのかみょん？"         ; en: Was buying this / the right choice, myon?
+
+text_066F:
+    string "ここは何の役に立つかみょん？"               ; en: What use is this place, myon?
+
+text_068C:
+    string "ゴメンだみょん%K勝負の世界は厳しいものだみょん"     ; en: Sorry, myon / The world of competition is tough, myon
+
+text_06BB:
+    string "少し節約しなきゃだみょん≦"                ; en: I have to save a little, myon ≦
+
+text_06D6:
+    string "お金は使うためにあるんだみょん"              ; en: Money is for spending, myon
+
+text_06F5:
+    string "お金がドンドン減っていくみょん？"             ; en: Is my money shrinking fast, myon?
+
+text_0716:
+    string "うーん%K予定より時間がかかったみょん≦"         ; en: Hmm / It took longer than planned, myon ≦
+
+text_073D:
+    string "折り返し地点だみょん♪"                  ; en: The turning point, myon ♪
+
+text_0754:
+    string "王者への道は長くけわしいみょん"              ; en: The road to the throne is long and steep, myon
+
+text_0773:
+    string "これを元手にガンバってくみょん♪"             ; en: I'll use this as capital and keep trying, myon ♪
+
+text_0794:
+    string "ここを手放すことになるとは%Kザンネンだみょん"      ; en: To think I have to let go of this place / is a shame, myon
+
+text_07C1:
+    string "僕には必要ないお店だみょん%Kせいぜい使ってくれだみょん"  ; en: It's a store I don't need, myon / Make the most of it, myon
+
+text_07F8:
+    string "ローンじゃだめかみょん？"                 ; en: Can't I pay with a loan, myon?
+
+text_0811:
+    string "ほしいけどお金がないみょん≦"               ; en: I want it but I have no money, myon ≦
+
+text_082E:
+    string "貧乏って切ないみょん≦"                  ; en: Being poor is sad, myon ≦
+
+text_0845:
+    string "こんな所はいらないみょん"                 ; en: I don't need a place like this, myon
+
+text_085E:
+    string "買った方が良かったかみょん？"               ; en: Would buying it have been better, myon?
+
+text_087B:
+    string "僕には僕の考えがあるみょん∵"               ; en: I have my own ideas, myon ∵
+
+text_0898:
+    string "ゲロゲロゲロ～∥"                     ; en: Gero gero gero~ ∥
+
+text_08A9:
+    string "ケロ？"                          ; en: Kero?
+
+text_08B0:
+    string "けろん"                          ; en: Keron
+    bytes 0x00    ; padding

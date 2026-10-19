@@ -1,0 +1,306 @@
+; TALK.J entry 1 (LZSS-packed)
+;
+; What Maiko says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnStart_PickScript):
+; 0 the first month
+; 1 assets at 7/8 of the goal
+; 2 last at the start of the round, first now
+; 3 first at the start of the round, last now
+; 4 ahead: a rival store it can't afford
+; 5 ahead: a rival store in a chain of 4
+; 6 ahead: a rival store closed, without goods
+; 7 ahead: its own store without goods
+; 8 the bank on the next square
+; 9 ranked better than at the start of the round
+; 10 ranked worse
+; 11 ahead: a rival store in a chain
+; 12 ahead: a vacant lot
+; 13 ahead: a rival store costing over 1/4 of its money
+; 14 ahead: the bank
+; 15 none of its stores ahead
+; 16 ahead: its own store with free goods slots
+; 17 no direction (after the bank)
+; 18 no direction, on an elevator square
+; 19 none of these
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2060 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 1, $l2                        ; voice: XA track 1 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01F8, 3, 12                ; 0.0 the first month: I'll show you what humans can do-o
+    words text_0219, 3, 12                ; 0.1 the first month: If I win, / it's a yakiniku pa-arty ☆
+    words text_0240, 3, 12                ; 0.2 the first month: Here goes <player>! ∝
+    words text_0253, 3, 1                 ; 1.0 assets at 7/8 of the goal: Almost at the yakiniku pa-arty ☆
+    words text_0274, 3, 1                 ; 1.1 assets at 7/8 of the goal: Think better of humans now? ♭
+    words text_028B, 3, 1                 ; 1.2 assets at 7/8 of the goal: <player> can do it too, you know
+    words text_02A2, 3, 1                 ; 2.0 last at the start of the round, first now: Everyone ☆ / thanks for being so nice to me ♪
+    words text_02C7, 3, 1                 ; 2.1 last at the start of the round, first now: Aren't I amaaazing ∈
+    words text_02DE, 3, 1                 ; 2.2 last at the start of the round, first now: Sorry, everyone ∝
+    words text_02F1, 4, 4                 ; 3.0 first at the start of the round, last now: I don't even have money left / to go clubbing~ ≦
+    words text_0322, 4, 4                 ; 3.1 first at the start of the round, last now: I can't even go to karaoke ≦
+    words text_033D, 4, 4                 ; 3.2 first at the start of the round, last now: I'll do it right next time, forgive me~
+    words text_035C, 4, 4                 ; 4.0 ahead: a rival store it can't afford: Aww, the worst
+    words text_036F, 1, 2                 ; 4.1 ahead: a rival store it can't afford: What's that?! / I can't believe it
+    words text_0394, 4, 4                 ; 4.2 ahead: a rival store it can't afford: Aww ≦ / I just want to run away~
+    words text_03B5, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Danger zone spotted up ahe-ead
+    words text_03D0, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: The sce-ent of danger ☆
+    words text_03E5, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: If I keep going it'll cost a fortune ≦
+    words text_0400, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: Looks like it's closed today~
+    words text_0415, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Found a store that doesn't care!?
+    words text_042A, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: Closed, how sad~ ☆
+    words text_0445, 1, 2                 ; 7.0 ahead: its own store without goods: Oh my, empty?!
+    words text_045E, 1, 2                 ; 7.1 ahead: its own store without goods: How do you restock anyway?
+    words text_0477, 1, 2                 ; 7.2 ahead: its own store without goods: Do I have to restock it?
+    words text_0490, 0, 0                 ; 8.0 the bank on the next square: Drinks party tonight~
+    words text_04A1, 0, 0                 ; 8.1 the bank on the next square: Salary Thief No. 28 here~
+    words text_04BA, 3, 1                 ; 8.2 the bank on the next square: Uncha!
+    words text_04C5, 3, 1                 ; 9.0 ranked better than at the start of the round: Thanks for being so nice to me, everyone ♪
+    words text_04E6, 3, 1                 ; 9.1 ranked better than at the start of the round: I'm happy if it goes up even a little ♪
+    words text_0507, 3, 1                 ; 9.2 ranked better than at the start of the round: It's only just begun ♭
+    words text_051E, 4, 4                 ; 10.0 ranked worse: Losing it
+    words text_0527, 4, 4                 ; 10.1 ranked worse: Ga-ga~∥｜n (shock)
+    words text_0534, 4, 4                 ; 10.2 ranked worse: Zu-ga-ga-ga~∥｜n (big shock)
+    words text_0547, 1, 2                 ; 11.0 ahead: a rival store in a chain: Eek, goosebumps ≦
+    words text_0562, 1, 2                 ; 11.1 ahead: a rival store in a chain: And I didn't want to spend money today
+    words text_057F, 1, 2                 ; 11.2 ahead: a rival store in a chain: Please ☆ someone help me
+    words text_0598, 0, 0                 ; 12.0 ahead: a vacant lot: I'd like a new store about now ☆
+    words text_05B7, 0, 0                 ; 12.1 ahead: a vacant lot: I'm opening a store, no matter what~
+    words text_05D0, 0, 0                 ; 12.2 ahead: a vacant lot: I wonder?
+    words text_05DD, 2, 3                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I'm not that into / designer brands!!
+    words text_0606, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: If it's too pricey nobody will buy
+    words text_0627, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: However much I have, it's never enough ≦
+    words text_0644, 0, 0                 ; 14.0 ahead: the bank: Is today payday?
+    words text_0657, 0, 0                 ; 14.1 ahead: the bank: I want an elegant life with money ★
+    words text_0678, 0, 0                 ; 14.2 ahead: the bank: Can I stop by the bank?
+    words text_068D, 1, 2                 ; 15.0 none of its stores ahead: Why, why? / Why aren't there any of my stores~
+    words text_06BA, 1, 2                 ; 15.1 none of its stores ahead: Where did <player>'s / stores go~?
+    words text_06E1, 1, 2                 ; 15.2 none of its stores ahead: So this is what lonely feels like~ ∵
+    words text_06FA, 0, 0                 ; 16.0 ahead: its own store with free goods slots: I have to restock once in a while!
+    words text_0719, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Stash-y and restock-y
+    words text_0730, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Gotta hurry ☆
+    words text_0741, 0, 0                 ; 17.0 no direction (after the bank): Which way will tomorrow's wind blow?
+    words text_0758, 0, 0                 ; 17.1 no direction (after the bank): Hey, someone tell me ☆
+    words text_076D, 0, 0                 ; 17.2 no direction (after the bank): Which way should I go?
+    words text_0782, 0, 0                 ; 18.0 no direction, on an elevator square: I want to ride the elevator
+    words text_079B, 0, 0                 ; 18.1 no direction, on an elevator square: I want to take it easy in the elevator
+    words text_07B6, 0, 0                 ; 18.2 no direction, on an elevator square: Can I make it to the elevator?
+    words text_07D1, 3, 10                ; 19.0 none of these: Gotta try hard~
+    words text_07E2, 3, 10                ; 19.1 none of these: Fight-o! Fight-o!
+    words text_07F7, 3, 10                ; 19.2 none of these: Gyahahahahahaha
+
+text_01F8:
+    string "人間様の実力を見せちゃいますル～"             ; en: I'll show you what humans can do-o
+
+text_0219:
+    string "優勝したら%K焼き肉ぱ～てぇ～だかンね☆"         ; en: If I win, / it's a yakiniku pa-arty ☆
+
+text_0240:
+    string "%NMYいっきま～す∝"                  ; en: Here goes <player>! ∝
+
+text_0253:
+    string "焼き肉ぱ～てぇ～まであとわずか☆"             ; en: Almost at the yakiniku pa-arty ☆
+
+text_0274:
+    string "人間様をみなおしたか♭"                  ; en: Think better of humans now? ♭
+
+text_028B:
+    string "%NMYだってやるんだから"                ; en: <player> can do it too, you know
+
+text_02A2:
+    string "みんな☆%K気ィ使ってくれてありがと♪"          ; en: Everyone ☆ / thanks for being so nice to me ♪
+
+text_02C7:
+    string "わたしってスッゴーイ∈"                  ; en: Aren't I amaaazing ∈
+
+text_02DE:
+    string "みんなゴメンねぇ∝"                    ; en: Sorry, everyone ∝
+
+text_02F1:
+    string "クラブに遊びに行くお金も%Kなくなっちゃったよ～≦"    ; en: I don't even have money left / to go clubbing~ ≦
+
+text_0322:
+    string "カラオケにも行けないよぉ≦"                ; en: I can't even go to karaoke ≦
+
+text_033D:
+    string "次からちゃんとやるから許して～"              ; en: I'll do it right next time, forgive me~
+
+text_035C:
+    string "あ～ん、さいあくぅ"                    ; en: Aww, the worst
+
+text_036F:
+    string "なによあれェ！%Kもうしんじらンなぁい"          ; en: What's that?! / I can't believe it
+
+text_0394:
+    string "あ～ん≦%Kもう、にげだしたいよ～"            ; en: Aww ≦ / I just want to run away~
+
+text_03B5:
+    string "この先に危険地帯はっけ～ん"                ; en: Danger zone spotted up ahe-ead
+
+text_03D0:
+    string "危険な、か・お・り☆"                   ; en: The sce-ent of danger ☆
+
+text_03E5:
+    string "このまま行ったら大出費ぃ≦"                ; en: If I keep going it'll cost a fortune ≦
+
+text_0400:
+    string "本日休業中みたいな～"                   ; en: Looks like it's closed today~
+
+text_0415:
+    string "やる気ない店発見！？"                   ; en: Found a store that doesn't care!?
+
+text_042A:
+    string "クローズなんてかわいそ～☆"                ; en: Closed, how sad~ ☆
+
+text_0445:
+    string "ありゃりゃ、カラッポ？！"                 ; en: Oh my, empty?!
+
+text_045E:
+    string "仕入れってどうやるのぉ？"                 ; en: How do you restock anyway?
+
+text_0477:
+    string "わたしが仕入れするのぉ？"                 ; en: Do I have to restock it?
+
+text_0490:
+    string "本日飲み会で～す"                     ; en: Drinks party tonight~
+
+text_04A1:
+    string "給料ドロボウ２８号で～す"                 ; en: Salary Thief No. 28 here~
+
+text_04BA:
+    string "うんちゃ！"                        ; en: Uncha!
+
+text_04C5:
+    string "みんな気ィ使ってくれてありがと♪"             ; en: Thanks for being so nice to me, everyone ♪
+
+text_04E6:
+    string "ちょっとでもあがるとうれしいな♪"             ; en: I'm happy if it goes up even a little ♪
+
+text_0507:
+    string "まだまだこれからだよ♭"                  ; en: It's only just begun ♭
+
+text_051E:
+    string "キレすん"                         ; en: Losing it
+
+text_0527:
+    string "がが～∥｜ん"                       ; en: Ga-ga~∥｜n (shock)
+
+text_0534:
+    string "ずがががが～∥｜ん"                    ; en: Zu-ga-ga-ga~∥｜n (big shock)
+
+text_0547:
+    string "イヤーン、鳥肌ゾクゾクウ≦"                ; en: Eek, goosebumps ≦
+
+text_0562:
+    string "今日はお金使いたくないのにぃ"               ; en: And I didn't want to spend money today
+
+text_057F:
+    string "おねがい☆誰かたすけてぇ"                 ; en: Please ☆ someone help me
+
+text_0598:
+    string "そろそろ新しいお店が欲しいな☆"              ; en: I'd like a new store about now ☆
+
+text_05B7:
+    string "ゼッタイにお店を開くの～"                 ; en: I'm opening a store, no matter what~
+
+text_05D0:
+    string "どうかなぁ？"                       ; en: I wonder?
+
+text_05DD:
+    string "ブランド物は%Kそんなに好きじゃないぃ！！"        ; en: I'm not that into / designer brands!!
+
+text_0606:
+    string "高すぎると誰も買ってくれないよぉ"             ; en: If it's too pricey nobody will buy
+
+text_0627:
+    string "いくらあってもたりないよぉ≦"               ; en: However much I have, it's never enough ≦
+
+text_0644:
+    string "今日は給料日かな？"                    ; en: Is today payday?
+
+text_0657:
+    string "お金のある優雅な生活がしたいな★"             ; en: I want an elegant life with money ★
+
+text_0678:
+    string "銀行よってけるかな？"                   ; en: Can I stop by the bank?
+
+text_068D:
+    string "なんでなんでぇ？%Kなんで私のお店がないのぉ～"      ; en: Why, why? / Why aren't there any of my stores~
+
+text_06BA:
+    string "%NMYのお店は%Kどこにいっちゃったの～？"       ; en: Where did <player>'s / stores go~?
+
+text_06E1:
+    string "これって孤独ってやつ～∵"                 ; en: So this is what lonely feels like~ ∵
+
+text_06FA:
+    string "たまには仕入れもしなくっちゃ！"              ; en: I have to restock once in a while!
+
+text_0719:
+    string "押入っちと仕入れっちぃ"                  ; en: Stash-y and restock-y
+
+text_0730:
+    string "急がなきゃ大変☆"                     ; en: Gotta hurry ☆
+
+text_0741:
+    string "明日の風はどっちかな？"                  ; en: Which way will tomorrow's wind blow?
+
+text_0758:
+    string "ねぇ誰かおしえてぇ☆"                   ; en: Hey, someone tell me ☆
+
+text_076D:
+    string "どっちに行こうかな？"                   ; en: Which way should I go?
+
+text_0782:
+    string "エレベーターに乗りたいな"                 ; en: I want to ride the elevator
+
+text_079B:
+    string "エレベーターでラクしたいネ"                ; en: I want to take it easy in the elevator
+
+text_07B6:
+    string "エレベーターに行けるかな？"                ; en: Can I make it to the elevator?
+
+text_07D1:
+    string "ガンバんなきゃ～"                     ; en: Gotta try hard~
+
+text_07E2:
+    string "ファイの！ファイの！"                   ; en: Fight-o! Fight-o!
+
+text_07F7:
+    string "ぎゃははははははは"                    ; en: Gyahahahahahaha
+    words 0    ; padding

@@ -1,0 +1,624 @@
+; CNT04.J entry 0
+;
+; Story mode: the introduction of stage 5 (Board_Task, FILE_CNT00_J + stage).
+; <player> is the human player's character, <player 1> the stage's rival (player 1).
+;
+; What it says: "[<player>] / I'm hungry now." | "[<player>] / Hmm..." | "[<player>] / Hmm...sniff
+; sniff..." | "[<player>] / What's that smell?" | "[<player 1>] / Ribbit ribbit!" | "[<player 1>]
+; / Ribbit ribbit! Myon myon!" | ...
+;
+; 3112 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    marker "CNT04"                        ; a name for the script; costs a frame
+    call start_scene_5
+    sprite_init 0, image=0, attr=MIDDLE_CENTER, x=-100, y=-100, pri=1
+    sprite_init 1, image=10, attr=MIDDLE_CENTER, x=-100, y=-100, pri=2
+    sprite_init 2, image=20, attr=0, x=-100, y=-100, pri=3
+    sprite_init 3, image=25, attr=0, x=-100, y=-100, pri=4
+    sprite_init 4, image=29, attr=BOTTOM_RIGHT, x=-100, y=-100, pri=5
+    sprite_init 5, image=30, attr=BOTTOM_RIGHT, x=-100, y=-100, pri=10
+    sprite_init 6, image=30, attr=BOTTOM_RIGHT, x=-100, y=-100, pri=10
+    sprite_init 7, image=30, attr=BOTTOM_RIGHT, x=-100, y=-100, pri=1
+    sprite_init 8, image=30, attr=BOTTOM_RIGHT, x=-100, y=-100, pri=10
+    sprite_path 5, path_09D7
+    sprite_path 6, path_0A59
+    sprite_path 7, path_0AEF
+    sprite_path 8, path_0B7B
+    talk "【%NMY】%KI'm hungry now."        ; [<player>] / I'm hungry now.
+    call show_and_open
+    sprite_path 0, path_070B
+    sprite_path 2, path_08E1
+    call wait_then_clear
+    talk "【%NMY】%KHmm..."                 ; [<player>] / Hmm...
+    call show_text
+    call wait_then_clear
+    talk "【%NMY】%KHmm...sniff sniff..."   ; [<player>] / Hmm...sniff sniff...
+    call show_text
+    call wait_then_clear
+    talk "【%NMY】%KWhat's that smell?"     ; [<player>] / What's that smell?
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KRibbit ribbit!"         ; [<player 1>] / Ribbit ribbit!
+    call show_text
+    sprite_path 0, path_073D
+    sprite_path 1, path_0593
+    sprite_path 3, path_0937
+    sprite_path 4, path_09A7
+    call wait_then_clear
+    talk "【%N01】%KRibbit ribbit! Myon myon!"  ; [<player 1>] / Ribbit ribbit! Myon myon!
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KHi, I'm the Frog Prince."  ; [<player 1>] / Hi, I'm the Frog Prince.
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KHi, I'm the Frog Prince.%KI'm in training to be the Frog King!"  ; [<player 1>] / Hi, I'm the Frog Prince. / I'm in training to be the Frog King!
+    call show_text
+    call wait_then_clear
+    talk "【%NMY】%K(Stomach begins to growl)"  ; [<player>] / (Stomach begins to growl)
+    call show_text
+    sprite_path 0, path_0729
+    sprite_path 1, path_05C5
+    sprite_path 3, path_0995
+    call wait_then_clear
+    talk "【%N01】%KMm?"                    ; [<player 1>] / Mm?
+    call show_text
+    sprite_path 0, path_073D
+    sprite_path 1, path_060F
+    call wait_then_clear
+    talk "【%N01】%KMm? What's going on?"   ; [<player 1>] / Mm? What's going on?
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KMm? What's going on?%KI feel a sudden chill!"  ; [<player 1>] / Mm? What's going on? / I feel a sudden chill!
+    call show_text
+    call wait_then_clear
+    sprite_path 0, path_0787
+    sprite_path 1, path_0623
+    talk "【%NMY】%KI can't take it!"       ; [<player>] / I can't take it!
+    call show_text
+    call wait_then_clear
+    talk "【%NMY】%KI can't take it! I'm hungry! Food!"  ; [<player>] / I can't take it! I'm hungry! Food!
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KAaaaargh! It's a cat monster!"  ; [<player 1>] / Aaaaargh! It's a cat monster!
+    call show_text
+    sprite_path 0, path_079B
+    sprite_path 1, path_06CB
+    call wait_then_clear
+    talk "【%N01】%KBut I won't run!"       ; [<player 1>] / But I won't run!
+    call show_text
+    sprite_path 0, path_079B
+    sprite_path 1, path_0553
+    call wait_then_clear
+    talk "【%N01】%KBut I won't run!I will defeat you%Kand become the King of Frogs!"  ; [<player 1>] / But I won't run!I will defeat you / and become the King of Frogs!
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KDad!"                   ; [<player 1>] / Dad!
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KDad! Watch me!"         ; [<player 1>] / Dad! Watch me!
+    call show_text
+    call wait_then_clear
+    talk "【%N01】%KDad! Watch me!%KRivet-rivet!"  ; [<player 1>] / Dad! Watch me! / Rivet-rivet!
+    call show_text
+    sprite_path 1, path_0567
+    call wait_then_finish
+
+show_and_open:
+    ; show the text and slide the talk panel in
+    talk_show 0
+    talk_open
+    return
+
+show_text:
+    ; show the text
+    talk_show 0
+    return
+
+wait_then_clear:
+    ; wait for cross (80 frames at most), then clear the text
+    wait_buttons_for CROSS|0x300, 80      ; wait for cross, 80 frames at most
+    talk_clear
+    return
+
+wait_then_finish:
+    ; wait for cross (80 frames at most), fade out, stop the music; end of the script
+    wait_buttons_for CROSS|0x300, 80      ; wait for cross, 80 frames at most
+    fade_out 48
+    wait_fade
+    stop_bgm
+    end
+
+empty:
+    ; returns at once
+    ; (not reached: nothing jumps here)
+    return
+
+start_scene:
+    ; clear the text, music 19, fade in
+    talk_clear
+    play_bgm 19
+    fade_in 8
+    return
+
+start_scene_2:
+    ; clear the text, music 18, fade in
+    talk_clear
+    play_bgm 18
+    fade_in 8
+    return
+
+start_scene_3:
+    ; clear the text, music 19, fade in
+    talk_clear
+    play_bgm 19
+    fade_in 8
+    return
+
+start_scene_4:
+    ; clear the text, music 17, fade in
+    talk_clear
+    play_bgm 17
+    fade_in 8
+    return
+
+start_scene_5:
+    ; clear the text, music 18, fade in
+    ; (reached again)
+    talk_clear
+    play_bgm 18
+    fade_in 8
+    return
+
+start_scene_6:
+    ; clear the text, music 17, fade in
+    ; (not reached: nothing jumps here)
+    talk_clear
+    play_bgm 17
+    fade_in 8
+    return
+
+start_scene_7:
+    ; clear the text, music 20, fade in
+    talk_clear
+    play_bgm 20
+    fade_in 8
+    return
+
+start_scene_8:
+    ; clear the text, music 19, fade in
+    talk_clear
+    play_bgm 19
+    fade_in 8
+    return
+
+start_scene_9:
+    ; clear the text, music 21, fade in
+    talk_clear
+    play_bgm 21
+    fade_in 8
+    return
+
+start_scene_10:
+    ; clear the text, music 22, fade in
+    talk_clear
+    play_bgm 22
+    fade_in 8
+    return
+
+path_0535:
+    ; (nothing names this)
+    step speed=-1, x=420, y=119, anim=anim_057B, next=NEXT  ; jump to 420, 119
+    step speed=8, x=240, y=119, anim=anim_057B, next=path_0549  ; move to 240, 119, 8 pixels a frame
+
+path_0549:
+    step speed=0, x=400, y=0, anim=anim_057B, next=path_0549  ; wait 400 frames
+
+path_0553:
+    step speed=-1, x=240, y=119, anim=anim_057B, next=path_055D  ; jump to 240, 119
+
+path_055D:
+    step speed=0, x=100, y=0, anim=anim_057B, next=path_055D  ; wait 100 frames
+
+path_0567:
+    step speed=-1, x=240, y=119, anim=anim_058B, next=path_0571  ; jump to 240, 119
+
+path_0571:
+    step speed=0, x=100, y=0, anim=anim_058B, next=path_0571  ; wait 100 frames
+
+anim_057B:
+    frame 10, time=4, flip=0, next=NEXT
+    frame 11, time=4, flip=0, next=anim_057B
+
+anim_058B:
+    frame 10, time=4, flip=0, next=anim_058B
+
+path_0593:
+    step speed=-1, x=420, y=119, anim=anim_05D9, next=NEXT  ; jump to 420, 119
+    step speed=8, x=240, y=119, anim=anim_05D9, next=path_05A7  ; move to 240, 119, 8 pixels a frame
+
+path_05A7:
+    step speed=0, x=400, y=0, anim=anim_05D9, next=path_05A7  ; wait 400 frames
+
+path_05B1:
+    ; (nothing names this)
+    step speed=8, x=240, y=119, anim=anim_05D9, next=path_05BB  ; move to 240, 119, 8 pixels a frame
+
+path_05BB:
+    step speed=0, x=100, y=0, anim=anim_05D9, next=path_05BB  ; wait 100 frames
+
+path_05C5:
+    step speed=8, x=240, y=119, anim=anim_05E9, next=path_05CF  ; move to 240, 119, 8 pixels a frame
+
+path_05CF:
+    step speed=0, x=100, y=0, anim=anim_05E9, next=path_05CF  ; wait 100 frames
+
+anim_05D9:
+    frame 12, time=6, flip=0, next=NEXT
+    frame 13, time=6, flip=0, next=anim_05D9
+
+anim_05E9:
+    frame 12, time=4, flip=0, next=anim_05E9
+
+path_05F1:
+    ; (nothing names this)
+    step speed=-1, x=420, y=119, anim=anim_0637, next=NEXT  ; jump to 420, 119
+    step speed=8, x=240, y=119, anim=anim_0637, next=path_0605  ; move to 240, 119, 8 pixels a frame
+
+path_0605:
+    step speed=0, x=400, y=0, anim=anim_0637, next=path_0605  ; wait 400 frames
+
+path_060F:
+    step speed=8, x=240, y=119, anim=anim_0637, next=path_0619  ; move to 240, 119, 8 pixels a frame
+
+path_0619:
+    step speed=0, x=100, y=0, anim=anim_0637, next=path_0619  ; wait 100 frames
+
+path_0623:
+    step speed=8, x=240, y=119, anim=anim_0647, next=path_062D  ; move to 240, 119, 8 pixels a frame
+
+path_062D:
+    step speed=0, x=100, y=0, anim=anim_0647, next=path_062D  ; wait 100 frames
+
+anim_0637:
+    frame 14, time=6, flip=0, next=NEXT
+    frame 15, time=6, flip=0, next=anim_0637
+
+anim_0647:
+    frame 14, time=4, flip=0, next=anim_0647
+
+path_064F:
+    ; (nothing names this)
+    step speed=-1, x=420, y=119, anim=anim_0695, next=NEXT  ; jump to 420, 119
+    step speed=8, x=240, y=119, anim=anim_0695, next=path_0663  ; move to 240, 119, 8 pixels a frame
+
+path_0663:
+    step speed=0, x=400, y=0, anim=anim_0695, next=path_0663  ; wait 400 frames
+
+path_066D:
+    ; (nothing names this)
+    step speed=8, x=240, y=119, anim=anim_0695, next=path_0677  ; move to 240, 119, 8 pixels a frame
+
+path_0677:
+    step speed=0, x=100, y=0, anim=anim_0695, next=path_0677  ; wait 100 frames
+
+path_0681:
+    ; (nothing names this)
+    step speed=8, x=240, y=119, anim=anim_06A5, next=path_068B  ; move to 240, 119, 8 pixels a frame
+
+path_068B:
+    step speed=0, x=100, y=0, anim=anim_06A5, next=path_068B  ; wait 100 frames
+
+anim_0695:
+    frame 16, time=6, flip=0, next=NEXT
+    frame 17, time=6, flip=0, next=anim_0695
+
+anim_06A5:
+    frame 16, time=4, flip=0, next=anim_06A5
+
+path_06AD:
+    ; (nothing names this)
+    step speed=-1, x=420, y=119, anim=anim_06F3, next=NEXT  ; jump to 420, 119
+    step speed=8, x=240, y=119, anim=anim_06F3, next=path_06C1  ; move to 240, 119, 8 pixels a frame
+
+path_06C1:
+    step speed=0, x=400, y=0, anim=anim_06F3, next=path_06C1  ; wait 400 frames
+
+path_06CB:
+    step speed=8, x=240, y=119, anim=anim_06F3, next=path_06D5  ; move to 240, 119, 8 pixels a frame
+
+path_06D5:
+    step speed=0, x=100, y=0, anim=anim_06F3, next=path_06D5  ; wait 100 frames
+
+path_06DF:
+    ; (nothing names this)
+    step speed=8, x=240, y=119, anim=anim_0703, next=path_06E9  ; move to 240, 119, 8 pixels a frame
+
+path_06E9:
+    step speed=0, x=100, y=0, anim=anim_0703, next=path_06E9  ; wait 100 frames
+
+anim_06F3:
+    frame 18, time=6, flip=0, next=NEXT
+    frame 19, time=6, flip=0, next=anim_06F3
+
+anim_0703:
+    frame 18, time=4, flip=0, next=anim_0703
+
+path_070B:
+    step speed=-1, x=-100, y=119, anim=anim_0751, next=NEXT  ; jump to -100, 119
+    step speed=8, x=80, y=119, anim=anim_0751, next=path_071F  ; move to 80, 119, 8 pixels a frame
+
+path_071F:
+    step speed=0, x=400, y=0, anim=anim_0751, next=path_071F  ; wait 400 frames
+
+path_0729:
+    step speed=-1, x=80, y=119, anim=anim_0751, next=path_0733  ; jump to 80, 119
+
+path_0733:
+    step speed=0, x=80, y=0, anim=anim_0751, next=path_0733  ; wait 80 frames
+
+path_073D:
+    step speed=-1, x=80, y=119, anim=anim_0761, next=path_0747  ; jump to 80, 119
+
+path_0747:
+    step speed=0, x=80, y=0, anim=anim_0761, next=path_0747  ; wait 80 frames
+
+anim_0751:
+    frame 0, time=4, flip=0, next=NEXT
+    frame 1, time=4, flip=0, next=anim_0751
+
+anim_0761:
+    frame 0, time=4, flip=0, next=anim_0761
+
+path_0769:
+    ; (nothing names this)
+    step speed=-1, x=-100, y=119, anim=anim_07AF, next=NEXT  ; jump to -100, 119
+    step speed=8, x=80, y=119, anim=anim_07AF, next=path_077D  ; move to 80, 119, 8 pixels a frame
+
+path_077D:
+    step speed=0, x=400, y=0, anim=anim_07AF, next=path_077D  ; wait 400 frames
+
+path_0787:
+    step speed=8, x=80, y=119, anim=anim_07AF, next=path_0791  ; move to 80, 119, 8 pixels a frame
+
+path_0791:
+    step speed=0, x=100, y=0, anim=anim_07AF, next=path_0791  ; wait 100 frames
+
+path_079B:
+    step speed=8, x=80, y=119, anim=anim_07BF, next=path_07A5  ; move to 80, 119, 8 pixels a frame
+
+path_07A5:
+    step speed=0, x=100, y=0, anim=anim_07BF, next=path_07A5  ; wait 100 frames
+
+anim_07AF:
+    frame 2, time=6, flip=0, next=NEXT
+    frame 3, time=6, flip=0, next=anim_07AF
+
+anim_07BF:
+    frame 2, time=4, flip=0, next=anim_07BF
+
+path_07C7:
+    ; (nothing names this)
+    step speed=-1, x=-100, y=119, anim=anim_080D, next=NEXT  ; jump to -100, 119
+    step speed=8, x=80, y=119, anim=anim_080D, next=path_07DB  ; move to 80, 119, 8 pixels a frame
+
+path_07DB:
+    step speed=0, x=400, y=0, anim=anim_080D, next=path_07DB  ; wait 400 frames
+
+path_07E5:
+    ; (nothing names this)
+    step speed=8, x=80, y=119, anim=anim_080D, next=path_07EF  ; move to 80, 119, 8 pixels a frame
+
+path_07EF:
+    step speed=0, x=100, y=0, anim=anim_080D, next=path_07EF  ; wait 100 frames
+
+path_07F9:
+    ; (nothing names this)
+    step speed=8, x=80, y=119, anim=anim_081D, next=path_0803  ; move to 80, 119, 8 pixels a frame
+
+path_0803:
+    step speed=0, x=100, y=0, anim=anim_081D, next=path_0803  ; wait 100 frames
+
+anim_080D:
+    frame 4, time=6, flip=0, next=NEXT
+    frame 5, time=6, flip=0, next=anim_080D
+
+anim_081D:
+    frame 4, time=4, flip=0, next=anim_081D
+
+path_0825:
+    ; (nothing names this)
+    step speed=-1, x=-100, y=119, anim=anim_086B, next=NEXT  ; jump to -100, 119
+    step speed=8, x=80, y=119, anim=anim_086B, next=path_0839  ; move to 80, 119, 8 pixels a frame
+
+path_0839:
+    step speed=0, x=400, y=0, anim=anim_086B, next=path_0839  ; wait 400 frames
+
+path_0843:
+    ; (nothing names this)
+    step speed=8, x=80, y=119, anim=anim_086B, next=path_084D  ; move to 80, 119, 8 pixels a frame
+
+path_084D:
+    step speed=0, x=100, y=0, anim=anim_086B, next=path_084D  ; wait 100 frames
+
+path_0857:
+    ; (nothing names this)
+    step speed=8, x=80, y=119, anim=anim_087B, next=path_0861  ; move to 80, 119, 8 pixels a frame
+
+path_0861:
+    step speed=0, x=100, y=0, anim=anim_087B, next=path_0861  ; wait 100 frames
+
+anim_086B:
+    frame 6, time=6, flip=0, next=NEXT
+    frame 7, time=6, flip=0, next=anim_086B
+
+anim_087B:
+    frame 6, time=4, flip=0, next=anim_087B
+
+path_0883:
+    ; (nothing names this)
+    step speed=-1, x=-100, y=119, anim=anim_08C9, next=NEXT  ; jump to -100, 119
+    step speed=8, x=80, y=119, anim=anim_08C9, next=path_0897  ; move to 80, 119, 8 pixels a frame
+
+path_0897:
+    step speed=0, x=400, y=0, anim=anim_08C9, next=path_0897  ; wait 400 frames
+
+path_08A1:
+    ; (nothing names this)
+    step speed=8, x=80, y=119, anim=anim_08C9, next=path_08AB  ; move to 80, 119, 8 pixels a frame
+
+path_08AB:
+    step speed=0, x=100, y=0, anim=anim_08C9, next=path_08AB  ; wait 100 frames
+
+path_08B5:
+    ; (nothing names this)
+    step speed=8, x=80, y=119, anim=anim_08D9, next=path_08BF  ; move to 80, 119, 8 pixels a frame
+
+path_08BF:
+    step speed=0, x=100, y=0, anim=anim_08D9, next=path_08BF  ; wait 100 frames
+
+anim_08C9:
+    frame 8, time=6, flip=0, next=NEXT
+    frame 9, time=6, flip=0, next=anim_08C9
+
+anim_08D9:
+    frame 8, time=4, flip=0, next=anim_08D9
+
+path_08E1:
+    step speed=-1, x=-60, y=112, anim=anim_08F5, next=NEXT  ; jump to -60, 112
+    step speed=2, x=120, y=112, anim=anim_08F5, next=path_0925  ; move to 120, 112, 2 pixels a frame
+
+anim_08F5:
+    frame 20, time=4, flip=FLIP_X, next=NEXT
+    frame 21, time=4, flip=FLIP_X, next=NEXT
+    frame 22, time=4, flip=FLIP_X, next=NEXT
+    frame 20, time=4, flip=FLIP_X, next=NEXT
+    frame 23, time=4, flip=FLIP_X, next=NEXT
+    frame 24, time=4, flip=FLIP_X, next=anim_08F5
+
+path_0925:
+    step speed=0, x=4, y=0, anim=anim_092F, next=path_0925  ; wait 4 frames
+
+anim_092F:
+    frame 20, time=4, flip=FLIP_X, next=anim_092F
+
+path_0937:
+    step speed=-1, x=160, y=-48, anim=anim_097D, next=NEXT  ; jump to 160, -48
+    step speed=4, x=160, y=-32, anim=anim_097D, next=NEXT  ; move to 160, -32, 4 pixels a frame
+    step speed=8, x=160, y=-16, anim=anim_097D, next=NEXT  ; move to 160, -16, 8 pixels a frame
+    step speed=12, x=160, y=16, anim=anim_097D, next=NEXT  ; move to 160, 16, 12 pixels a frame
+    step speed=16, x=160, y=104, anim=anim_097D, next=NEXT  ; move to 160, 104, 16 pixels a frame
+    step speed=0, x=80, y=0, anim=anim_0985, next=path_0973  ; wait 80 frames
+
+path_0973:
+    step speed=0, x=4, y=0, anim=anim_098D, next=path_0973  ; wait 4 frames
+
+anim_097D:
+    frame 25, time=4, flip=0, next=anim_097D
+
+anim_0985:
+    frame 26, time=4, flip=0, next=anim_0985
+
+anim_098D:
+    frame 27, time=4, flip=0, next=anim_098D
+
+path_0995:
+    step speed=0, x=4, y=0, anim=anim_099F, next=path_0995  ; wait 4 frames
+
+anim_099F:
+    frame 28, time=4, flip=FLIP_X, next=anim_099F
+
+path_09A7:
+    step speed=0, x=20, y=0, anim=anim_09CF, next=NEXT  ; wait 20 frames
+    step speed=-1, x=158, y=122, anim=anim_09CF, next=NEXT  ; jump to 158, 122
+    step speed=0, x=40, y=0, anim=anim_09CF, next=path_09C5  ; wait 40 frames
+
+path_09C5:
+    step speed=-1, x=-100, y=-100, anim=anim_09CF, next=path_09C5  ; jump to -100, -100
+
+anim_09CF:
+    frame 29, time=4, flip=FLIP_X, next=anim_09CF
+
+path_09D7:
+    step speed=-1, x=80, y=120, anim=anim_0C07, next=path_09E1  ; jump to 80, 120
+
+path_09E1:
+    step speed=1, x=82, y=116, anim=anim_0C0F, next=NEXT  ; move to 82, 116, 1 pixels a frame
+    step speed=1, x=84, y=120, anim=anim_0C0F, next=NEXT  ; move to 84, 120, 1 pixels a frame
+    step speed=0, x=40, y=0, anim=anim_0C07, next=NEXT  ; wait 40 frames
+    step speed=1, x=86, y=116, anim=anim_0C0F, next=NEXT  ; move to 86, 116, 1 pixels a frame
+    step speed=1, x=88, y=120, anim=anim_0C0F, next=NEXT  ; move to 88, 120, 1 pixels a frame
+    step speed=0, x=40, y=0, anim=anim_0C07, next=NEXT  ; wait 40 frames
+    step speed=1, x=86, y=116, anim=anim_0C1F, next=NEXT  ; move to 86, 116, 1 pixels a frame
+    step speed=1, x=84, y=120, anim=anim_0C1F, next=NEXT  ; move to 84, 120, 1 pixels a frame
+    step speed=0, x=8, y=0, anim=anim_0C17, next=NEXT  ; wait 8 frames
+    step speed=1, x=82, y=116, anim=anim_0C1F, next=NEXT  ; move to 82, 116, 1 pixels a frame
+    step speed=1, x=80, y=120, anim=anim_0C1F, next=NEXT  ; move to 80, 120, 1 pixels a frame
+    step speed=0, x=40, y=0, anim=anim_0C17, next=path_09E1  ; wait 40 frames
+
+path_0A59:
+    step speed=-1, x=120, y=130, anim=anim_0C07, next=NEXT  ; jump to 120, 130
+    step speed=0, x=500, y=0, anim=anim_0C07, next=path_0A6D  ; wait 500 frames
+
+path_0A6D:
+    step speed=0, x=20, y=0, anim=anim_0C07, next=NEXT  ; wait 20 frames
+    step speed=1, x=122, y=126, anim=anim_0C0F, next=NEXT  ; move to 122, 126, 1 pixels a frame
+    step speed=1, x=124, y=130, anim=anim_0C0F, next=NEXT  ; move to 124, 130, 1 pixels a frame
+    step speed=0, x=20, y=0, anim=anim_0C07, next=NEXT  ; wait 20 frames
+    step speed=1, x=126, y=126, anim=anim_0C0F, next=NEXT  ; move to 126, 126, 1 pixels a frame
+    step speed=1, x=128, y=130, anim=anim_0C0F, next=NEXT  ; move to 128, 130, 1 pixels a frame
+    step speed=0, x=80, y=0, anim=anim_0C07, next=NEXT  ; wait 80 frames
+    step speed=1, x=126, y=126, anim=anim_0C1F, next=NEXT  ; move to 126, 126, 1 pixels a frame
+    step speed=1, x=124, y=130, anim=anim_0C1F, next=NEXT  ; move to 124, 130, 1 pixels a frame
+    step speed=0, x=60, y=0, anim=anim_0C17, next=NEXT  ; wait 60 frames
+    step speed=1, x=122, y=126, anim=anim_0C1F, next=NEXT  ; move to 122, 126, 1 pixels a frame
+    step speed=1, x=120, y=130, anim=anim_0C1F, next=NEXT  ; move to 120, 130, 1 pixels a frame
+    step speed=0, x=10, y=0, anim=anim_0C17, next=path_0A6D  ; wait 10 frames
+
+path_0AEF:
+    step speed=-1, x=180, y=160, anim=anim_0C07, next=path_0AF9  ; jump to 180, 160
+
+path_0AF9:
+    step speed=0, x=60, y=0, anim=anim_0C07, next=NEXT  ; wait 60 frames
+    step speed=1, x=182, y=156, anim=anim_0C0F, next=NEXT  ; move to 182, 156, 1 pixels a frame
+    step speed=1, x=184, y=160, anim=anim_0C0F, next=NEXT  ; move to 184, 160, 1 pixels a frame
+    step speed=0, x=20, y=0, anim=anim_0C07, next=NEXT  ; wait 20 frames
+    step speed=1, x=186, y=156, anim=anim_0C0F, next=NEXT  ; move to 186, 156, 1 pixels a frame
+    step speed=1, x=188, y=160, anim=anim_0C0F, next=NEXT  ; move to 188, 160, 1 pixels a frame
+    step speed=0, x=80, y=0, anim=anim_0C07, next=NEXT  ; wait 80 frames
+    step speed=1, x=186, y=156, anim=anim_0C1F, next=NEXT  ; move to 186, 156, 1 pixels a frame
+    step speed=1, x=184, y=160, anim=anim_0C1F, next=NEXT  ; move to 184, 160, 1 pixels a frame
+    step speed=0, x=60, y=0, anim=anim_0C17, next=NEXT  ; wait 60 frames
+    step speed=1, x=182, y=156, anim=anim_0C1F, next=NEXT  ; move to 182, 156, 1 pixels a frame
+    step speed=1, x=180, y=160, anim=anim_0C1F, next=NEXT  ; move to 180, 160, 1 pixels a frame
+    step speed=0, x=10, y=0, anim=anim_0C17, next=path_0AF9  ; wait 10 frames
+
+path_0B7B:
+    step speed=-1, x=250, y=120, anim=anim_0C07, next=path_0B85  ; jump to 250, 120
+
+path_0B85:
+    step speed=0, x=200, y=0, anim=anim_0C07, next=NEXT  ; wait 200 frames
+    step speed=1, x=252, y=116, anim=anim_0C0F, next=NEXT  ; move to 252, 116, 1 pixels a frame
+    step speed=1, x=254, y=120, anim=anim_0C0F, next=NEXT  ; move to 254, 120, 1 pixels a frame
+    step speed=0, x=40, y=0, anim=anim_0C07, next=NEXT  ; wait 40 frames
+    step speed=1, x=256, y=116, anim=anim_0C0F, next=NEXT  ; move to 256, 116, 1 pixels a frame
+    step speed=1, x=258, y=120, anim=anim_0C0F, next=NEXT  ; move to 258, 120, 1 pixels a frame
+    step speed=0, x=16, y=0, anim=anim_0C07, next=NEXT  ; wait 16 frames
+    step speed=1, x=256, y=116, anim=anim_0C1F, next=NEXT  ; move to 256, 116, 1 pixels a frame
+    step speed=1, x=254, y=120, anim=anim_0C1F, next=NEXT  ; move to 254, 120, 1 pixels a frame
+    step speed=0, x=16, y=0, anim=anim_0C17, next=NEXT  ; wait 16 frames
+    step speed=1, x=252, y=116, anim=anim_0C1F, next=NEXT  ; move to 252, 116, 1 pixels a frame
+    step speed=1, x=250, y=120, anim=anim_0C1F, next=NEXT  ; move to 250, 120, 1 pixels a frame
+    step speed=0, x=20, y=0, anim=anim_0C17, next=path_0B85  ; wait 20 frames
+
+anim_0C07:
+    frame 30, time=4, flip=0, next=anim_0C07
+
+anim_0C0F:
+    frame 31, time=4, flip=0, next=anim_0C0F
+
+anim_0C17:
+    frame 30, time=4, flip=FLIP_X, next=anim_0C17
+
+anim_0C1F:
+    frame 31, time=4, flip=FLIP_X, next=anim_0C1F
+    bytes 0x00    ; padding

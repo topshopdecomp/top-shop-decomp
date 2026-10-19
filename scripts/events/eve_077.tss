@@ -1,0 +1,2863 @@
+; EVE_077.J entry 0
+;
+; Event 77: never played. Event_PickRandom never draws it, and nothing turns on
+; RULE_PICK_EVENT, the debug rule that lets the player pick any event.
+; Result ($result of the task): 0 the turn goes on, 1 another event (result_another),
+; 2 roll again (result_reroll), 3 move the steps set (move_steps).
+;
+; What it does: the current player: money + $l10.
+;
+; What it says: "[Pumpkin Head] / This is a speed-up quiz." | "The quiz is two-choice questions
+; about store goods; / a wrong answer or running out of time / ends it" | ""number right x" | ""
+; money is yours" | "Start!" | "1." | ...
+;
+; 11212 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+
+; The event card scene's variables (scripts/README.md):
+; corner1-4: top left, top right, bottom left, bottom right (sprites 1-4)
+; $cornerN_x/_y: position; _dx/_dy: offset for this frame only; _home_x/_y: place in the frame
+; $corner_zoom: 256 = full size, this frame; $corner_stretch_x/_y: 50 = no stretch
+; $corner_entrance: CORNERS_*; $corner_effects: FX_* bits; $card_entrance: CARD_*
+; $card_state: 0 not started, 32767 done (the card routines count in it)
+var $corner1_x = $v0A
+var $corner1_y = $v0B
+var $corner2_x = $v0C
+var $corner2_y = $v0D
+var $corner3_x = $v0E
+var $corner3_y = $v0F
+var $corner4_x = $v10
+var $corner4_y = $v11
+var $corner_zoom = $v12
+var $corner_stretch_x = $v13
+var $corner_stretch_y = $v14
+var $corner1_dx = $v15
+var $corner1_dy = $v16
+var $corner2_dx = $v17
+var $corner2_dy = $v18
+var $corner3_dx = $v19
+var $corner3_dy = $v1A
+var $corner4_dx = $v1B
+var $corner4_dy = $v1C
+var $corner1_home_x = $v1D
+var $corner1_home_y = $v1E
+var $corner2_home_x = $v1F
+var $corner2_home_y = $v20
+var $corner3_home_x = $v21
+var $corner3_home_y = $v22
+var $corner4_home_x = $v23
+var $corner4_home_y = $v24
+var $corner_entrance = $v25
+var $corner_effects = $v26
+var $card_entrance = $v28
+var $card_state = $v8C
+var $card_angle = $v8D
+var $card_sink_step = $v93
+var $card_rise_step = $v94
+var $pulse_angle = $v96
+var $pulse_x_angle = $v97
+var $pulse_y_angle = $v98
+var $shrink_amount = $v99
+var $grow_amount = $v9A
+var $corner_steps = $v9B
+var $squeeze_y_angle = $v9C
+var $squeeze_x_angle = $v9D
+var $circle_radius = $v9E
+var $circle_angle = $v9F
+    call clear_vars
+    call scene_setup
+    call corners_animate
+    $corner_entrance = CORNERS_HOME
+    $corner_effects = 0
+    $card_entrance = CARD_RISE
+    call effects_default
+    nop_34 6                              ; no effect in this game
+    talk "【Pumpkin Head】%KThis is a speed-up quiz."  ; [Pumpkin Head] / This is a speed-up quiz.
+    call card_show
+    talk_clear
+    talk "クイズはお店の商品に関する２択で%K間違えるか、タイムオーバーすると%K終了し"  ; en: The quiz is two-choice questions about store goods; / a wrong answer or running out of time / ends it
+    talk_show 0
+    call wait_cross
+    call money_by_years
+    $v00 /= 2
+    talk_clear
+    talk "「正解数×"                          ; en: "number right x
+    talk_number $v00, 0
+    talk "」お金がもらえます"                      ; en: " money is yours
+    talk_show 0
+    call wait_cross
+    talk_clear
+    talk "Start!"
+    talk_show 0
+    call wait_cross
+    if $cur_is_cpu & CPU goto L_042C
+
+L_0107:
+    $l0 = 50
+    sprite_init 50, image=11, attr=BOTTOM_LEFT, x=50, y=167, pri=2
+    sprite_scale 50, 512, 256
+    $v00 = random 44
+    $v00 *= 7
+    $l0 = table_057B[$v00]
+    $v01 = random 6
+    $v01 += 1
+    $v01 += $v00
+    $l1 = table_057B[$v01]
+
+L_0151:
+    $v01 = random 44
+    $v01 *= 7
+    if $v01 == $v00 goto L_0151
+    $v00 = random 6
+    $v00 += 1
+    $v01 += $v00
+    $l2 = table_057B[$v01]
+    $l4 = random 2
+    $l3 = table_0555[$l4]
+    talk_clear
+    talk_data $l0
+    talk_data $l3
+    $v00 = random 2
+    if $v00 != 0 goto L_01D1
+    talk "１．"                             ; 1.
+    talk_data $l1
+    talk "%K２．"                           ; 2.
+    talk_data $l2
+    $l6 = 0
+    $l7 = 1
+    goto L_01F5
+
+L_01D1:
+    talk "１．"                             ; 1.
+    talk_data $l2
+    talk "%K２．"                           ; 2.
+    talk_data $l1
+    $l6 = 1
+    $l7 = 0
+
+L_01F5:
+    talk_show 0
+    $l5 = 1
+    talk_cursor 1
+    $l12 = 512
+
+L_0209:
+    call effects_run
+    if $cur_pressed != 8192 goto L_0235
+    $l5 += 1
+    if $l5 != 3 goto L_022D
+    $l5 = 1
+
+L_022D:
+    talk_cursor $l5
+    play_se 0
+
+L_0235:
+    if $cur_pressed != 4096 goto L_025D
+    $l5 -= 1
+    if $l5 != 0 goto L_0255
+    $l5 = 2
+
+L_0255:
+    talk_cursor $l5
+    play_se 0
+
+L_025D:
+    if $l12 <= 0 goto L_030B
+    sprite_scale 50, $l12, 256
+    $v00 = $l9
+    $v00 += 1
+    $l12 -= $v00
+    if $cur_pressed != 512 goto L_0209
+    if $l5 != 1 goto L_029F
+    $l11 = $l6
+    goto L_02A5
+
+L_029F:
+    $l11 = $l7
+
+L_02A5:
+    if $l4 != $l11 goto L_02B7
+    play_se 7
+    goto L_02BB
+
+L_02B7:
+    play_se 8
+
+L_02BB:
+    talk_no_cursor
+    $l8 = 0
+
+L_02C3:
+    $v00 = 1
+    call effects_for
+    talk_cursor $l5
+    $v00 = 3
+    call effects_for
+    talk_no_cursor
+    $l8 += 1
+    if $l8 != 3 goto L_02C3
+    $v00 = 1
+    call effects_for
+    if $l4 != $l11 goto L_032F
+    $l9 += 1
+    goto L_0107
+
+L_030B:
+    play_se 8
+    sprite_hide 50
+    $v00 = 5
+    call effects_for
+    talk_clear
+    talk "Time."
+    talk_show 0
+    goto L_036B
+
+L_032F:
+    $v00 = 50
+    sprite_hide 50
+    $v00 = 5
+    call effects_for
+    talk_clear
+    talk "I'm sorry, but%Kthe time is up."
+    talk_show 0
+
+L_036B:
+    call wait_cross
+    if $l9 != 0 goto L_03C8
+    talk_clear
+    talk "Since you didn't get%Kthe answers right, you%Kdidn't win anything."
+    talk_show 0
+    goto L_041C
+
+L_03C8:
+    talk_clear
+    talk_number $l9, 0
+    talk "問正解でしたので%K"                     ; en: questions right, so /
+    talk_show 0
+    call money_by_years
+    $l10 = $v00
+    $l10 /= 2
+    $l10 *= $l9
+    talk_number $l10, 0
+    talk "s prize money."
+    earn CUR_PLAYER, $l10                 ; the current player: money + $l10
+
+L_041C:
+    talk_show 0
+    call wait_cross
+    call card_close
+    call finish
+
+L_042C:
+    $l1 = 0
+    $l2 = 90
+    $l3 = -2
+
+L_043E:
+    talk_clear
+    talk "%NMY is answering.%K"
+    $l0 = 0
+
+L_045D:
+    if $l0 == $l1 goto L_0476
+    $l0 += 1
+    talk "○"                              ; ○
+    goto L_045D
+
+L_0476:
+    if $l1 == 16 goto L_04B3
+    $l4 = random 100
+    if $l4 > $l2 goto L_04B3
+    $l2 += $l3
+    $l1 += 1
+    talk "○"                              ; ○
+    talk_show 0
+    $v00 = 10
+    call effects_for
+    goto L_043E
+
+L_04B3:
+    talk "×"                              ; ×
+    talk_show 0
+    $l9 = $l1
+    goto L_036B
+
+effects_for:
+    ; keep the effects going for $v00 frames
+    $l0 = $v00
+    $l1 = 0
+
+L_04D2:
+    call effects_run
+    $l1 += 1
+    if $l1 != $l0 goto L_04D2
+    return
+
+anim_04E8:
+    ; (nothing names this)
+    frame 12, time=0, flip=0, next=END
+
+anim_04F0:
+    ; (nothing names this)
+    frame 13, time=0, flip=0, next=END
+
+anim_04F8:
+    ; (nothing names this)
+    frame 14, time=0, flip=0, next=END
+
+table_0500:
+    ; (nothing names this)
+    words text_0506
+    words text_0509
+    words text_050C
+
+text_0506:
+    string "１"                            ; 1
+
+text_0509:
+    string "２"                            ; 2
+
+text_050C:
+    string "３"                            ; 3
+
+table_050F:
+    ; (nothing names this)
+    words text_051B
+    words text_0522
+    words text_052D
+    words text_0538
+    words text_0543
+    words text_054E
+
+text_051B:
+    string "最も高"                          ; en: most expens(ive)
+
+text_0522:
+    string "２番目に高"                        ; en: 2nd most expens(ive)
+
+text_052D:
+    string "３番目に高"                        ; en: 3rd most expens(ive)
+
+text_0538:
+    string "３番目に安"                        ; en: 3rd cheap(est)
+
+text_0543:
+    string "２番目に安"                        ; en: 2nd cheap(est)
+
+text_054E:
+    string "最も安"                          ; en: cheap(est)
+
+table_0555:
+    words text_0559
+    words text_056A
+
+text_0559:
+    string "にある商品は？%K"                    ; en: : which of these does it sell? /
+
+text_056A:
+    string "にない商品は？%K"                    ; en: : which of these does it not sell? /
+
+table_057B:
+    words text_07E3
+    words text_07F2
+    words text_07FB
+    words text_0804
+    words text_0811
+    words text_0818
+    words text_081F
+    words text_0828
+    words text_0831
+    words text_083A
+    words text_084B
+    words text_0854
+    words text_0861
+    words text_086A
+    words text_0871
+    words text_087E
+    words text_088B
+    words text_089A
+    words text_08A3
+    words text_08AA
+    words text_08B3
+    words text_08BC
+    words text_08C5
+    words text_08D6
+    words text_08E1
+    words text_08F2
+    words text_08FD
+    words text_090A
+    words text_091B
+    words text_0926
+    words text_0931
+    words text_093C
+    words text_094B
+    words text_095A
+    words text_0965
+    words text_0974
+    words text_0981
+    words text_098A
+    words text_0995
+    words text_099C
+    words text_09A1
+    words text_09A8
+    words text_09AF
+    words text_09BE
+    words text_09C5
+    words text_09D0
+    words text_09D5
+    words text_09DE
+    words text_09E3
+    words text_09E8
+    words text_09F7
+    words text_09FC
+    words text_0A01
+    words text_0A10
+    words text_0A1D
+    words text_0A24
+    words text_0A2F
+    words text_0A3A
+    words text_0A41
+    words text_0A4A
+    words text_0A53
+    words text_0A5A
+    words text_0A5F
+    words text_0A68
+    words text_0A75
+    words text_0A7A
+    words text_0A7F
+    words text_0A84
+    words text_0A8D
+    words text_0A98
+    words text_0A9D
+    words text_0AAA
+    words text_0AB5
+    words text_0AC2
+    words text_0ACD
+    words text_0ADA
+    words text_0AE5
+    words text_0AEE
+    words text_0AF9
+    words text_0AFE
+    words text_0B0B
+    words text_0B1C
+    words text_0B29
+    words text_0B36
+    words text_0B3D
+    words text_0B46
+    words text_0B57
+    words text_0B68
+    words text_0B73
+    words text_0B82
+    words text_0B93
+    words text_0BA0
+    words text_0BAF
+    words text_0BBC
+    words text_0BC5
+    words text_0BCA
+    words text_0BD9
+    words text_0BE8
+    words text_0BF1
+    words text_0C00
+    words text_0C0D
+    words text_0C1E
+    words text_0C25
+    words text_0C30
+    words text_0C41
+    words text_0C4C
+    words text_0C59
+    words text_0C60
+    words text_0C6B
+    words text_0C76
+    words text_0C7D
+    words text_0C86
+    words text_0C8F
+    words text_0C9E
+    words text_0CA7
+    words text_0CB0
+    words text_0CBB
+    words text_0CC4
+    words text_0CD1
+    words text_0CE0
+    words text_0CE7
+    words text_0CF8
+    words text_0D09
+    words text_0D10
+    words text_0D19
+    words text_0D22
+    words text_0D27
+    words text_0D38
+    words text_0D43
+    words text_0D4E
+    words text_0D5B
+    words text_0D68
+    words text_0D75
+    words text_0D80
+    words text_0D8D
+    words text_0D9A
+    words text_0DA5
+    words text_0DAA
+    words text_0DB1
+    words text_0DB8
+    words text_0DBF
+    words text_0DCA
+    words text_0DD1
+    words text_0DDC
+    words text_0DE7
+    words text_0DF2
+    words text_0DFD
+    words text_0E02
+    words text_0E0F
+    words text_0E1C
+    words text_0E29
+    words text_0E36
+    words text_0E41
+    words text_0E4A
+    words text_0E57
+    words text_0E5C
+    words text_0E63
+    words text_0E68
+    words text_0E6D
+    words text_0E72
+    words text_0E79
+    words text_0E7E
+    words text_0E87
+    words text_0E92
+    words text_0E9F
+    words text_0EAE
+    words text_0EBF
+    words text_0EC6
+    words text_0ECF
+    words text_0EDC
+    words text_0EE9
+    words text_0EF6
+    words text_0EFF
+    words text_0F08
+    words text_0F17
+    words text_0F1C
+    words text_0F29
+    words text_0F2E
+    words text_0F37
+    words text_0F40
+    words text_0F49
+    words text_0F50
+    words text_0F5B
+    words text_0F62
+    words text_0F6D
+    words text_0F74
+    words text_0F79
+    words text_0F80
+    words text_0F87
+    words text_0F90
+    words text_0F9D
+    words text_0FAC
+    words text_0FB9
+    words text_0FCA
+    words text_0FD7
+    words text_0FE6
+    words text_0FF7
+    words text_1002
+    words text_1009
+    words text_1014
+    words text_1025
+    words text_1034
+    words text_103F
+    words text_104C
+    words text_105B
+    words text_1066
+    words text_1073
+    words text_1082
+    words text_1093
+    words text_10A0
+    words text_10AF
+    words text_10BC
+    words text_10C5
+    words text_10D0
+    words text_10DD
+    words text_10EC
+    words text_10F7
+    words text_1100
+    words text_1107
+    words text_110E
+    words text_1115
+    words text_111E
+    words text_1129
+    words text_1132
+    words text_1137
+    words text_113E
+    words text_114B
+    words text_115C
+    words text_1169
+    words text_1178
+    words text_1185
+    words text_1192
+    words text_119B
+    words text_11A2
+    words text_11AB
+    words text_11B2
+    words text_11B9
+    words text_11C0
+    words text_11C9
+    words text_11D0
+    words text_11DD
+    words text_11E4
+    words text_11EB
+    words text_11F2
+    words text_11F9
+    words text_1200
+    words text_1209
+    words text_1214
+    words text_121D
+    words text_122A
+    words text_1233
+    words text_1240
+    words text_124D
+    words text_125C
+    words text_126B
+    words text_127A
+    words text_1289
+    words text_1290
+    words text_1297
+    words text_12A0
+    words text_12A7
+    words text_12B4
+    words text_12BD
+    words text_12C8
+    words text_12D9
+    words text_12E0
+    words text_12E9
+    words text_12F8
+    words text_12FD
+    words text_1302
+    words text_1307
+    words text_1312
+    words text_1319
+    words text_131E
+    words text_132F
+    words text_1336
+    words text_1341
+    words text_134E
+    words text_1355
+    words text_1364
+    words text_1371
+    words text_1378
+    words text_1387
+    words text_1396
+    words text_13A5
+    words text_13B6
+    words text_13C3
+    words text_13D2
+    words text_13D7
+    words text_13E6
+    words text_13F5
+    words text_1402
+    words text_140D
+    words text_1414
+    words text_1421
+    words text_1430
+    words text_143D
+    words text_1446
+    words text_144D
+    words text_1458
+    words text_145F
+    words text_1466
+    words text_146F
+    words text_1478
+    words text_1487
+    words text_148E
+    words text_1499
+    words text_14A2
+
+text_07E3:
+    string "マツモトキヨシ"                      ; en: Matsumoto Kiyoshi (drugstore)
+
+text_07F2:
+    string "健康食品"                         ; en: Health food
+
+text_07FB:
+    string "ヘアケア"                         ; en: Hair care
+
+text_0804:
+    string "トイレタリー"                       ; en: Toiletries
+
+text_0811:
+    string "化粧品"                          ; en: Cosmetics
+
+text_0818:
+    string "医薬品"                          ; en: Medicine
+
+text_081F:
+    string "日用雑貨"                         ; en: Daily goods
+
+text_0828:
+    string "駄菓子屋"                         ; en: Candy store
+
+text_0831:
+    string "けんだま"                         ; en: Kendama
+
+text_083A:
+    string "ＤＸお菓子セット"                     ; en: Deluxe snack set
+
+text_084B:
+    string "ヨーヨー"                         ; en: Yo-yo
+
+text_0854:
+    string "スナック菓子"                       ; en: Snacks
+
+text_0861:
+    string "三角くじ"                         ; en: Triangle lottery
+
+text_086A:
+    string "ふがし"                          ; en: Fugashi (wheat-gluten sweets)
+
+text_0871:
+    string "パンパドール"                       ; en: Painpadour (bakery)
+
+text_087E:
+    string "フランスパン"                       ; en: French bread
+
+text_088B:
+    string "サンドウィッチ"                      ; en: Sandwich
+
+text_089A:
+    string "ピザパン"                         ; en: Pizza bread
+
+text_08A3:
+    string "食パン"                          ; en: Sliced bread
+
+text_08AA:
+    string "揚げパン"                         ; en: Fried bread
+
+text_08B3:
+    string "菓子パン"                         ; en: Sweet bun
+
+text_08BC:
+    string "ＫＩＳＳ"                         ; KISS
+
+text_08C5:
+    string "スペシャル・ピザ"                     ; en: Special pizza
+
+text_08D6:
+    string "オムライス"                        ; en: Omelette rice
+
+text_08E1:
+    string "フレンチトースト"                     ; en: French toast
+
+text_08F2:
+    string "カプチーノ"                        ; en: Cappuccino
+
+text_08FD:
+    string "エスプレッソ"                       ; en: Espresso
+
+text_090A:
+    string "アップルジュース"                     ; en: Apple juice
+
+text_091B:
+    string "ロッテリア"                        ; en: Lotteria (burgers)
+
+text_0926:
+    string "デラセット"                        ; en: Deluxe set
+
+text_0931:
+    string "リブセット"                        ; en: Rib set
+
+text_093C:
+    string "ＫＩＤＳセット"                      ; en: Kids' set
+
+text_094B:
+    string "テリヤキセット"                      ; en: Teriyaki set
+
+text_095A:
+    string "エビセット"                        ; en: Shrimp set
+
+text_0965:
+    string "バーガーセット"                      ; en: Burger set
+
+text_0974:
+    string "森の国屋書店"                       ; en: Morinokuniya bookstore
+
+text_0981:
+    string "百科事典"                         ; en: Encyclopedia
+
+text_098A:
+    string "歴史写真集"                        ; en: History photo book
+
+text_0995:
+    string "参考書"                          ; en: Study guide
+
+text_099C:
+    string "絵本"                           ; en: Picture book
+
+text_09A1:
+    string "単行本"                          ; en: Hardcover book
+
+text_09A8:
+    string "週刊誌"                          ; en: Weekly magazine
+
+text_09AF:
+    string "金物の金ちゃん"                      ; en: Kin-chan's Hardware
+
+text_09BE:
+    string "圧力鍋"                          ; en: Pressure cooker
+
+text_09C5:
+    string "フライパン"                        ; en: Frying pan
+
+text_09D0:
+    string "お皿"                           ; en: Plates
+
+text_09D5:
+    string "スプーン"                         ; en: Spoons
+
+text_09DE:
+    string "茶碗"                           ; en: Rice bowls
+
+text_09E3:
+    string "ハシ"                           ; en: Chopsticks
+
+text_09E8:
+    string "フラワーハート"                      ; en: Flower Heart
+
+text_09F7:
+    string "バラ"                           ; en: Roses
+
+text_09FC:
+    string "ユリ"                           ; en: Lilies
+
+text_0A01:
+    string "カーネーション"                      ; en: Carnations
+
+text_0A10:
+    string "チューリップ"                       ; en: Tulips
+
+text_0A1D:
+    string "スミレ"                          ; en: Violets
+
+text_0A24:
+    string "カスミソウ"                        ; en: Baby's breath
+
+text_0A2F:
+    string "まんがの森"                        ; en: Manga no Mori (comic shop)
+
+text_0A3A:
+    string "写真集"                          ; en: Photo book
+
+text_0A41:
+    string "アメコミ"                         ; en: American comics
+
+text_0A4A:
+    string "ポスター"                         ; en: Posters
+
+text_0A53:
+    string "文庫本"                          ; en: Paperbacks
+
+text_0A5A:
+    string "雑誌"                           ; en: Magazines
+
+text_0A5F:
+    string "コミック"                         ; en: Comics
+
+text_0A68:
+    string "ミートランド"                       ; en: Meat Land
+
+text_0A75:
+    string "牛肉"                           ; en: Beef
+
+text_0A7A:
+    string "豚肉"                           ; en: Pork
+
+text_0A7F:
+    string "鳥肉"                           ; en: Chicken
+
+text_0A84:
+    string "ベーコン"                         ; en: Bacon
+
+text_0A8D:
+    string "ソーセージ"                        ; en: Sausages
+
+text_0A98:
+    string "挽肉"                           ; en: Minced meat
+
+text_0A9D:
+    string "あったか弁当"                       ; en: Hot Bento
+
+text_0AAA:
+    string "幕の内弁当"                        ; en: Makunouchi bento
+
+text_0AB5:
+    string "カツどん弁当"                       ; en: Katsudon bento
+
+text_0AC2:
+    string "焼き魚弁当"                        ; en: Grilled fish bento
+
+text_0ACD:
+    string "コロッケ弁当"                       ; en: Croquette bento
+
+text_0ADA:
+    string "シャケ弁当"                        ; en: Salmon bento
+
+text_0AE5:
+    string "のり弁当"                         ; en: Nori bento
+
+text_0AEE:
+    string "ボブソンズ"                        ; en: Bobsons (ice cream)
+
+text_0AF9:
+    string "抹茶"                           ; en: Green tea
+
+text_0AFE:
+    string "ラムレーズン"                       ; en: Rum raisin
+
+text_0B0B:
+    string "クッキークリーム"                     ; en: Cookies and cream
+
+text_0B1C:
+    string "チョコレート"                       ; en: Chocolate
+
+text_0B29:
+    string "ストロベリー"                       ; en: Strawberry
+
+text_0B36:
+    string "バニラ"                          ; en: Vanilla
+
+text_0B3D:
+    string "デニーズ"                         ; en: Denny's
+
+text_0B46:
+    string "ステーキディナー"                     ; en: Steak dinner
+
+text_0B57:
+    string "ハンバーグコース"                     ; en: Hamburg steak course
+
+text_0B68:
+    string "季節の定食"                        ; en: Seasonal set meal
+
+text_0B73:
+    string "スパゲッティー"                      ; en: Spaghetti
+
+text_0B82:
+    string "ＫＩＤＳメニュー"                     ; en: Kids' menu
+
+text_0B93:
+    string "ケーキセット"                       ; en: Cake set
+
+text_0BA0:
+    string "ビックリカメラ"                      ; en: Bikkuri Camera
+
+text_0BAF:
+    string "お見合い写真"                       ; en: Matchmaking photos
+
+text_0BBC:
+    string "アルバム"                         ; en: Albums
+
+text_0BC5:
+    string "現像"                           ; en: Film developing
+
+text_0BCA:
+    string "カラープリント"                      ; en: Color prints
+
+text_0BD9:
+    string "ＡＰＳシステム"                      ; en: APS system
+
+text_0BE8:
+    string "フィルム"                         ; en: Film
+
+text_0BF1:
+    string "ネズミィランド"                      ; en: Nezumi Land (theme park)
+
+text_0C00:
+    string "タワーホール"                       ; en: Tower hall
+
+text_0C0D:
+    string "ループコースター"                     ; en: Loop coaster
+
+text_0C1E:
+    string "観覧車"                          ; en: Ferris wheel
+
+text_0C25:
+    string "お化け屋敷"                        ; en: Haunted house
+
+text_0C30:
+    string "メリーゴーランド"                     ; en: Merry-go-round
+
+text_0C41:
+    string "ゴーカート"                        ; en: Go-karts
+
+text_0C4C:
+    string "文具のいざわ"                       ; en: Izawa Stationery
+
+text_0C59:
+    string "万年筆"                          ; en: Fountain pen
+
+text_0C60:
+    string "シャーペン"                        ; en: Mechanical pencil
+
+text_0C6B:
+    string "ボールペン"                        ; en: Ballpoint pen
+
+text_0C76:
+    string "ノート"                          ; en: Notebook
+
+text_0C7D:
+    string "消しゴム"                         ; en: Eraser
+
+text_0C86:
+    string "エンピツ"                         ; en: Pencil
+
+text_0C8F:
+    string "ＴＳＵＴＡＹＡ"                      ; TSUTAYA
+
+text_0C9E:
+    string "パソコン"                         ; en: Personal computer
+
+text_0CA7:
+    string "ゲーム機"                         ; en: Game console
+
+text_0CB0:
+    string "セルビデオ"                        ; en: Videos for sale
+
+text_0CBB:
+    string "セルＣＤ"                         ; en: CDs for sale
+
+text_0CC4:
+    string "レンタルＣＤ"                       ; en: CD rental
+
+text_0CD1:
+    string "レンタルビデオ"                      ; en: Video rental
+
+text_0CE0:
+    string "黒木屋"                          ; en: Kurokiya (izakaya)
+
+text_0CE7:
+    string "刺し身盛り合わせ"                     ; en: Sashimi platter
+
+text_0CF8:
+    string "サイコロステーキ"                     ; en: Diced steak
+
+text_0D09:
+    string "ほっけ"                          ; en: Hokke (grilled mackerel)
+
+text_0D10:
+    string "肉じゃが"                         ; en: Nikujaga (meat and potatoes)
+
+text_0D19:
+    string "冷やっこ"                         ; en: Hiyayakko (cold tofu)
+
+text_0D22:
+    string "枝豆"                           ; en: Edamame
+
+text_0D27:
+    string "カレーのインド屋"                     ; en: Curry House India
+
+text_0D38:
+    string "カツカレー"                        ; en: Katsu curry
+
+text_0D43:
+    string "エビカレー"                        ; en: Shrimp curry
+
+text_0D4E:
+    string "ビーフカレー"                       ; en: Beef curry
+
+text_0D5B:
+    string "チキンカレー"                       ; en: Chicken curry
+
+text_0D68:
+    string "ポークカレー"                       ; en: Pork curry
+
+text_0D75:
+    string "野菜カレー"                        ; en: Vegetable curry
+
+text_0D80:
+    string "桃屋フルーツ"                       ; en: Momoya Fruits
+
+text_0D8D:
+    string "マスクメロン"                       ; en: Musk melon
+
+text_0D9A:
+    string "サクランボ"                        ; en: Cherries
+
+text_0DA5:
+    string "なし"                           ; en: Pears
+
+text_0DAA:
+    string "りんご"                          ; en: Apples
+
+text_0DB1:
+    string "みかん"                          ; en: Mandarin oranges
+
+text_0DB8:
+    string "バナナ"                          ; en: Bananas
+
+text_0DBF:
+    string "洋服の青山"                        ; en: Aoyama (clothing)
+
+text_0DCA:
+    string "スーツ"                          ; en: Suits
+
+text_0DD1:
+    string "ジャケット"                        ; en: Jackets
+
+text_0DDC:
+    string "スラックス"                        ; en: Slacks
+
+text_0DE7:
+    string "フォーマル"                        ; en: Formal wear
+
+text_0DF2:
+    string "カジュアル"                        ; en: Casual wear
+
+text_0DFD:
+    string "洋品"                           ; en: Accessories
+
+text_0E02:
+    string "ラーメン光月"                       ; en: Ramen Kogetsu
+
+text_0E0F:
+    string "全部ラーメン"                       ; en: Everything ramen
+
+text_0E1C:
+    string "味噌ラーメン"                       ; en: Miso ramen
+
+text_0E29:
+    string "豚骨ラーメン"                       ; en: Tonkotsu ramen
+
+text_0E36:
+    string "塩ラーメン"                        ; en: Salt ramen
+
+text_0E41:
+    string "ギョウザ"                         ; en: Gyoza
+
+text_0E4A:
+    string "醤油ラーメン"                       ; en: Soy sauce ramen
+
+text_0E57:
+    string "魚八"                           ; en: Uohachi (fish shop)
+
+text_0E5C:
+    string "マグロ"                          ; en: Tuna
+
+text_0E63:
+    string "タイ"                           ; en: Sea bream
+
+text_0E68:
+    string "海老"                           ; en: Shrimp
+
+text_0E6D:
+    string "タコ"                           ; en: Octopus
+
+text_0E72:
+    string "サンマ"                          ; en: Pacific saury
+
+text_0E79:
+    string "アジ"                           ; en: Horse mackerel
+
+text_0E7E:
+    string "アマンズ"                         ; en: Amanzu (cafe)
+
+text_0E87:
+    string "カプチーノ"                        ; en: Cappuccino
+
+text_0E92:
+    string "エスプレッソ"                       ; en: Espresso
+
+text_0E9F:
+    string "クリームソーダ"                      ; en: Cream soda
+
+text_0EAE:
+    string "レモンスカッシュ"                     ; en: Lemon squash
+
+text_0EBF:
+    string "コーラ"                          ; en: Cola
+
+text_0EC6:
+    string "コーヒー"                         ; en: Coffee
+
+text_0ECF:
+    string "ヴィクトリア"                       ; en: Victoria (sports)
+
+text_0EDC:
+    string "チタンウッド"                       ; en: Titanium wood (golf club)
+
+text_0EE9:
+    string "スノーボード"                       ; en: Snowboard
+
+text_0EF6:
+    string "スキー板"                         ; en: Skis
+
+text_0EFF:
+    string "スケート"                         ; en: Skates
+
+text_0F08:
+    string "テニスラケット"                      ; en: Tennis racket
+
+text_0F17:
+    string "水着"                           ; en: Swimsuit
+
+text_0F1C:
+    string "八百屋の山田"                       ; en: Yamada's Greengrocer
+
+text_0F29:
+    string "松茸"                           ; en: Matsutake mushrooms
+
+text_0F2E:
+    string "キャベツ"                         ; en: Cabbage
+
+text_0F37:
+    string "ダイコン"                         ; en: Daikon radish
+
+text_0F40:
+    string "ニンジン"                         ; en: Carrots
+
+text_0F49:
+    string "玉ねぎ"                          ; en: Onions
+
+text_0F50:
+    string "ジャガイモ"                        ; en: Potatoes
+
+text_0F5B:
+    string "三河屋"                          ; en: Mikawaya (liquor store)
+
+text_0F62:
+    string "ウイスキー"                        ; en: Whisky
+
+text_0F6D:
+    string "日本酒"                          ; en: Sake
+
+text_0F74:
+    string "焼酎"                           ; en: Shochu
+
+text_0F79:
+    string "ビール"                          ; en: Beer
+
+text_0F80:
+    string "発泡酒"                          ; en: Low-malt beer
+
+text_0F87:
+    string "ジュース"                         ; en: Juice
+
+text_0F90:
+    string "イタリアさん"                       ; en: Italia-san (restaurant)
+
+text_0F9D:
+    string "イタリアワイン"                      ; en: Italian wine
+
+text_0FAC:
+    string "仔牛のソテー"                       ; en: Veal saute
+
+text_0FB9:
+    string "生ハムと卵のピザ"                     ; en: Prosciutto and egg pizza
+
+text_0FCA:
+    string "ペスカトーレ"                       ; en: Pescatore
+
+text_0FD7:
+    string "海の幸のマリネ"                      ; en: Seafood marinade
+
+text_0FE6:
+    string "前菜の盛り合わせ"                     ; en: Assorted appetizers
+
+text_0FF7:
+    string "たかの友梨"                        ; en: Takano Yuri (beauty salon)
+
+text_1002:
+    string "ネイル"                          ; en: Nails
+
+text_1009:
+    string "ヘアエステ"                        ; en: Hair treatment
+
+text_1014:
+    string "リラクゼーション"                     ; en: Relaxation
+
+text_1025:
+    string "エピレイション"                      ; en: Hair removal
+
+text_1034:
+    string "スリミング"                        ; en: Slimming
+
+text_103F:
+    string "フェイシャル"                       ; en: Facial
+
+text_104C:
+    string "ゲームのシマグ"                      ; en: Shimagu game center
+
+text_105B:
+    string "競馬ゲーム"                        ; en: Horse racing game
+
+text_1066:
+    string "ビンゴゲーム"                       ; en: Bingo game
+
+text_1073:
+    string "スノボーゲーム"                      ; en: Snowboard game
+
+text_1082:
+    string "ルーレットゲーム"                     ; en: Roulette game
+
+text_1093:
+    string "落ち物ゲーム"                       ; en: Falling-block puzzle game
+
+text_10A0:
+    string "対戦格闘ゲーム"                      ; en: Fighting game
+
+text_10AF:
+    string "カティランド"                       ; en: Katyland (toys)
+
+text_10BC:
+    string "合体ロボ"                         ; en: Combining robot
+
+text_10C5:
+    string "ぬいぐるみ"                        ; en: Stuffed toy
+
+text_10D0:
+    string "ボードゲーム"                       ; en: Board game
+
+text_10DD:
+    string "リナちゃん人形"                      ; en: Rina-chan doll
+
+text_10EC:
+    string "プラモデル"                        ; en: Plastic model
+
+text_10F7:
+    string "トランプ"                         ; en: Playing cards
+
+text_1100:
+    string "コグマ"                          ; en: Koguma (hardware)
+
+text_1107:
+    string "はしご"                          ; en: Ladder
+
+text_110E:
+    string "ペンキ"                          ; en: Paint
+
+text_1115:
+    string "ベニヤ板"                         ; en: Plywood
+
+text_111E:
+    string "ドライバー"                        ; en: Screwdriver
+
+text_1129:
+    string "カナヅチ"                         ; en: Hammer
+
+text_1132:
+    string "クギ"                           ; en: Nails
+
+text_1137:
+    string "上州屋"                          ; en: Joshuya (fishing tackle)
+
+text_113E:
+    string "へら鮒セット"                       ; en: Crucian carp set
+
+text_114B:
+    string "海のルアーセット"                     ; en: Sea lure set
+
+text_115C:
+    string "フライセット"                       ; en: Fly fishing set
+
+text_1169:
+    string "バス釣りセット"                      ; en: Bass fishing set
+
+text_1178:
+    string "磯釣りセット"                       ; en: Shore fishing set
+
+text_1185:
+    string "船釣りセット"                       ; en: Boat fishing set
+
+text_1192:
+    string "第４家電"                         ; en: Dai-4 Kaden (electronics)
+
+text_119B:
+    string "冷蔵庫"                          ; en: Refrigerator
+
+text_11A2:
+    string "エアコン"                         ; en: Air conditioner
+
+text_11AB:
+    string "コンポ"                          ; en: Stereo
+
+text_11B2:
+    string "ビデオ"                          ; en: Video recorder
+
+text_11B9:
+    string "テレビ"                          ; en: Television
+
+text_11C0:
+    string "ラジカセ"                         ; en: Radio-cassette player
+
+text_11C9:
+    string "香港苑"                          ; en: Hong Kong En (Korean BBQ)
+
+text_11D0:
+    string "骨付きカルビ"                       ; en: Bone-in kalbi
+
+text_11DD:
+    string "クッパ"                          ; en: Gukbap
+
+text_11E4:
+    string "ユッケ"                          ; en: Yukhoe
+
+text_11EB:
+    string "カルビ"                          ; en: Kalbi
+
+text_11F2:
+    string "タン塩"                          ; en: Salted tongue
+
+text_11F9:
+    string "キムチ"                          ; en: Kimchi
+
+text_1200:
+    string "ベントン"                         ; en: Benton (clothing)
+
+text_1209:
+    string "ワンピース"                        ; en: Dress
+
+text_1214:
+    string "スカート"                         ; en: Skirt
+
+text_121D:
+    string "カーディガン"                       ; en: Cardigan
+
+text_122A:
+    string "Ｔシャツ"                         ; en: T-shirt
+
+text_1233:
+    string "タンクトップ"                       ; en: Tank top
+
+text_1240:
+    string "チビＴシャツ"                       ; en: Baby tee
+
+text_124D:
+    string "オートバックス"                      ; en: Autobacs (car goods)
+
+text_125C:
+    string "ＤＶＤカーナビ"                      ; en: DVD car navigation
+
+text_126B:
+    string "アルミホイール"                      ; en: Alloy wheels
+
+text_127A:
+    string "カーオーディオ"                      ; en: Car audio
+
+text_1289:
+    string "タイヤ"                          ; en: Tires
+
+text_1290:
+    string "オイル"                          ; en: Oil
+
+text_1297:
+    string "ワックス"                         ; en: Wax
+
+text_12A0:
+    string "ＫＩＤ"                          ; KID
+
+text_12A7:
+    string "ピアニンジン"                       ; en: Pianinjin (game shop)
+
+text_12B4:
+    string "坂本竜馬"                         ; en: Sakamoto Ryoma
+
+text_12BD:
+    string "ポケラブ２"                        ; en: Pokelove 2
+
+text_12C8:
+    string "テナントウォーズ"                     ; en: Tenant Wars
+
+text_12D9:
+    string "缶バニ"                          ; en: Can Bunny
+
+text_12E0:
+    string "ポケラブ"                         ; en: Pokelove
+
+text_12E9:
+    string "恵比寿ケンケン"                      ; en: Ebisu Kenken (pet shop)
+
+text_12F8:
+    string "小犬"                           ; en: Puppy
+
+text_12FD:
+    string "小猫"                           ; en: Kitten
+
+text_1302:
+    string "ワニ"                           ; en: Crocodile
+
+text_1307:
+    string "フェレット"                        ; en: Ferret
+
+text_1312:
+    string "熱帯魚"                          ; en: Tropical fish
+
+text_1319:
+    string "カメ"                           ; en: Turtle
+
+text_131E:
+    string "ＹＡＭＡＴＯ楽器"                     ; en: YAMATO Musical Instruments
+
+text_132F:
+    string "ピアノ"                          ; en: Piano
+
+text_1336:
+    string "バイオリン"                        ; en: Violin
+
+text_1341:
+    string "ドラムセット"                       ; en: Drum set
+
+text_134E:
+    string "ギター"                          ; en: Guitar
+
+text_1355:
+    string "トライアングル"                      ; en: Triangle
+
+text_1364:
+    string "カスタネット"                       ; en: Castanets
+
+text_1371:
+    string "ＨＩＳ"                          ; HIS
+
+text_1378:
+    string "世界一周航空券"                      ; en: Round-the-world air ticket
+
+text_1387:
+    string "ブラジル航空券"                      ; en: Air ticket to Brazil
+
+text_1396:
+    string "ロンドン８日間"                      ; en: 8 days in London
+
+text_13A5:
+    string "北米大周遊航空券"                     ; en: North America tour air ticket
+
+text_13B6:
+    string "Ｌ．Ａ５日間"                       ; en: 5 days in L.A.
+
+text_13C3:
+    string "ホノルル６日間"                      ; en: 6 days in Honolulu
+
+text_13D2:
+    string "京映"                           ; en: Kyoei (cinema)
+
+text_13D7:
+    string "ムーンウォーズ"                      ; en: Moon Wars
+
+text_13E6:
+    string "ラストワールド"                      ; en: Last World
+
+text_13F5:
+    string "バッドマン３"                       ; en: Badman 3
+
+text_1402:
+    string "ものおじ姫"                        ; en: Princess Monooji
+
+text_140D:
+    string "墜落園"                          ; en: Crash Park
+
+text_1414:
+    string "学校の階段３"                       ; en: School Stairs 3
+
+text_1421:
+    string "ジュエリートキ"                      ; en: Jewelry Toki
+
+text_1430:
+    string "ダイヤモンド"                       ; en: Diamond
+
+text_143D:
+    string "プラチナ"                         ; en: Platinum
+
+text_1446:
+    string "ルビー"                          ; en: Ruby
+
+text_144D:
+    string "エメラルド"                        ; en: Emerald
+
+text_1458:
+    string "１８金"                          ; en: 18-karat gold
+
+text_145F:
+    string "パール"                          ; en: Pearl
+
+text_1466:
+    string "アイブル"                         ; en: Aiburu (real estate)
+
+text_146F:
+    string "一戸建て"                         ; en: Detached house
+
+text_1478:
+    string "高級マンション"                      ; en: Luxury condominium
+
+text_1487:
+    string "事務所"                          ; en: Office
+
+text_148E:
+    string "マンション"                        ; en: Condominium
+
+text_1499:
+    string "アパート"                         ; en: Apartment
+
+text_14A2:
+    string "下宿"                           ; en: Lodging room
+
+corners_animate:
+    ; start the animations of the card and the four corners
+    sprite_animate 0, anim_2A43
+    sprite_animate 1, anim_2773
+    sprite_animate 2, anim_27C3
+    sprite_animate 3, anim_2813
+    sprite_animate 4, anim_2863
+    return
+
+corners_animate_alt:
+    ; other animations for the corners (not used)
+    ; (not reached: nothing jumps here)
+    sprite_animate 1, anim_28B3
+    sprite_animate 2, anim_28EB
+    sprite_animate 3, anim_2923
+    sprite_animate 4, anim_295B
+    return
+
+corners_animate_alt_2:
+    ; other animations for the corners (not used)
+    sprite_animate 1, anim_2993
+    sprite_animate 2, anim_29B3
+    sprite_animate 3, anim_2993
+    sprite_animate 4, anim_29B3
+    return
+
+corners_animate_alt_3:
+    ; other animations for the corners (not used)
+    sprite_animate 1, anim_29D3
+    sprite_animate 2, anim_2A0B
+    sprite_animate 3, anim_29D3
+    sprite_animate 4, anim_2A0B
+    return
+
+show_and_open:
+    ; show the text and slide the talk panel in
+    talk_show 0
+    talk_open
+    return
+
+show_wait_clear:
+    ; show the text, wait for cross (180 frames at most), clear the text
+    talk_show 0
+    wait_buttons_for CROSS|0x300, 180     ; wait for cross, 180 frames at most
+    talk_clear
+    return
+
+card_close:
+    ; close the view and take everything away (corners_leave); wait until the view and the talk
+    ; panel are closed
+    ; (reached again)
+    view_close GROW, 10
+    set 0, 0                              ; a constant where a variable belongs: only $result is set
+    call corners_leave
+    view_wait
+    talk_wait_closed
+    return
+
+corners_leave:
+    ; the corners draw in for 10 frames, the talk panel closes, then they fly off for 15 frames;
+    ; meanwhile the card sinks into the talk panel (card_sink) and the tiles shrink
+    $l0 = 0
+    $card_state = 0
+
+L_154D:
+    $corner1_x += 2
+    $corner1_y += 2
+    $corner2_x -= 2
+    $corner2_y += 2
+    $corner3_x += 2
+    $corner3_y -= 2
+    $corner4_x -= 2
+    $corner4_y -= 2
+    if $card_entrance == CARD_STILL goto L_158B
+    call card_sink
+
+L_158B:
+    call effects_run
+    call tiles_shrink
+    $l0 += 1
+    if $l0 != 10 goto L_154D
+    $l0 = 0
+    talk_close
+
+L_15AB:
+    $corner1_x -= 10
+    $corner1_y -= 10
+    $corner2_x += 10
+    $corner2_y -= 10
+    $corner3_x -= 10
+    $corner3_y += 10
+    $corner4_x += 10
+    $corner4_y += 10
+    call card_sink
+    call effects_run
+    call tiles_shrink
+    $l0 += 1
+    if $l0 != 15 goto L_15AB
+    return
+
+finish:
+    ; stop the music; end of the script
+    stop_bgm
+    end
+
+scene_setup:
+    ; the scene: layer 0 (scene image 0); the card (sprite 0, image 7) off screen; the four
+    ; corners (sprites 1-4, image 1) at their home positions, worked out from the size of image 1
+    ; (the frame fills 320 x 170); the 30 background tiles (sprites 10-39, image 10) in rows of 6;
+    ; dim 128; $corner_steps = 20, the zoom and squeeze counters set
+    get_image_size 1, $v00, $v01
+    $v00 /= 2
+    $v01 /= 2
+    $corner1_home_x = 0
+    $corner1_home_x += $v00
+    $corner1_home_y = 0
+    $corner1_home_y += $v01
+    $corner2_home_x = 320
+    $corner2_home_x -= $v00
+    $corner2_home_y = 0
+    $corner2_home_y += $v01
+    $corner3_home_x = 0
+    $corner3_home_x += $v00
+    $corner3_home_y = 170
+    $corner3_home_y -= $v01
+    $corner4_home_x = 320
+    $corner4_home_x -= $v00
+    $corner4_home_y = 170
+    $corner4_home_y -= $v01
+    $corner1_x = $corner1_home_x
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner2_y = $corner2_home_y
+    $corner3_x = $corner3_home_x
+    $corner3_y = $corner3_home_y
+    $corner4_x = $corner4_home_x
+    $corner4_y = $corner4_home_y
+    $corner_zoom = 256
+    $corner_stretch_x = 50
+    $corner_stretch_y = 50
+    $v95 = 1
+    $shrink_amount = 256
+    $grow_amount = 256
+    $corner_steps = 20
+    $squeeze_y_angle = 8191
+    $squeeze_x_angle = 8191
+    $circle_radius = 50
+    layer_init 0, image=0, pri=31, flags=0
+    sprite_init 0, image=7, attr=MIDDLE_CENTER, x=420, y=340, pri=0
+    sprite_init 1, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    sprite_init 2, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    sprite_init 3, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    sprite_init 4, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    $l0 = 10
+    $v00 = 0
+    $v01 = 0
+
+L_173F:
+    sprite_init $l0, image=10, attr=MIDDLE_CENTER|SEMITRANS2, x=$v00, y=$v01, pri=-1
+    sprite_scale $l0, 0, 0
+    $l0 += 1
+    $v00 += 64
+    if $v00 != 384 goto L_1777
+    $v00 = 0
+    $v01 += 64
+
+L_1777:
+    if $l0 != 40 goto L_173F
+    set_dim 128
+    return
+
+L_1787:
+    return
+
+effects_default:
+    ; no corner entrance; only FX_TILES
+    $corner_entrance = CORNERS_HOME
+    $corner_effects = 0
+    $corner_effects |= FX_TILES
+    return
+
+card_show:
+    ; music 3; open the view and the talk panel; then every frame the corner entrance
+    ; ($corner_entrance), the effects ($corner_effects) and the card's entrance ($card_entrance),
+    ; until the voice has ended and cross is pressed (a CPU player: 60 frames); then the corners
+    ; back home and a sound
+    play_bgm 3
+    $l0 = 0
+    view_set x=64, y=24, w=192, h=128
+    view_open GROW, 10
+    talk_show 0
+    talk_open
+
+L_17BD:
+    switch $corner_entrance: L_17D9, L_17C9, L_17D1
+
+L_17C9:
+    ; $corner_entrance = 1
+    call corners_spread
+    goto L_17D9
+
+L_17D1:
+    ; $corner_entrance = 2
+    call corners_fly_in
+    goto L_17D9
+
+L_17D9:
+    ; $corner_entrance = 0
+    if $corner_effects !& FX_GROW goto L_17E7
+    call fx_grow
+
+L_17E7:
+    if $corner_effects !& FX_SHRINK goto L_17F5
+    call fx_shrink
+
+L_17F5:
+    if $corner_effects !& FX_CIRCLE goto L_1803
+    call fx_circle
+
+L_1803:
+    if $corner_effects !& FX_SQUEEZE_X goto L_1811
+    call fx_squeeze_x
+
+L_1811:
+    if $corner_effects !& FX_SQUEEZE_Y goto L_181F
+    call fx_squeeze_y
+
+L_181F:
+    if $corner_effects !& FX_SPIN goto L_182D
+    call fx_spin
+
+L_182D:
+    if $corner_effects !& FX_PULSE_X goto L_183B
+    call fx_pulse_x
+
+L_183B:
+    if $corner_effects !& FX_PULSE_Y goto L_1849
+    call fx_pulse_y
+
+L_1849:
+    if $corner_effects !& FX_PULSE goto L_1857
+    call fx_pulse
+
+L_1857:
+    if $corner_effects !& FX_TILES goto L_1869
+    call fx_tiles_scroll
+    call fx_tiles_grow
+
+L_1869:
+    call card_enter
+    call corners_apply
+    $l0 += 1
+    if $l0 >= 0 goto L_1887
+    $l0 = 30
+
+L_1887:
+    if $l0 < 30 goto L_17BD
+    if $l0 != 10 goto L_189F
+    nop_34 $card_sink_step                ; no effect in this game
+
+L_189F:
+    $v00 = xa_playing
+    if $v00 == 1 goto L_17BD
+    if $cur_is_cpu & CPU goto L_18C5
+    if $cur_pressed !& CROSS|0x300 goto L_17BD
+    goto L_18CF
+
+L_18C5:
+    if $l0 < 60 goto L_17BD
+
+L_18CF:
+    $corner1_x = $corner1_home_x
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner2_y = $corner2_home_y
+    $corner3_x = $corner3_home_x
+    $corner3_y = $corner3_home_y
+    $corner4_x = $corner4_home_x
+    $corner4_y = $corner4_home_y
+    sprite_pos 1, $corner1_home_x, $corner1_home_y
+    sprite_pos 2, $corner2_home_x, $corner2_home_y
+    sprite_pos 3, $corner3_home_x, $corner3_home_y
+    sprite_pos 4, $corner4_home_x, $corner4_home_y
+    play_se 1
+    return
+
+effects_settle:
+    ; (not used) run the effects until the corner entrance, FX_GROW, FX_SHRINK, FX_CIRCLE and the
+    ; squeezes have run down, then until the spin and the pulses are back at rest
+    ; (not reached: nothing jumps here)
+    $vA0 = 0
+    if $corner_entrance == CORNERS_HOME goto L_193B
+    $vA0 += $corner_steps
+
+L_193B:
+    if $corner_effects !& FX_GROW goto L_194B
+    $vA0 += $grow_amount
+
+L_194B:
+    if $corner_effects !& FX_SHRINK goto L_195B
+    $vA0 += $shrink_amount
+
+L_195B:
+    if $corner_effects !& FX_CIRCLE goto L_196B
+    $vA0 += $circle_radius
+
+L_196B:
+    if $corner_effects !& FX_SQUEEZE_X goto L_197B
+    $vA0 += $squeeze_x_angle
+
+L_197B:
+    if $corner_effects !& FX_SQUEEZE_Y goto L_198B
+    $vA0 += $squeeze_y_angle
+
+L_198B:
+    call corners_apply
+    if $vA0 != 0 goto card_show
+
+L_1999:
+    $vA0 = 0
+    if $corner_effects !& FX_SPIN goto L_19B9
+    call fx_spin_stop
+    sprite_get_angle 1, $v00
+    $vA0 += $v00
+
+L_19B9:
+    if $corner_effects !& FX_PULSE_X goto L_19CD
+    call fx_pulse_x_stop
+    $vA0 += $pulse_x_angle
+
+L_19CD:
+    if $corner_effects !& FX_PULSE_Y goto L_19E1
+    call fx_pulse_y_stop
+    $vA0 += $pulse_y_angle
+
+L_19E1:
+    if $corner_effects !& FX_PULSE goto L_19F5
+    call fx_pulse_stop
+    $vA0 += $pulse_angle
+
+L_19F5:
+    call corners_apply
+    if $vA0 != 0 goto L_1999
+    return
+
+effects_run:
+    ; one frame of the effects that keep going (FX_SPIN, FX_PULSE_X, FX_PULSE_Y, FX_PULSE,
+    ; FX_TILES), then corners_apply
+    ; (reached again)
+    if $corner_effects !& FX_SPIN goto L_1A13
+    call fx_spin
+
+L_1A13:
+    if $corner_effects !& FX_PULSE_X goto L_1A21
+    call fx_pulse_x
+
+L_1A21:
+    if $corner_effects !& FX_PULSE_Y goto L_1A2F
+    call fx_pulse_y
+
+L_1A2F:
+    if $corner_effects !& FX_PULSE goto L_1A3D
+    call fx_pulse
+
+L_1A3D:
+    if $corner_effects !& FX_TILES goto L_1A4B
+    call fx_tiles_scroll
+
+L_1A4B:
+    call corners_apply
+    return
+
+corners_apply:
+    ; corner positions plus this frame's offsets to sprites 1-4, their scale = $corner_stretch_x/y
+    ; * $corner_zoom / 50; offsets, zoom and stretch back to neutral; wait a frame
+    $v00 = $corner1_x
+    $v01 = $corner1_y
+    $v02 = $corner2_x
+    $v03 = $corner2_y
+    $v04 = $corner3_x
+    $v05 = $corner3_y
+    $v06 = $corner4_x
+    $v07 = $corner4_y
+    $v00 += $corner1_dx
+    $v01 += $corner1_dy
+    $v02 += $corner2_dx
+    $v03 += $corner2_dy
+    $v04 += $corner3_dx
+    $v05 += $corner3_dy
+    $v06 += $corner4_dx
+    $v07 += $corner4_dy
+    $corner1_dx = 0
+    $corner1_dy = 0
+    $corner2_dx = 0
+    $corner2_dy = 0
+    $corner3_dx = 0
+    $corner3_dy = 0
+    $corner4_dx = 0
+    $corner4_dy = 0
+    sprite_pos 1, $v00, $v01
+    sprite_pos 2, $v02, $v03
+    sprite_pos 3, $v04, $v05
+    sprite_pos 4, $v06, $v07
+    $corner_stretch_x *= $corner_zoom
+    $corner_stretch_y *= $corner_zoom
+    $corner_stretch_x /= 50
+    $corner_stretch_y /= 50
+    sprite_scale 1, $corner_stretch_x, $corner_stretch_y
+    sprite_scale 2, $corner_stretch_x, $corner_stretch_y
+    sprite_scale 3, $corner_stretch_x, $corner_stretch_y
+    sprite_scale 4, $corner_stretch_x, $corner_stretch_y
+    $corner_zoom = 256
+    $corner_stretch_x = 50
+    $corner_stretch_y = 50
+    wait 1
+    return
+
+corners_spread:
+    ; corner entrance 1: all four start at the center and spread out to their home positions over
+    ; $corner_steps frames
+    if $corner_steps == 0 goto L_1787
+    if $corner_steps == 1 goto L_1C2B
+    if $corner_steps != 20 goto L_1BD3
+    $v00 = $corner2_home_x
+    $v00 -= $corner1_home_x
+    $v00 /= 2
+    $v00 += $corner1_home_x
+    $v01 = $corner3_home_y
+    $v01 -= $corner1_home_y
+    $v01 /= 2
+    $v01 += $corner1_home_y
+    $corner1_x = $v00
+    $corner1_y = $v01
+    $corner2_x = $v00
+    $corner2_y = $v01
+    $corner3_x = $v00
+    $corner3_y = $v01
+    $corner4_x = $v00
+    $corner4_y = $v01
+    goto L_1C5B
+
+L_1BD3:
+    $v00 = $corner4_home_x
+    $v00 -= $corner4_x
+    $v00 /= $corner_steps
+    $v01 = $corner4_home_y
+    $v01 -= $corner4_y
+    $v01 /= $corner_steps
+    $corner1_x -= $v00
+    $corner1_y -= $v01
+    $corner2_x += $v00
+    $corner2_y -= $v01
+    $corner3_x -= $v00
+    $corner3_y += $v01
+    $corner4_x += $v00
+    $corner4_y += $v01
+    goto L_1C5B
+
+L_1C2B:
+    $corner1_x = $corner1_home_x
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner2_y = $corner2_home_y
+    $corner3_x = $corner3_home_x
+    $corner3_y = $corner3_home_y
+    $corner4_x = $corner4_home_x
+    $corner4_y = $corner4_home_y
+
+L_1C5B:
+    $corner_steps -= 1
+    return
+
+corners_fly_in:
+    ; corner entrance 2: the corners fly in from the edges of the screen over $corner_steps frames
+    if $corner_steps == 0 goto L_1787
+    if $corner_steps == 1 goto L_1D01
+    if $corner_steps != 20 goto L_1C9D
+    $corner1_y = 340
+    $corner2_x = -100
+    $corner3_x = 420
+    $corner4_y = -100
+    goto L_1D19
+
+L_1C9D:
+    $v00 = $corner1_home_y
+    $v00 -= $corner1_y
+    $v00 /= $corner_steps
+    $v01 = $corner2_home_x
+    $v01 -= $corner2_x
+    $v01 /= $corner_steps
+    $v02 = $corner3_home_x
+    $v02 -= $corner3_x
+    $v02 /= $corner_steps
+    $v03 = $corner4_home_y
+    $v03 -= $corner4_y
+    $v03 /= $corner_steps
+    $corner1_y += $v00
+    $corner2_x += $v01
+    $corner3_x += $v02
+    $corner4_y += $v03
+    goto L_1D19
+
+L_1D01:
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner3_x = $corner3_home_x
+    $corner4_y = $corner4_home_y
+
+L_1D19:
+    $corner_steps -= 1
+    return
+
+fx_grow:
+    ; FX_GROW: zoom = 1 - $grow_amount/256; the amount falls by 10 a frame
+    $corner_zoom -= $grow_amount
+    $grow_amount -= 10
+    if $grow_amount > 0 goto L_1787
+    $grow_amount = 0
+    return
+
+fx_shrink:
+    ; FX_SHRINK: zoom = 1 + $shrink_amount/256; the amount falls by 10 a frame
+    $corner_zoom += $shrink_amount
+    $shrink_amount -= 10
+    if $shrink_amount > 0 goto L_1787
+    $shrink_amount = 0
+    return
+
+fx_squeeze_x:
+    ; FX_SQUEEZE_X: the corners start 100 pixels further apart sideways and ease back
+    ; ($squeeze_x_angle)
+    $v02 = 8191
+    $v02 -= $squeeze_x_angle
+    step_toward x=0, y=0, distance=100, angle=$v02, to_x=$v00, to_y=$v01
+    $v00 = 100
+    $v00 -= $v01
+    $corner1_dx -= $v00
+    $corner2_dx += $v00
+    $corner3_dx -= $v00
+    $corner4_dx += $v00
+    $squeeze_x_angle -= 400
+    if $squeeze_x_angle > 0 goto L_1787
+    $squeeze_x_angle = 0
+    return
+
+fx_squeeze_y:
+    ; FX_SQUEEZE_Y: the same up and down ($squeeze_y_angle)
+    $v02 = 8191
+    $v02 -= $squeeze_y_angle
+    step_toward x=0, y=0, distance=100, angle=$v02, to_x=$v00, to_y=$v01
+    $v00 = 100
+    $v00 -= $v01
+    $corner1_dy -= $v00
+    $corner2_dy -= $v00
+    $corner3_dy += $v00
+    $corner4_dy += $v00
+    $squeeze_y_angle -= 400
+    if $squeeze_y_angle > 0 goto L_1787
+    $squeeze_y_angle = 0
+    return
+
+fx_circle:
+    ; FX_CIRCLE: the corners circle around their places; the radius $circle_radius falls by 1 a
+    ; frame
+    step_toward x=0, y=0, distance=$circle_radius, angle=$circle_angle, to_x=$v00, to_y=$v01
+    $corner1_dx -= $v00
+    $corner1_dy -= $v01
+    $corner2_dx += $v00
+    $corner2_dy -= $v01
+    $corner3_dx -= $v00
+    $corner3_dy += $v01
+    $corner4_dx += $v00
+    $corner4_dy += $v01
+    $circle_angle += 1500
+    if $circle_angle <= 32767 goto L_1E5D
+    $circle_angle -= 32767
+
+L_1E5D:
+    $circle_radius -= 1
+    if $circle_radius >= 0 goto L_1787
+    $circle_radius = 0
+    return
+
+fx_pulse:
+    ; FX_PULSE: the corners throb (size 1 to 1.5, $pulse_angle)
+    step_toward x=0, y=0, distance=128, angle=$pulse_angle, to_x=$v00, to_y=$v01
+    if $v00 >= 0 goto L_1E97
+    $corner_zoom -= $v00
+    goto L_1E9D
+
+L_1E97:
+    $corner_zoom += $v00
+
+L_1E9D:
+    $pulse_angle += 1500
+    if $pulse_angle >= 0 goto L_1787
+    $pulse_angle -= 32767
+    return
+
+fx_pulse_stop:
+    ; stop FX_PULSE at the end of a swing (not used)
+    ; (not reached: nothing jumps here)
+    if $pulse_angle == 0 goto L_1787
+    if $pulse_angle >= 31267 goto L_1ECF
+    call fx_pulse
+    return
+
+L_1ECF:
+    $pulse_angle = 0
+    return
+
+fx_pulse_x:
+    ; FX_PULSE_X: the corners turn over sideways, around and around (their width swings between -1
+    ; and 1, $pulse_x_angle)
+    ; (reached again)
+    step_toward x=0, y=0, distance=50, angle=$pulse_x_angle, to_x=$v00, to_y=$v01
+    $v00 -= 50
+    $corner_stretch_x += $v00
+    $pulse_x_angle += 1500
+    if $pulse_x_angle >= 0 goto L_1787
+    $pulse_x_angle -= 32767
+    return
+
+fx_pulse_x_stop:
+    ; stop FX_PULSE_X at the end of a swing (not used)
+    ; (not reached: nothing jumps here)
+    if $pulse_x_angle == 0 goto L_1787
+    if $pulse_x_angle >= 31267 goto L_1F23
+    call fx_pulse_x
+    return
+
+L_1F23:
+    $pulse_x_angle = 0
+    return
+
+fx_pulse_y:
+    ; FX_PULSE_Y: the same, turning over top to bottom ($pulse_y_angle)
+    ; (reached again)
+    step_toward x=0, y=0, distance=50, angle=$pulse_y_angle, to_x=$v00, to_y=$v01
+    $v00 -= 50
+    $corner_stretch_y += $v00
+    $pulse_y_angle += 1500
+    if $pulse_y_angle >= 0 goto L_1787
+    $pulse_y_angle -= 32767
+    return
+
+fx_pulse_y_stop:
+    ; stop FX_PULSE_Y at the end of a swing (not used)
+    ; (not reached: nothing jumps here)
+    if $pulse_y_angle == 0 goto L_1787
+    if $pulse_y_angle >= 31267 goto L_1F77
+    call fx_pulse_y
+    return
+
+L_1F77:
+    $pulse_y_angle = 0
+    return
+
+fx_spin:
+    ; FX_SPIN: the corners turn (1 and 3 one way, 2 and 4 the other)
+    ; (reached again)
+    sprite_rotate 1, -1500
+    sprite_rotate 2, 1500
+    sprite_rotate 3, -1500
+    sprite_rotate 4, 1500
+    return
+
+fx_spin_stop:
+    ; stop FX_SPIN once the angle is back at 0 (not used)
+    ; (not reached: nothing jumps here)
+    sprite_get_angle 1, $v00
+    if $v00 == 0 goto L_1787
+    if $v00 >= 31267 goto L_1FB9
+    call fx_spin
+    return
+
+L_1FB9:
+    sprite_angle 1, 0
+    sprite_angle 2, 0
+    sprite_angle 3, 0
+    sprite_angle 4, 0
+    return
+
+card_slide_left:
+    ; CARD_SLIDE_LEFT: the card slides in from the left, slowing down, to the center (160, 120)
+    ; (reached again)
+    if $card_state == CARD_DONE goto L_1787
+    step_toward x=0, y=0, distance=261, angle=$card_angle, to_x=$v01, to_y=$v00
+    $v00 -= 100
+    sprite_pos 0, $v00, 120
+    $card_angle += 1000
+    if $v00 < 160 goto L_1787
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_slide_right:
+    ; CARD_SLIDE_RIGHT: the card slides in from the right
+    if $card_state == CARD_DONE goto L_1787
+    step_toward x=0, y=0, distance=261, angle=$card_angle, to_x=$v00, to_y=$v01
+    $v00 = 420
+    $v00 -= $v01
+    sprite_pos 0, $v00, 120
+    $card_angle += 1000
+    if $v00 > 160 goto L_1787
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_zoom:
+    ; CARD_ZOOM: the card appears 16 times its size at the center and shrinks to its size
+    if $card_state == CARD_DONE goto L_1787
+    if $card_state != 0 goto L_2091
+    sprite_pos 0, 160, 120
+    sprite_scale 0, 4096, 4096
+    $card_state = 1
+    return
+
+L_2091:
+    sprite_scale_by 0, -256, -256
+    sprite_get_scale 0, $v00, $v01
+    if $v00 > 256 goto L_1787
+    sprite_scale 0, 256, 256
+    $card_state = CARD_DONE
+    return
+
+card_rise:
+    ; CARD_RISE: the card grows out of the top of the talk panel, moving right from the center (it
+    ; ends at x 240, standing on the panel)
+    if $card_state == CARD_DONE goto L_1787
+    if $card_state != 0 goto L_20DF
+    sprite_scale 0, 0, 0
+    $card_state = 1
+    return
+
+L_20DF:
+    $v00 = 240
+    $v00 -= 160
+    $v00 *= $card_rise_step
+    $v00 /= 16
+    $v00 += 160
+    get_image_size 7, $v01, $v02
+    $v01 = $card_rise_step
+    $v01 *= 16
+    $v02 *= $v01
+    $v02 /= 256
+    $v02 /= 2
+    $v01 = talk_y
+    $v01 -= $v02
+    $v01 -= 3
+    sprite_pos 0, $v00, $v01
+    $card_rise_step += 1
+    sprite_scale_by 0, 16, 16
+    sprite_get_scale 0, $v00, $v01
+    if $v00 < 256 goto L_1787
+    sprite_scale 0, 256, 256
+    $card_state = CARD_DONE
+    return
+
+card_sink:
+    ; the card shrinks into the talk panel, moving back to the center, and is hidden
+    if $card_state == CARD_DONE goto L_1787
+    $v00 = 240
+    $v00 -= 160
+    $v01 = 8
+    $v01 -= $card_sink_step
+    $v00 *= $v01
+    $v00 /= 8
+    $v00 += 160
+    get_image_size 7, $v01, $v02
+    $v01 = 7
+    $v01 -= $card_sink_step
+    $v01 *= 32
+    $v02 *= $v01
+    $v02 /= 256
+    $v02 /= 2
+    $v01 = talk_y
+    $v01 -= $v02
+    $v01 -= 3
+    sprite_pos 0, $v00, $v01
+    $card_sink_step += 1
+    sprite_scale_by 0, -32, -32
+    sprite_get_scale 0, $v00, $v01
+    if $v00 > 0 goto L_1787
+    sprite_scale 0, 0, 0
+    $card_state = CARD_DONE
+    sprite_hide 0
+    return
+
+card_spiral:
+    ; CARD_SPIRAL: the card spirals in to the center
+    if $card_state == CARD_DONE goto L_1787
+    $v00 = 260
+    $v01 = $card_state
+    $v01 *= 13
+    $v00 -= $v01
+    step_toward x=160, y=120, distance=$v00, angle=$card_angle, to_x=$v01, to_y=$v02
+    sprite_pos 0, $v01, $v02
+    if $v00 <= 0 goto L_2277
+    $card_state += 1
+    $card_angle += 3000
+    if $card_angle >= 0 goto L_1787
+    sub 0, 32767                          ; a constant where a variable belongs: only $result is set
+    return
+
+L_2277:
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_bounce:
+    ; CARD_BOUNCE: the card bounces up and down, less and less, into the center
+    if $card_state == CARD_DONE goto L_1787
+    if $card_state != 0 goto L_22A1
+    $card_angle = 24575
+
+L_22A1:
+    $v00 = 220
+    $v01 = $card_state
+    $v01 *= 3
+    $v00 -= $v01
+    step_toward x=160, y=120, distance=$v00, angle=$card_angle, to_x=$v02, to_y=$v01
+    sprite_pos 0, 160, $v01
+    if $v00 <= 0 goto L_2303
+    $card_state += 1
+    $v00 = 40
+    $v00 *= $card_state
+    $card_angle += $v00
+    if $card_angle >= 0 goto L_1787
+    $card_angle -= 16383
+    return
+
+L_2303:
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_enter:
+    ; one frame of the card's entrance, by $card_entrance
+    switch $card_entrance: L_2327, L_232B, L_2333, L_233B, L_2343, L_234B, L_2353
+
+L_2327:
+    ; $card_entrance = 0
+    goto L_2357
+
+L_232B:
+    ; $card_entrance = 1
+    call card_slide_left
+    goto L_2357
+
+L_2333:
+    ; $card_entrance = 2
+    call card_slide_right
+    goto L_2357
+
+L_233B:
+    ; $card_entrance = 3
+    call card_zoom
+    goto L_2357
+
+L_2343:
+    ; $card_entrance = 4
+    call card_rise
+    goto L_2357
+
+L_234B:
+    ; $card_entrance = 5
+    call card_spiral
+    goto L_2357
+
+L_2353:
+    ; $card_entrance = 6
+    call card_bounce
+
+L_2357:
+    return
+
+wait_cross:
+    ; keep the effects going until cross is pressed (a CPU player: 30 frames); a sound
+    $l0 = 0
+
+L_235F:
+    call effects_run
+    $l0 += 1
+    if $cur_is_cpu & CPU goto L_2383
+    if $cur_pressed !& CROSS|0x300 goto L_235F
+    play_se 1
+    return
+
+L_2383:
+    if $l0 < 30 goto L_235F
+    play_se 1
+    return
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $corner1_x = 0
+    $corner1_y = 0
+    $corner2_x = 0
+    $corner2_y = 0
+    $corner3_x = 0
+    $corner3_y = 0
+    $corner4_x = 0
+    $corner4_y = 0
+    $corner_zoom = 0
+    $corner_stretch_x = 0
+    $corner_stretch_y = 0
+    $corner1_dx = 0
+    $corner1_dy = 0
+    $corner2_dx = 0
+    $corner2_dy = 0
+    $corner3_dx = 0
+    $corner3_dy = 0
+    $corner4_dx = 0
+    $corner4_dy = 0
+    $corner1_home_x = 0
+    $corner1_home_y = 0
+    $corner2_home_x = 0
+    $corner2_home_y = 0
+    $corner3_home_x = 0
+    $corner3_home_y = 0
+    $corner4_home_x = 0
+    $corner4_home_y = 0
+    $corner_entrance = CORNERS_HOME
+    $corner_effects = 0
+    $v27 = 0
+    $card_entrance = CARD_STILL
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $card_state = 0
+    $card_angle = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $card_sink_step = 0
+    $card_rise_step = 0
+    $v95 = 0
+    $pulse_angle = 0
+    $pulse_x_angle = 0
+    $pulse_y_angle = 0
+    $shrink_amount = 0
+    $grow_amount = 0
+    $corner_steps = 0
+    $squeeze_y_angle = 0
+    $squeeze_x_angle = 0
+    $circle_radius = 0
+    $circle_angle = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+anim_2773:
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 4, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=NEXT
+    frame 6, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=anim_2773
+
+anim_27C3:
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 4, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=NEXT
+    frame 6, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=anim_27C3
+
+anim_2813:
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 4, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=NEXT
+    frame 6, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=anim_2813
+
+anim_2863:
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 4, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=NEXT
+    frame 6, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=anim_2863
+
+anim_28B3:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=anim_28B3
+
+anim_28EB:
+    frame 1, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 4, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 1, time=8, flip=FLIP_X, next=anim_28EB
+
+anim_2923:
+    frame 1, time=8, flip=FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_Y, next=NEXT
+    frame 4, time=8, flip=FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_Y, next=NEXT
+    frame 1, time=8, flip=FLIP_Y, next=anim_2923
+
+anim_295B:
+    frame 1, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 4, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 1, time=8, flip=FLIP_X|FLIP_Y, next=anim_295B
+
+anim_2993:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=8, flip=0, next=anim_2993
+
+anim_29B3:
+    frame 1, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 4, time=8, flip=FLIP_X, next=anim_29B3
+
+anim_29D3:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=anim_29D3
+
+anim_2A0B:
+    frame 1, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 4, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 1, time=8, flip=FLIP_X, next=anim_2A0B
+
+anim_2A43:
+    frame 7, time=5, flip=0, next=NEXT
+    frame 8, time=5, flip=0, next=anim_2A43
+
+fx_tiles_scroll:
+    ; FX_TILES: the background tiles drift down and to the left, wrapping around
+    $l0 = 10
+
+L_2A59:
+    sprite_move_by $l0, -3, 3
+    sprite_get_pos $l0, $v00, $v01
+    if $v00 > -32 goto L_2A81
+    $v00 += 384
+    sprite_pos $l0, $v00, $v01
+
+L_2A81:
+    if $v01 < 288 goto L_2A99
+    $v01 -= 320
+    sprite_pos $l0, $v00, $v01
+
+L_2A99:
+    $l0 += 1
+    if $l0 != 40 goto L_2A59
+    return
+
+fx_tiles_grow:
+    ; FX_TILES: the background tiles grow to full size
+    sprite_get_scale 10, $v00, $v01
+    if $v00 == 256 goto L_1787
+    $l0 = 10
+
+L_2AC3:
+    sprite_scale_by $l0, 16, 16
+    $l0 += 1
+    if $l0 != 40 goto L_2AC3
+    sprite_get_scale 10, $v00, $v01
+    if $v00 < 256 goto L_1787
+    $l0 = 10
+
+L_2AF3:
+    sprite_scale $l0, 256, 256
+    $l0 += 1
+    if $l0 != 40 goto L_2AF3
+    return
+
+tiles_shrink:
+    ; the background tiles shrink; hidden once gone
+    $l0 = 10
+
+L_2B13:
+    sprite_scale_by $l0, -16, -16
+    $l0 += 1
+    if $l0 != 40 goto L_2B13
+    sprite_get_scale 10, $v00, $v01
+    if $v00 > 0 goto L_1787
+    $l0 = 10
+
+L_2B43:
+    sprite_hide $l0
+    $l0 += 1
+    if $l0 != 40 goto L_2B43
+    return
+
+money_by_years:
+    ; $v00 = 100 * ($months / 24 + 1): an amount that grows every two years
+    $l0 = $months
+    $l0 /= 24
+    $l0 += 1
+    $l0 *= 100
+    $v00 = $l0
+    return
+
+path_2B79:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_2773, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=-100, y=-100, anim=anim_2773, next=END  ; move to -100, -100, 10 pixels a frame
+
+path_2B8D:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_27C3, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=100, y=-100, anim=anim_27C3, next=END  ; move to 100, -100, 10 pixels a frame
+
+path_2BA1:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_2813, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=-100, y=100, anim=anim_2813, next=END  ; move to -100, 100, 10 pixels a frame
+
+path_2BB5:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_2863, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=100, y=100, anim=anim_2863, next=END  ; move to 100, 100, 10 pixels a frame
+    bytes 0x00, 0x00, 0x00    ; padding

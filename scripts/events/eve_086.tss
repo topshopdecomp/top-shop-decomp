@@ -1,0 +1,1352 @@
+; EVE_086.J entry 0
+;
+; Event 86: the event of August (g_monthEvents), when the random draw gives none.
+; Result ($result of the task): 0 the turn goes on, 1 another event (result_another),
+; 2 roll again (result_reroll), 3 move the steps set (move_steps).
+;
+; What it does: every player's stores sell at 50% for 1 month.
+;
+; What it says: "[Young Lady] / This is a message from / the information desk." | "Summer Sale. /
+; All items are 50% / off for one turn."
+;
+; 6112 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+
+; The event card scene's variables (scripts/README.md):
+; corner1-4: top left, top right, bottom left, bottom right (sprites 1-4)
+; $cornerN_x/_y: position; _dx/_dy: offset for this frame only; _home_x/_y: place in the frame
+; $corner_zoom: 256 = full size, this frame; $corner_stretch_x/_y: 50 = no stretch
+; $corner_entrance: CORNERS_*; $corner_effects: FX_* bits; $card_entrance: CARD_*
+; $card_state: 0 not started, 32767 done (the card routines count in it)
+var $corner1_x = $v0A
+var $corner1_y = $v0B
+var $corner2_x = $v0C
+var $corner2_y = $v0D
+var $corner3_x = $v0E
+var $corner3_y = $v0F
+var $corner4_x = $v10
+var $corner4_y = $v11
+var $corner_zoom = $v12
+var $corner_stretch_x = $v13
+var $corner_stretch_y = $v14
+var $corner1_dx = $v15
+var $corner1_dy = $v16
+var $corner2_dx = $v17
+var $corner2_dy = $v18
+var $corner3_dx = $v19
+var $corner3_dy = $v1A
+var $corner4_dx = $v1B
+var $corner4_dy = $v1C
+var $corner1_home_x = $v1D
+var $corner1_home_y = $v1E
+var $corner2_home_x = $v1F
+var $corner2_home_y = $v20
+var $corner3_home_x = $v21
+var $corner3_home_y = $v22
+var $corner4_home_x = $v23
+var $corner4_home_y = $v24
+var $corner_entrance = $v25
+var $corner_effects = $v26
+var $card_entrance = $v28
+var $card_state = $v8C
+var $card_angle = $v8D
+var $card_sink_step = $v93
+var $card_rise_step = $v94
+var $pulse_angle = $v96
+var $pulse_x_angle = $v97
+var $pulse_y_angle = $v98
+var $shrink_amount = $v99
+var $grow_amount = $v9A
+var $corner_steps = $v9B
+var $squeeze_y_angle = $v9C
+var $squeeze_x_angle = $v9D
+var $circle_radius = $v9E
+var $circle_angle = $v9F
+    call clear_vars
+    call scene_setup
+    call corners_animate
+    $corner_entrance = CORNERS_HOME
+    $corner_effects = 0
+    $card_entrance = CARD_RISE
+    call effects_default
+    nop_34 2                              ; no effect in this game
+    talk "【Young Lady】%KThis is a message from%Kthe information desk."  ; [Young Lady] / This is a message from / the information desk.
+    call card_show
+    talk_clear
+    talk "Summer Sale.%KAll items are 50％%Koff for one turn."  ; Summer Sale. / All items are 50% / off for one turn.
+    talk_show 0
+    call wait_cross
+    call card_close
+    stores_set_price ALL_STORES, percent=50, months=1  ; every player's stores sell at 50% for 1 month
+    call finish
+
+corners_animate:
+    ; start the animations of the card and the four corners
+    sprite_animate 0, anim_1656
+    sprite_animate 1, anim_1386
+    sprite_animate 2, anim_13D6
+    sprite_animate 3, anim_1426
+    sprite_animate 4, anim_1476
+    return
+
+corners_animate_alt:
+    ; other animations for the corners (not used)
+    ; (not reached: nothing jumps here)
+    sprite_animate 1, anim_14C6
+    sprite_animate 2, anim_14FE
+    sprite_animate 3, anim_1536
+    sprite_animate 4, anim_156E
+    return
+
+corners_animate_alt_2:
+    ; other animations for the corners (not used)
+    sprite_animate 1, anim_15A6
+    sprite_animate 2, anim_15C6
+    sprite_animate 3, anim_15A6
+    sprite_animate 4, anim_15C6
+    return
+
+corners_animate_alt_3:
+    ; other animations for the corners (not used)
+    sprite_animate 1, anim_15E6
+    sprite_animate 2, anim_161E
+    sprite_animate 3, anim_15E6
+    sprite_animate 4, anim_161E
+    return
+
+show_and_open:
+    ; show the text and slide the talk panel in
+    talk_show 0
+    talk_open
+    return
+
+show_wait_clear:
+    ; show the text, wait for cross (180 frames at most), clear the text
+    talk_show 0
+    wait_buttons_for CROSS|0x300, 180     ; wait for cross, 180 frames at most
+    talk_clear
+    return
+
+card_close:
+    ; close the view and take everything away (corners_leave); wait until the view and the talk
+    ; panel are closed
+    ; (reached again)
+    view_close GROW, 10
+    set 0, 0                              ; a constant where a variable belongs: only $result is set
+    call corners_leave
+    view_wait
+    talk_wait_closed
+    return
+
+corners_leave:
+    ; the corners draw in for 10 frames, the talk panel closes, then they fly off for 15 frames;
+    ; meanwhile the card sinks into the talk panel (card_sink) and the tiles shrink
+    $l0 = 0
+    $card_state = 0
+
+L_0160:
+    $corner1_x += 2
+    $corner1_y += 2
+    $corner2_x -= 2
+    $corner2_y += 2
+    $corner3_x += 2
+    $corner3_y -= 2
+    $corner4_x -= 2
+    $corner4_y -= 2
+    if $card_entrance == CARD_STILL goto L_019E
+    call card_sink
+
+L_019E:
+    call effects_run
+    call tiles_shrink
+    $l0 += 1
+    if $l0 != 10 goto L_0160
+    $l0 = 0
+    talk_close
+
+L_01BE:
+    $corner1_x -= 10
+    $corner1_y -= 10
+    $corner2_x += 10
+    $corner2_y -= 10
+    $corner3_x -= 10
+    $corner3_y += 10
+    $corner4_x += 10
+    $corner4_y += 10
+    call card_sink
+    call effects_run
+    call tiles_shrink
+    $l0 += 1
+    if $l0 != 15 goto L_01BE
+    return
+
+finish:
+    ; stop the music; end of the script
+    stop_bgm
+    end
+
+scene_setup:
+    ; the scene: layer 0 (scene image 0); the card (sprite 0, image 7) off screen; the four
+    ; corners (sprites 1-4, image 1) at their home positions, worked out from the size of image 1
+    ; (the frame fills 320 x 170); the 30 background tiles (sprites 10-39, image 10) in rows of 6;
+    ; dim 128; $corner_steps = 20, the zoom and squeeze counters set
+    get_image_size 1, $v00, $v01
+    $v00 /= 2
+    $v01 /= 2
+    $corner1_home_x = 0
+    $corner1_home_x += $v00
+    $corner1_home_y = 0
+    $corner1_home_y += $v01
+    $corner2_home_x = 320
+    $corner2_home_x -= $v00
+    $corner2_home_y = 0
+    $corner2_home_y += $v01
+    $corner3_home_x = 0
+    $corner3_home_x += $v00
+    $corner3_home_y = 170
+    $corner3_home_y -= $v01
+    $corner4_home_x = 320
+    $corner4_home_x -= $v00
+    $corner4_home_y = 170
+    $corner4_home_y -= $v01
+    $corner1_x = $corner1_home_x
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner2_y = $corner2_home_y
+    $corner3_x = $corner3_home_x
+    $corner3_y = $corner3_home_y
+    $corner4_x = $corner4_home_x
+    $corner4_y = $corner4_home_y
+    $corner_zoom = 256
+    $corner_stretch_x = 50
+    $corner_stretch_y = 50
+    $v95 = 1
+    $shrink_amount = 256
+    $grow_amount = 256
+    $corner_steps = 20
+    $squeeze_y_angle = 8191
+    $squeeze_x_angle = 8191
+    $circle_radius = 50
+    layer_init 0, image=0, pri=31, flags=0
+    sprite_init 0, image=7, attr=MIDDLE_CENTER, x=420, y=340, pri=0
+    sprite_init 1, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    sprite_init 2, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    sprite_init 3, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    sprite_init 4, image=1, attr=MIDDLE_CENTER, x=-100, y=0, pri=1
+    $l0 = 10
+    $v00 = 0
+    $v01 = 0
+
+L_0352:
+    sprite_init $l0, image=10, attr=MIDDLE_CENTER|SEMITRANS2, x=$v00, y=$v01, pri=-1
+    sprite_scale $l0, 0, 0
+    $l0 += 1
+    $v00 += 64
+    if $v00 != 384 goto L_038A
+    $v00 = 0
+    $v01 += 64
+
+L_038A:
+    if $l0 != 40 goto L_0352
+    set_dim 128
+    return
+
+L_039A:
+    return
+
+effects_default:
+    ; no corner entrance; only FX_TILES
+    $corner_entrance = CORNERS_HOME
+    $corner_effects = 0
+    $corner_effects |= FX_TILES
+    return
+
+card_show:
+    ; music 3; open the view and the talk panel; then every frame the corner entrance
+    ; ($corner_entrance), the effects ($corner_effects) and the card's entrance ($card_entrance),
+    ; until the voice has ended and cross is pressed (a CPU player: 60 frames); then the corners
+    ; back home and a sound
+    play_bgm 3
+    $l0 = 0
+    view_set x=64, y=24, w=192, h=128
+    view_open GROW, 10
+    talk_show 0
+    talk_open
+
+L_03D0:
+    switch $corner_entrance: L_03EC, L_03DC, L_03E4
+
+L_03DC:
+    ; $corner_entrance = 1
+    call corners_spread
+    goto L_03EC
+
+L_03E4:
+    ; $corner_entrance = 2
+    call corners_fly_in
+    goto L_03EC
+
+L_03EC:
+    ; $corner_entrance = 0
+    if $corner_effects !& FX_GROW goto L_03FA
+    call fx_grow
+
+L_03FA:
+    if $corner_effects !& FX_SHRINK goto L_0408
+    call fx_shrink
+
+L_0408:
+    if $corner_effects !& FX_CIRCLE goto L_0416
+    call fx_circle
+
+L_0416:
+    if $corner_effects !& FX_SQUEEZE_X goto L_0424
+    call fx_squeeze_x
+
+L_0424:
+    if $corner_effects !& FX_SQUEEZE_Y goto L_0432
+    call fx_squeeze_y
+
+L_0432:
+    if $corner_effects !& FX_SPIN goto L_0440
+    call fx_spin
+
+L_0440:
+    if $corner_effects !& FX_PULSE_X goto L_044E
+    call fx_pulse_x
+
+L_044E:
+    if $corner_effects !& FX_PULSE_Y goto L_045C
+    call fx_pulse_y
+
+L_045C:
+    if $corner_effects !& FX_PULSE goto L_046A
+    call fx_pulse
+
+L_046A:
+    if $corner_effects !& FX_TILES goto L_047C
+    call fx_tiles_scroll
+    call fx_tiles_grow
+
+L_047C:
+    call card_enter
+    call corners_apply
+    $l0 += 1
+    if $l0 >= 0 goto L_049A
+    $l0 = 30
+
+L_049A:
+    if $l0 < 30 goto L_03D0
+    if $l0 != 10 goto L_04B2
+    nop_34 $card_sink_step                ; no effect in this game
+
+L_04B2:
+    $v00 = xa_playing
+    if $v00 == 1 goto L_03D0
+    if $cur_is_cpu & CPU goto L_04D8
+    if $cur_pressed !& CROSS|0x300 goto L_03D0
+    goto L_04E2
+
+L_04D8:
+    if $l0 < 60 goto L_03D0
+
+L_04E2:
+    $corner1_x = $corner1_home_x
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner2_y = $corner2_home_y
+    $corner3_x = $corner3_home_x
+    $corner3_y = $corner3_home_y
+    $corner4_x = $corner4_home_x
+    $corner4_y = $corner4_home_y
+    sprite_pos 1, $corner1_home_x, $corner1_home_y
+    sprite_pos 2, $corner2_home_x, $corner2_home_y
+    sprite_pos 3, $corner3_home_x, $corner3_home_y
+    sprite_pos 4, $corner4_home_x, $corner4_home_y
+    play_se 1
+    return
+
+effects_settle:
+    ; (not used) run the effects until the corner entrance, FX_GROW, FX_SHRINK, FX_CIRCLE and the
+    ; squeezes have run down, then until the spin and the pulses are back at rest
+    ; (not reached: nothing jumps here)
+    $vA0 = 0
+    if $corner_entrance == CORNERS_HOME goto L_054E
+    $vA0 += $corner_steps
+
+L_054E:
+    if $corner_effects !& FX_GROW goto L_055E
+    $vA0 += $grow_amount
+
+L_055E:
+    if $corner_effects !& FX_SHRINK goto L_056E
+    $vA0 += $shrink_amount
+
+L_056E:
+    if $corner_effects !& FX_CIRCLE goto L_057E
+    $vA0 += $circle_radius
+
+L_057E:
+    if $corner_effects !& FX_SQUEEZE_X goto L_058E
+    $vA0 += $squeeze_x_angle
+
+L_058E:
+    if $corner_effects !& FX_SQUEEZE_Y goto L_059E
+    $vA0 += $squeeze_y_angle
+
+L_059E:
+    call corners_apply
+    if $vA0 != 0 goto card_show
+
+L_05AC:
+    $vA0 = 0
+    if $corner_effects !& FX_SPIN goto L_05CC
+    call fx_spin_stop
+    sprite_get_angle 1, $v00
+    $vA0 += $v00
+
+L_05CC:
+    if $corner_effects !& FX_PULSE_X goto L_05E0
+    call fx_pulse_x_stop
+    $vA0 += $pulse_x_angle
+
+L_05E0:
+    if $corner_effects !& FX_PULSE_Y goto L_05F4
+    call fx_pulse_y_stop
+    $vA0 += $pulse_y_angle
+
+L_05F4:
+    if $corner_effects !& FX_PULSE goto L_0608
+    call fx_pulse_stop
+    $vA0 += $pulse_angle
+
+L_0608:
+    call corners_apply
+    if $vA0 != 0 goto L_05AC
+    return
+
+effects_run:
+    ; one frame of the effects that keep going (FX_SPIN, FX_PULSE_X, FX_PULSE_Y, FX_PULSE,
+    ; FX_TILES), then corners_apply
+    ; (reached again)
+    if $corner_effects !& FX_SPIN goto L_0626
+    call fx_spin
+
+L_0626:
+    if $corner_effects !& FX_PULSE_X goto L_0634
+    call fx_pulse_x
+
+L_0634:
+    if $corner_effects !& FX_PULSE_Y goto L_0642
+    call fx_pulse_y
+
+L_0642:
+    if $corner_effects !& FX_PULSE goto L_0650
+    call fx_pulse
+
+L_0650:
+    if $corner_effects !& FX_TILES goto L_065E
+    call fx_tiles_scroll
+
+L_065E:
+    call corners_apply
+    return
+
+corners_apply:
+    ; corner positions plus this frame's offsets to sprites 1-4, their scale = $corner_stretch_x/y
+    ; * $corner_zoom / 50; offsets, zoom and stretch back to neutral; wait a frame
+    $v00 = $corner1_x
+    $v01 = $corner1_y
+    $v02 = $corner2_x
+    $v03 = $corner2_y
+    $v04 = $corner3_x
+    $v05 = $corner3_y
+    $v06 = $corner4_x
+    $v07 = $corner4_y
+    $v00 += $corner1_dx
+    $v01 += $corner1_dy
+    $v02 += $corner2_dx
+    $v03 += $corner2_dy
+    $v04 += $corner3_dx
+    $v05 += $corner3_dy
+    $v06 += $corner4_dx
+    $v07 += $corner4_dy
+    $corner1_dx = 0
+    $corner1_dy = 0
+    $corner2_dx = 0
+    $corner2_dy = 0
+    $corner3_dx = 0
+    $corner3_dy = 0
+    $corner4_dx = 0
+    $corner4_dy = 0
+    sprite_pos 1, $v00, $v01
+    sprite_pos 2, $v02, $v03
+    sprite_pos 3, $v04, $v05
+    sprite_pos 4, $v06, $v07
+    $corner_stretch_x *= $corner_zoom
+    $corner_stretch_y *= $corner_zoom
+    $corner_stretch_x /= 50
+    $corner_stretch_y /= 50
+    sprite_scale 1, $corner_stretch_x, $corner_stretch_y
+    sprite_scale 2, $corner_stretch_x, $corner_stretch_y
+    sprite_scale 3, $corner_stretch_x, $corner_stretch_y
+    sprite_scale 4, $corner_stretch_x, $corner_stretch_y
+    $corner_zoom = 256
+    $corner_stretch_x = 50
+    $corner_stretch_y = 50
+    wait 1
+    return
+
+corners_spread:
+    ; corner entrance 1: all four start at the center and spread out to their home positions over
+    ; $corner_steps frames
+    if $corner_steps == 0 goto L_039A
+    if $corner_steps == 1 goto L_083E
+    if $corner_steps != 20 goto L_07E6
+    $v00 = $corner2_home_x
+    $v00 -= $corner1_home_x
+    $v00 /= 2
+    $v00 += $corner1_home_x
+    $v01 = $corner3_home_y
+    $v01 -= $corner1_home_y
+    $v01 /= 2
+    $v01 += $corner1_home_y
+    $corner1_x = $v00
+    $corner1_y = $v01
+    $corner2_x = $v00
+    $corner2_y = $v01
+    $corner3_x = $v00
+    $corner3_y = $v01
+    $corner4_x = $v00
+    $corner4_y = $v01
+    goto L_086E
+
+L_07E6:
+    $v00 = $corner4_home_x
+    $v00 -= $corner4_x
+    $v00 /= $corner_steps
+    $v01 = $corner4_home_y
+    $v01 -= $corner4_y
+    $v01 /= $corner_steps
+    $corner1_x -= $v00
+    $corner1_y -= $v01
+    $corner2_x += $v00
+    $corner2_y -= $v01
+    $corner3_x -= $v00
+    $corner3_y += $v01
+    $corner4_x += $v00
+    $corner4_y += $v01
+    goto L_086E
+
+L_083E:
+    $corner1_x = $corner1_home_x
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner2_y = $corner2_home_y
+    $corner3_x = $corner3_home_x
+    $corner3_y = $corner3_home_y
+    $corner4_x = $corner4_home_x
+    $corner4_y = $corner4_home_y
+
+L_086E:
+    $corner_steps -= 1
+    return
+
+corners_fly_in:
+    ; corner entrance 2: the corners fly in from the edges of the screen over $corner_steps frames
+    if $corner_steps == 0 goto L_039A
+    if $corner_steps == 1 goto L_0914
+    if $corner_steps != 20 goto L_08B0
+    $corner1_y = 340
+    $corner2_x = -100
+    $corner3_x = 420
+    $corner4_y = -100
+    goto L_092C
+
+L_08B0:
+    $v00 = $corner1_home_y
+    $v00 -= $corner1_y
+    $v00 /= $corner_steps
+    $v01 = $corner2_home_x
+    $v01 -= $corner2_x
+    $v01 /= $corner_steps
+    $v02 = $corner3_home_x
+    $v02 -= $corner3_x
+    $v02 /= $corner_steps
+    $v03 = $corner4_home_y
+    $v03 -= $corner4_y
+    $v03 /= $corner_steps
+    $corner1_y += $v00
+    $corner2_x += $v01
+    $corner3_x += $v02
+    $corner4_y += $v03
+    goto L_092C
+
+L_0914:
+    $corner1_y = $corner1_home_y
+    $corner2_x = $corner2_home_x
+    $corner3_x = $corner3_home_x
+    $corner4_y = $corner4_home_y
+
+L_092C:
+    $corner_steps -= 1
+    return
+
+fx_grow:
+    ; FX_GROW: zoom = 1 - $grow_amount/256; the amount falls by 10 a frame
+    $corner_zoom -= $grow_amount
+    $grow_amount -= 10
+    if $grow_amount > 0 goto L_039A
+    $grow_amount = 0
+    return
+
+fx_shrink:
+    ; FX_SHRINK: zoom = 1 + $shrink_amount/256; the amount falls by 10 a frame
+    $corner_zoom += $shrink_amount
+    $shrink_amount -= 10
+    if $shrink_amount > 0 goto L_039A
+    $shrink_amount = 0
+    return
+
+fx_squeeze_x:
+    ; FX_SQUEEZE_X: the corners start 100 pixels further apart sideways and ease back
+    ; ($squeeze_x_angle)
+    $v02 = 8191
+    $v02 -= $squeeze_x_angle
+    step_toward x=0, y=0, distance=100, angle=$v02, to_x=$v00, to_y=$v01
+    $v00 = 100
+    $v00 -= $v01
+    $corner1_dx -= $v00
+    $corner2_dx += $v00
+    $corner3_dx -= $v00
+    $corner4_dx += $v00
+    $squeeze_x_angle -= 400
+    if $squeeze_x_angle > 0 goto L_039A
+    $squeeze_x_angle = 0
+    return
+
+fx_squeeze_y:
+    ; FX_SQUEEZE_Y: the same up and down ($squeeze_y_angle)
+    $v02 = 8191
+    $v02 -= $squeeze_y_angle
+    step_toward x=0, y=0, distance=100, angle=$v02, to_x=$v00, to_y=$v01
+    $v00 = 100
+    $v00 -= $v01
+    $corner1_dy -= $v00
+    $corner2_dy -= $v00
+    $corner3_dy += $v00
+    $corner4_dy += $v00
+    $squeeze_y_angle -= 400
+    if $squeeze_y_angle > 0 goto L_039A
+    $squeeze_y_angle = 0
+    return
+
+fx_circle:
+    ; FX_CIRCLE: the corners circle around their places; the radius $circle_radius falls by 1 a
+    ; frame
+    step_toward x=0, y=0, distance=$circle_radius, angle=$circle_angle, to_x=$v00, to_y=$v01
+    $corner1_dx -= $v00
+    $corner1_dy -= $v01
+    $corner2_dx += $v00
+    $corner2_dy -= $v01
+    $corner3_dx -= $v00
+    $corner3_dy += $v01
+    $corner4_dx += $v00
+    $corner4_dy += $v01
+    $circle_angle += 1500
+    if $circle_angle <= 32767 goto L_0A70
+    $circle_angle -= 32767
+
+L_0A70:
+    $circle_radius -= 1
+    if $circle_radius >= 0 goto L_039A
+    $circle_radius = 0
+    return
+
+fx_pulse:
+    ; FX_PULSE: the corners throb (size 1 to 1.5, $pulse_angle)
+    step_toward x=0, y=0, distance=128, angle=$pulse_angle, to_x=$v00, to_y=$v01
+    if $v00 >= 0 goto L_0AAA
+    $corner_zoom -= $v00
+    goto L_0AB0
+
+L_0AAA:
+    $corner_zoom += $v00
+
+L_0AB0:
+    $pulse_angle += 1500
+    if $pulse_angle >= 0 goto L_039A
+    $pulse_angle -= 32767
+    return
+
+fx_pulse_stop:
+    ; stop FX_PULSE at the end of a swing (not used)
+    ; (not reached: nothing jumps here)
+    if $pulse_angle == 0 goto L_039A
+    if $pulse_angle >= 31267 goto L_0AE2
+    call fx_pulse
+    return
+
+L_0AE2:
+    $pulse_angle = 0
+    return
+
+fx_pulse_x:
+    ; FX_PULSE_X: the corners turn over sideways, around and around (their width swings between -1
+    ; and 1, $pulse_x_angle)
+    ; (reached again)
+    step_toward x=0, y=0, distance=50, angle=$pulse_x_angle, to_x=$v00, to_y=$v01
+    $v00 -= 50
+    $corner_stretch_x += $v00
+    $pulse_x_angle += 1500
+    if $pulse_x_angle >= 0 goto L_039A
+    $pulse_x_angle -= 32767
+    return
+
+fx_pulse_x_stop:
+    ; stop FX_PULSE_X at the end of a swing (not used)
+    ; (not reached: nothing jumps here)
+    if $pulse_x_angle == 0 goto L_039A
+    if $pulse_x_angle >= 31267 goto L_0B36
+    call fx_pulse_x
+    return
+
+L_0B36:
+    $pulse_x_angle = 0
+    return
+
+fx_pulse_y:
+    ; FX_PULSE_Y: the same, turning over top to bottom ($pulse_y_angle)
+    ; (reached again)
+    step_toward x=0, y=0, distance=50, angle=$pulse_y_angle, to_x=$v00, to_y=$v01
+    $v00 -= 50
+    $corner_stretch_y += $v00
+    $pulse_y_angle += 1500
+    if $pulse_y_angle >= 0 goto L_039A
+    $pulse_y_angle -= 32767
+    return
+
+fx_pulse_y_stop:
+    ; stop FX_PULSE_Y at the end of a swing (not used)
+    ; (not reached: nothing jumps here)
+    if $pulse_y_angle == 0 goto L_039A
+    if $pulse_y_angle >= 31267 goto L_0B8A
+    call fx_pulse_y
+    return
+
+L_0B8A:
+    $pulse_y_angle = 0
+    return
+
+fx_spin:
+    ; FX_SPIN: the corners turn (1 and 3 one way, 2 and 4 the other)
+    ; (reached again)
+    sprite_rotate 1, -1500
+    sprite_rotate 2, 1500
+    sprite_rotate 3, -1500
+    sprite_rotate 4, 1500
+    return
+
+fx_spin_stop:
+    ; stop FX_SPIN once the angle is back at 0 (not used)
+    ; (not reached: nothing jumps here)
+    sprite_get_angle 1, $v00
+    if $v00 == 0 goto L_039A
+    if $v00 >= 31267 goto L_0BCC
+    call fx_spin
+    return
+
+L_0BCC:
+    sprite_angle 1, 0
+    sprite_angle 2, 0
+    sprite_angle 3, 0
+    sprite_angle 4, 0
+    return
+
+card_slide_left:
+    ; CARD_SLIDE_LEFT: the card slides in from the left, slowing down, to the center (160, 120)
+    ; (reached again)
+    if $card_state == CARD_DONE goto L_039A
+    step_toward x=0, y=0, distance=261, angle=$card_angle, to_x=$v01, to_y=$v00
+    $v00 -= 100
+    sprite_pos 0, $v00, 120
+    $card_angle += 1000
+    if $v00 < 160 goto L_039A
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_slide_right:
+    ; CARD_SLIDE_RIGHT: the card slides in from the right
+    if $card_state == CARD_DONE goto L_039A
+    step_toward x=0, y=0, distance=261, angle=$card_angle, to_x=$v00, to_y=$v01
+    $v00 = 420
+    $v00 -= $v01
+    sprite_pos 0, $v00, 120
+    $card_angle += 1000
+    if $v00 > 160 goto L_039A
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_zoom:
+    ; CARD_ZOOM: the card appears 16 times its size at the center and shrinks to its size
+    if $card_state == CARD_DONE goto L_039A
+    if $card_state != 0 goto L_0CA4
+    sprite_pos 0, 160, 120
+    sprite_scale 0, 4096, 4096
+    $card_state = 1
+    return
+
+L_0CA4:
+    sprite_scale_by 0, -256, -256
+    sprite_get_scale 0, $v00, $v01
+    if $v00 > 256 goto L_039A
+    sprite_scale 0, 256, 256
+    $card_state = CARD_DONE
+    return
+
+card_rise:
+    ; CARD_RISE: the card grows out of the top of the talk panel, moving right from the center (it
+    ; ends at x 240, standing on the panel)
+    if $card_state == CARD_DONE goto L_039A
+    if $card_state != 0 goto L_0CF2
+    sprite_scale 0, 0, 0
+    $card_state = 1
+    return
+
+L_0CF2:
+    $v00 = 240
+    $v00 -= 160
+    $v00 *= $card_rise_step
+    $v00 /= 16
+    $v00 += 160
+    get_image_size 7, $v01, $v02
+    $v01 = $card_rise_step
+    $v01 *= 16
+    $v02 *= $v01
+    $v02 /= 256
+    $v02 /= 2
+    $v01 = talk_y
+    $v01 -= $v02
+    $v01 -= 3
+    sprite_pos 0, $v00, $v01
+    $card_rise_step += 1
+    sprite_scale_by 0, 16, 16
+    sprite_get_scale 0, $v00, $v01
+    if $v00 < 256 goto L_039A
+    sprite_scale 0, 256, 256
+    $card_state = CARD_DONE
+    return
+
+card_sink:
+    ; the card shrinks into the talk panel, moving back to the center, and is hidden
+    if $card_state == CARD_DONE goto L_039A
+    $v00 = 240
+    $v00 -= 160
+    $v01 = 8
+    $v01 -= $card_sink_step
+    $v00 *= $v01
+    $v00 /= 8
+    $v00 += 160
+    get_image_size 7, $v01, $v02
+    $v01 = 7
+    $v01 -= $card_sink_step
+    $v01 *= 32
+    $v02 *= $v01
+    $v02 /= 256
+    $v02 /= 2
+    $v01 = talk_y
+    $v01 -= $v02
+    $v01 -= 3
+    sprite_pos 0, $v00, $v01
+    $card_sink_step += 1
+    sprite_scale_by 0, -32, -32
+    sprite_get_scale 0, $v00, $v01
+    if $v00 > 0 goto L_039A
+    sprite_scale 0, 0, 0
+    $card_state = CARD_DONE
+    sprite_hide 0
+    return
+
+card_spiral:
+    ; CARD_SPIRAL: the card spirals in to the center
+    if $card_state == CARD_DONE goto L_039A
+    $v00 = 260
+    $v01 = $card_state
+    $v01 *= 13
+    $v00 -= $v01
+    step_toward x=160, y=120, distance=$v00, angle=$card_angle, to_x=$v01, to_y=$v02
+    sprite_pos 0, $v01, $v02
+    if $v00 <= 0 goto L_0E8A
+    $card_state += 1
+    $card_angle += 3000
+    if $card_angle >= 0 goto L_039A
+    sub 0, 32767                          ; a constant where a variable belongs: only $result is set
+    return
+
+L_0E8A:
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_bounce:
+    ; CARD_BOUNCE: the card bounces up and down, less and less, into the center
+    if $card_state == CARD_DONE goto L_039A
+    if $card_state != 0 goto L_0EB4
+    $card_angle = 24575
+
+L_0EB4:
+    $v00 = 220
+    $v01 = $card_state
+    $v01 *= 3
+    $v00 -= $v01
+    step_toward x=160, y=120, distance=$v00, angle=$card_angle, to_x=$v02, to_y=$v01
+    sprite_pos 0, 160, $v01
+    if $v00 <= 0 goto L_0F16
+    $card_state += 1
+    $v00 = 40
+    $v00 *= $card_state
+    $card_angle += $v00
+    if $card_angle >= 0 goto L_039A
+    $card_angle -= 16383
+    return
+
+L_0F16:
+    sprite_pos 0, 160, 120
+    $card_state = CARD_DONE
+    return
+
+card_enter:
+    ; one frame of the card's entrance, by $card_entrance
+    switch $card_entrance: L_0F3A, L_0F3E, L_0F46, L_0F4E, L_0F56, L_0F5E, L_0F66
+
+L_0F3A:
+    ; $card_entrance = 0
+    goto L_0F6A
+
+L_0F3E:
+    ; $card_entrance = 1
+    call card_slide_left
+    goto L_0F6A
+
+L_0F46:
+    ; $card_entrance = 2
+    call card_slide_right
+    goto L_0F6A
+
+L_0F4E:
+    ; $card_entrance = 3
+    call card_zoom
+    goto L_0F6A
+
+L_0F56:
+    ; $card_entrance = 4
+    call card_rise
+    goto L_0F6A
+
+L_0F5E:
+    ; $card_entrance = 5
+    call card_spiral
+    goto L_0F6A
+
+L_0F66:
+    ; $card_entrance = 6
+    call card_bounce
+
+L_0F6A:
+    return
+
+wait_cross:
+    ; keep the effects going until cross is pressed (a CPU player: 30 frames); a sound
+    $l0 = 0
+
+L_0F72:
+    call effects_run
+    $l0 += 1
+    if $cur_is_cpu & CPU goto L_0F96
+    if $cur_pressed !& CROSS|0x300 goto L_0F72
+    play_se 1
+    return
+
+L_0F96:
+    if $l0 < 30 goto L_0F72
+    play_se 1
+    return
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $corner1_x = 0
+    $corner1_y = 0
+    $corner2_x = 0
+    $corner2_y = 0
+    $corner3_x = 0
+    $corner3_y = 0
+    $corner4_x = 0
+    $corner4_y = 0
+    $corner_zoom = 0
+    $corner_stretch_x = 0
+    $corner_stretch_y = 0
+    $corner1_dx = 0
+    $corner1_dy = 0
+    $corner2_dx = 0
+    $corner2_dy = 0
+    $corner3_dx = 0
+    $corner3_dy = 0
+    $corner4_dx = 0
+    $corner4_dy = 0
+    $corner1_home_x = 0
+    $corner1_home_y = 0
+    $corner2_home_x = 0
+    $corner2_home_y = 0
+    $corner3_home_x = 0
+    $corner3_home_y = 0
+    $corner4_home_x = 0
+    $corner4_home_y = 0
+    $corner_entrance = CORNERS_HOME
+    $corner_effects = 0
+    $v27 = 0
+    $card_entrance = CARD_STILL
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $card_state = 0
+    $card_angle = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $card_sink_step = 0
+    $card_rise_step = 0
+    $v95 = 0
+    $pulse_angle = 0
+    $pulse_x_angle = 0
+    $pulse_y_angle = 0
+    $shrink_amount = 0
+    $grow_amount = 0
+    $corner_steps = 0
+    $squeeze_y_angle = 0
+    $squeeze_x_angle = 0
+    $circle_radius = 0
+    $circle_angle = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+anim_1386:
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 4, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=NEXT
+    frame 6, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=anim_1386
+
+anim_13D6:
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 4, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=NEXT
+    frame 6, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=anim_13D6
+
+anim_1426:
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 4, time=4, flip=0, next=NEXT
+    frame 3, time=4, flip=0, next=NEXT
+    frame 1, time=4, flip=0, next=NEXT
+    frame 2, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=NEXT
+    frame 6, time=4, flip=0, next=NEXT
+    frame 5, time=4, flip=0, next=anim_1426
+
+anim_1476:
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 4, time=4, flip=FLIP_X, next=NEXT
+    frame 3, time=4, flip=FLIP_X, next=NEXT
+    frame 1, time=4, flip=FLIP_X, next=NEXT
+    frame 2, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=NEXT
+    frame 6, time=4, flip=FLIP_X, next=NEXT
+    frame 5, time=4, flip=FLIP_X, next=anim_1476
+
+anim_14C6:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=anim_14C6
+
+anim_14FE:
+    frame 1, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 4, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 1, time=8, flip=FLIP_X, next=anim_14FE
+
+anim_1536:
+    frame 1, time=8, flip=FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_Y, next=NEXT
+    frame 4, time=8, flip=FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_Y, next=NEXT
+    frame 1, time=8, flip=FLIP_Y, next=anim_1536
+
+anim_156E:
+    frame 1, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 4, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 3, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 2, time=8, flip=FLIP_X|FLIP_Y, next=NEXT
+    frame 1, time=8, flip=FLIP_X|FLIP_Y, next=anim_156E
+
+anim_15A6:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=8, flip=0, next=anim_15A6
+
+anim_15C6:
+    frame 1, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 4, time=8, flip=FLIP_X, next=anim_15C6
+
+anim_15E6:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=8, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=anim_15E6
+
+anim_161E:
+    frame 1, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 4, time=8, flip=FLIP_X, next=NEXT
+    frame 3, time=8, flip=FLIP_X, next=NEXT
+    frame 2, time=8, flip=FLIP_X, next=NEXT
+    frame 1, time=8, flip=FLIP_X, next=anim_161E
+
+anim_1656:
+    frame 7, time=5, flip=0, next=NEXT
+    frame 8, time=5, flip=0, next=anim_1656
+
+fx_tiles_scroll:
+    ; FX_TILES: the background tiles drift down and to the left, wrapping around
+    $l0 = 10
+
+L_166C:
+    sprite_move_by $l0, -3, 3
+    sprite_get_pos $l0, $v00, $v01
+    if $v00 > -32 goto L_1694
+    $v00 += 384
+    sprite_pos $l0, $v00, $v01
+
+L_1694:
+    if $v01 < 288 goto L_16AC
+    $v01 -= 320
+    sprite_pos $l0, $v00, $v01
+
+L_16AC:
+    $l0 += 1
+    if $l0 != 40 goto L_166C
+    return
+
+fx_tiles_grow:
+    ; FX_TILES: the background tiles grow to full size
+    sprite_get_scale 10, $v00, $v01
+    if $v00 == 256 goto L_039A
+    $l0 = 10
+
+L_16D6:
+    sprite_scale_by $l0, 16, 16
+    $l0 += 1
+    if $l0 != 40 goto L_16D6
+    sprite_get_scale 10, $v00, $v01
+    if $v00 < 256 goto L_039A
+    $l0 = 10
+
+L_1706:
+    sprite_scale $l0, 256, 256
+    $l0 += 1
+    if $l0 != 40 goto L_1706
+    return
+
+tiles_shrink:
+    ; the background tiles shrink; hidden once gone
+    $l0 = 10
+
+L_1726:
+    sprite_scale_by $l0, -16, -16
+    $l0 += 1
+    if $l0 != 40 goto L_1726
+    sprite_get_scale 10, $v00, $v01
+    if $v00 > 0 goto L_039A
+    $l0 = 10
+
+L_1756:
+    sprite_hide $l0
+    $l0 += 1
+    if $l0 != 40 goto L_1756
+    return
+
+money_by_years:
+    ; $v00 = 100 * ($months / 24 + 1): an amount that grows every two years
+    ; (not reached: nothing jumps here)
+    $l0 = $months
+    $l0 /= 24
+    $l0 += 1
+    $l0 *= 100
+    $v00 = $l0
+    return
+
+path_178C:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_1386, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=-100, y=-100, anim=anim_1386, next=END  ; move to -100, -100, 10 pixels a frame
+
+path_17A0:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_13D6, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=100, y=-100, anim=anim_13D6, next=END  ; move to 100, -100, 10 pixels a frame
+
+path_17B4:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_1426, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=-100, y=100, anim=anim_1426, next=END  ; move to -100, 100, 10 pixels a frame
+
+path_17C8:
+    ; (nothing names this)
+    step speed=2, x=-32768, y=-32767, anim=anim_1476, next=NEXT  ; move to -32768, -32767, 2 pixels a frame
+    step speed=10, x=100, y=100, anim=anim_1476, next=END  ; move to 100, 100, 10 pixels a frame
+    words 0, 0    ; padding

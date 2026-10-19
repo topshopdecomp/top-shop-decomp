@@ -1,0 +1,98 @@
+# Building
+
+How the game is built from the C sources, and what the build is made of.
+
+## Where things stand
+
+- **All 657 game functions are C** in `src/` (53 files including the data, about 44k lines), with
+  names for every function, global, struct field, task work-area field and local. No `D_ADDR`
+  labels are left in the C.
+- **The game's data is C too**: the tables and constant data in `src/data.c`, the variables in
+  `src/bss.c`.
+- **Only the PsyQ SDK stays assembly** (`asm/sdk.s`, 0x8008DBFC–0x800A56D0), by design: it is Sony's
+  library, disassembled from your copy of the executable when the build splits it; so does the
+  executable's header (`asm/header.s`).
+- **The build is not yet byte-matching.** The rebuilt disc was compared with the original
+  in the PCSX-ReARMed emulator over 25 scenarios (menus, story mode, free play, events, saving and
+  loading), with the same game state.
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `make setup` | installs the toolchain into `tools/` (`tools/setup.sh`): binutils 2.47 (mipsel, built from source), the PsyQ GCC 2.8.1 from decompals/old-gcc 0.17, maspsx, splat 0.50.0, mkpsxiso / dumpsxiso 2.30. Nothing is installed system-wide. |
+| `make` | the whole build: extract the disc image (once), split the executable (once), compile and link, make the disc image |
+| `make extract` | extracts your disc image into `disc/` and its layout into `disc.xml` (`tools/extract_disc.sh`): checks the `.bin`'s MD5, runs `dumpsxiso`, checks every file against `tools/disc_files.sha1`; then writes the characters' voices into `voices/` (`tools/extract_voices.py`). Takes `CUE=path/to/image.cue`, or the one `.cue` in `rom/` |
+| `make split` | runs splat on `config/topshop.yaml`: writes `asm/` (with splat's linker script, `asm/topshop.ld`) and `config/symbol_addrs_c.txt` (the `D_ADDR` labels the C uses). splat prints suggestions for splitting the read-only data into files (jump tables not aligned "file-wise") and says `sdk_rodata` may belong to `sdk`: hints for a byte-matching split, which don't apply here |
+| `make exe` | compiles and links `build/SLUS_013.33` |
+| `make image` | builds the disc image `build/topshop.bin` / `.cue` with mkpsxiso: the original disc's files with the rebuilt executable. **This is the playable result.** |
+| `make scripts` | assembles `scripts/` into the disc files that hold the scripts, in `scripts/build/` (`tools/tss.py build`; see [script.md](script.md)) |
+| `make CPU_TALK=1` | a build that plays the CPU players' talk at the start and the end of their turns, which the retail game never shows ([script.md](script.md)), with their voices: its disc image takes them from `voices/`. It goes with any target (`make CPU_TALK=1 exe`), and changing it compiles the C again. Without it, the build is the retail game. |
+| `make voices` | writes `voices/` again from `disc/A` (`tools/extract_voices.py`): the voices' files as XA sectors, for a `CPU_TALK` disc image, and every voice as a WAV file ([fileio.md](fileio.md)) |
+| `make clean` | removes `build/` and `scripts/build/` |
+| `make distclean` | also removes what was extracted from or generated out of your disc image: `disc/`, `disc.xml`, `voices/`, `asm/`, splat's files |
+
+## Memory layout
+
+See [overview.md](overview.md) for the original executable.
+
+| Section | Starts at |
+|---|---|
+| `.rodata` | 0x80010000 |
+| `.text` | 0x800196E8 (game), 0x8008DBFC (SDK) |
+| `.data` | 0x800A56D0 |
+| `.sdata` | 0x800B1E74 (= `$gp`) |
+| `.bss` | 0x800B2398–0x8011F3D0 (cleared by `start`) |
+
+Everything is linked by symbol, so C that is longer or shorter than the original code simply moves
+what follows it.
+
+## The build's pieces
+
+- `config/topshop.yaml`: splat's segments; one `c` segment per source file.
+- `config/symbol_addrs.txt`: the names, addresses and sizes of the original's functions and data.
+  **Every global or function the C names must be listed there** (or use splat's `func_` / `D_` names);
+  renaming one means changing `src/`, `include/` and this file, then `make split`.
+- `config/symbol_overrides.txt`: overrides by hand (`type:u32` for tables that hold pointers).
+- `config/symbol_addrs_ptrs.txt`, `config/reloc_addrs.txt`: relocation help for the data.
+- `tools/filter_undefined.py`: keeps only the truly external addresses of splat's
+  `undefined_*_auto` files. `tools/check_layout.py` then fails the build if a symbol in the moving
+  part of the image is still pinned to its original address.
+- `tools/fixexe.py`: sets `pc0` and `t_size` in the PS-X EXE header.
+- `tools/mkdisc.py`: writes the mkpsxiso project for the disc image from `disc.xml`, with the rebuilt
+  executable in place of the original's (and, with `--voices voices`, the voices as XA).
+- `tools/extract_voices.py`: the characters' voices, from the disc's `GM*.XA` files into `voices/`.
+
+### Compiling the C
+
+Each file goes through `cpp | cc1 (GCC 2.8.1 -O2 -G0 -mips1 -fsigned-char) | maspsx | as`, with
+`-Werror-implicit-function-declaration`. The C compiles without warnings; the assembler's "ignoring
+incorrect section type for .bss" on `src/bss.c` is harmless (GCC 2.8 labels the section as data, the
+assembler makes it zero-filled as it should be). Some sizes the C has to match: `Player` 0xC0 bytes,
+`SaveImage` 0x978, the tasks' work areas 0x64.
+
+### Source files and linking
+
+The C files are organized by subsystem, not by the original's address ranges. splat's linker script
+(from `config/topshop.yaml`, the original's split) lists one line per original C file in each
+section; `tools/ldobjects.py` replaces those runs with the files of `config/c_files.txt`, in that
+order. `src/data.c` and `src/bss.c` keep their own places: the read-only data at the start stays at
+its original addresses. Adding, removing or renaming a C file means updating `config/c_files.txt`;
+the build stops if it and `src/*.c` differ.
+
+## Checking an edit
+
+A purely cosmetic change (a constant given a name, a comment) leaves the executable byte for byte the
+same: `sha1sum build/SLUS_013.33` before and after `make exe` must give the same SHA-1. A change that
+alters the executable has to be played and checked in an emulator.
+
+## Open items
+
+- **Casts.** The 593 casts left in the C all change the generated code (the original reads those bytes
+  both ways).
+- **Readability.** No gotos, no generic local names, no raw byte-offset accesses, no sign-extension or
+  compiler idioms, no decompiler-shaped loops, no comma expressions in conditions and no register
+  leftovers, over 785 function definitions. What such counts cannot judge stays a matter of review.
+  No name or comment in the sources is marked as a guess.
+- **Assembly.** The data tables are C (`src/data.c`, `src/bss.c`); only the PsyQ SDK is still
+  assembled from `asm/`, by design.

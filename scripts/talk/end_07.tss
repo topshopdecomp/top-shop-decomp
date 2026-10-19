@@ -1,0 +1,293 @@
+; TALK.J entry 23 (LZSS-packed)
+;
+; What Patty says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 1592 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 7, $l2                        ; voice: XA track 7 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): I hate it~
+    words text_01EF, 4, 9                 ; 0.1 (no comment): No~∥｜
+    words text_01FA, 4, 9                 ; 0.2 (no comment): Mm~∥｜
+    words text_0205, 3, 6                 ; 1.0 a chain of 4: I'm worried about my waist size ☆
+    words text_0228, 3, 6                 ; 1.1 a chain of 4: I'll beat you all to a pu-lp
+    words text_0249, 3, 6                 ; 1.2 a chain of 4: Link complete ♪
+    words text_0256, 3, 6                 ; 2.0 a chain of 2 or 3: A grade up
+    words text_0269, 3, 6                 ; 2.1 a chain of 2 or 3: The stores merged
+    words text_027A, 3, 6                 ; 2.2 a chain of 2 or 3: Ya~∥｜y
+    words text_0285, 3, 6                 ; 3.0 landed on a rival store closed for now: Hooray for days off ☆
+    words text_029A, 3, 6                 ; 3.1 landed on a rival store closed for now: It's closed~ ♪
+    words text_02AD, 3, 6                 ; 3.2 landed on a rival store closed for now: Kyai~∥｜ ☆
+    words text_02BC, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Bargain, bargain
+    words text_02CF, 0, 5                 ; 4.1 landed on a rival store with lowered prices: Cheap ∴
+    words text_02DC, 0, 5                 ; 4.2 landed on a rival store with lowered prices: We did it ∴
+    words text_02E7, 0, 5                 ; 5.0 landed on its own store / opened a store: Safe for now
+    words text_02FC, 0, 5                 ; 5.1 landed on its own store / opened a store: It's strong ∵
+    words text_030B, 0, 5                 ; 5.2 landed on its own store / opened a store: My own store ∵∵
+    words text_031E, 0, 5                 ; 6.0 did not take the elevator: I'm not so good with elevators
+    words text_033B, 3, 6                 ; 6.1 did not take the elevator: I'll skip it today ☆
+    words text_034C, 1, 7                 ; 6.2 did not take the elevator: Huh? What, what?
+    words text_035B, 3, 6                 ; 7.0 landed on the bank: Ehe ∵ money
+    words text_036C, 3, 6                 ; 7.1 landed on the bank: Thank you very much
+    words text_0381, 3, 6                 ; 7.2 landed on the bank: Ufufu ☆ payday ♪
+    words text_0394, 0, 5                 ; 8.0 took the elevator: Dozing...
+    words text_03A7, 3, 6                 ; 8.1 took the elevator: Ja-ja-ja-ja~∥｜n ∵
+    words text_03C2, 3, 6                 ; 8.2 took the elevator: Okay, next person
+    words text_03CD, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: That's totally a cheat
+    words text_03E6, 1, 7                 ; 9.1 shopping cost a fifth of its money or more: No... not like this...
+    words text_0405, 4, 9                 ; 9.2 shopping cost a fifth of its money or more: Don't bully me so much
+    words text_041C, 3, 6                 ; 10.0 shopping: got the money back: Ahahahaha...
+    words text_042F, 3, 6                 ; 10.1 shopping: got the money back: Thank you for your patronage ☆
+    words text_044E, 3, 6                 ; 10.2 shopping: got the money back: I'm so happy ☆
+    words text_045D, 1, 7                 ; 11.0 shopping: Nooo~∥｜
+    words text_046A, 3, 6                 ; 11.1 shopping: You can't tell what's ahead yet ☆
+    words text_0487, 3, 6                 ; 11.2 shopping: Cheerful ∴
+    words text_048E, 0, 5                 ; 12.0 bought a rival's store: How about it?
+    words text_04A1, 0, 5                 ; 12.1 bought a rival's store: I have to try hard again ∵
+    words text_04B8, 3, 6                 ; 12.2 bought a rival's store: Happy ☆
+    words text_04C3, 4, 9                 ; 13.0 shopped this turn and the last: My money's dwindling~ ≦≦
+    words text_04DC, 1, 7                 ; 13.1 shopped this turn and the last: I want to go somewhere far away ∴
+    words text_04F9, 4, 9                 ; 13.2 shopped this turn and the last: Waa~∥｜ ≦≦
+    words text_050A, 3, 6                 ; 14.0 assets passed half the goal: Half left to go~
+    words text_0521, 3, 6                 ; 14.1 assets passed half the goal: We've reached the midpoint ∵
+    words text_0536, 3, 6                 ; 14.2 assets passed half the goal: Half to go, fight!!
+    words text_054D, 1, 7                 ; 15.0 sold a store: And I didn't want to sell~...
+    words text_0568, 4, 9                 ; 15.1 sold a store: Aa~∥｜ I hate this!!
+    words text_057F, 1, 7                 ; 15.2 sold a store: I want to give up~
+    words text_0594, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I want a store~
+    words text_05A5, 2, 8                 ; 16.1 declined a vacant lot it could not afford: Fine, then!!
+    words text_05B2, 1, 7                 ; 16.2 declined a vacant lot it could not afford: ...My store... ≦≦
+    words text_05C7, 1, 7                 ; 17.0 declined a vacant lot: I wanted to buy a store...
+    words text_05E2, 1, 7                 ; 17.1 declined a vacant lot: Ehehehehe...
+    words text_05F3, 1, 7                 ; 17.2 declined a vacant lot: Oh, I forgot to buy a store
+    words text_060A, 3, 10                ; 18.0 an event card (the default): Who's next~ ☆
+    words text_061B, 3, 10                ; 18.1 an event card (the default): Kyaru-un ☆
+    words text_0628, 3, 10                ; 18.2 an event card (the default): Wobble wobble
+
+text_01E6:
+    string "キラ～イ"                         ; en: I hate it~
+
+text_01EF:
+    string "や～∥｜ん"                        ; en: No~∥｜
+
+text_01FA:
+    string "む～∥｜ん"                        ; en: Mm~∥｜
+
+text_0205:
+    string "ウエストのサイズが気になっちゃう☆"            ; en: I'm worried about my waist size ☆
+
+text_0228:
+    string "みんな、ボコボコにしてあ・げ・る"             ; en: I'll beat you all to a pu-lp
+
+text_0249:
+    string "リンク完了♪"                       ; en: Link complete ♪
+
+text_0256:
+    string "グレードアップだね"                    ; en: A grade up
+
+text_0269:
+    string "お店が合体したネ"                     ; en: The stores merged
+
+text_027A:
+    string "わ～∥｜い"                        ; en: Ya~∥｜y
+
+text_0285:
+    string "お休みバンバンザイ☆"                   ; en: Hooray for days off ☆
+
+text_029A:
+    string "クローズなのぉ～♪"                    ; en: It's closed~ ♪
+
+text_02AD:
+    string "きゃイ～∥｜☆"                      ; en: Kyai~∥｜ ☆
+
+text_02BC:
+    string "バーゲン・バーゲン"                    ; en: Bargain, bargain
+
+text_02CF:
+    string "安上がりネ∴"                       ; en: Cheap ∴
+
+text_02DC:
+    string "やったネ∴"                        ; en: We did it ∴
+
+text_02E7:
+    string "ひとまず安全なのよネ"                   ; en: Safe for now
+
+text_02FC:
+    string "強いのじゃぁ∵"                      ; en: It's strong ∵
+
+text_030B:
+    string "じぶんのおみせ∵∵"                    ; en: My own store ∵∵
+
+text_031E:
+    string "エレベーターってちょっと苦手"               ; en: I'm not so good with elevators
+
+text_033B:
+    string "今日はやめとこ☆"                     ; en: I'll skip it today ☆
+
+text_034C:
+    string "え？なになに？"                      ; en: Huh? What, what?
+
+text_035B:
+    string "えへっ∵お金です"                     ; en: Ehe ∵ money
+
+text_036C:
+    string "ありがとうございます"                   ; en: Thank you very much
+
+text_0381:
+    string "ウフフ☆給料日ィ♪"                    ; en: Ufufu ☆ payday ♪
+
+text_0394:
+    string "うつらうつら・・・"                    ; en: Dozing...
+
+text_03A7:
+    string "ジャジャジャジャ～∥｜ン∵"                ; en: Ja-ja-ja-ja~∥｜n ∵
+
+text_03C2:
+    string "ハイ次の人"                        ; en: Okay, next person
+
+text_03CD:
+    string "まったくインチキじゃない"                 ; en: That's totally a cheat
+
+text_03E6:
+    string "やだよぉ・・・こんなのぉ・・・"              ; en: No... not like this...
+
+text_0405:
+    string "そんなにイジメないでよ"                  ; en: Don't bully me so much
+
+text_041C:
+    string "あははははは・・・"                    ; en: Ahahahaha...
+
+text_042F:
+    string "まいどありがとうございました☆"              ; en: Thank you for your patronage ☆
+
+text_044E:
+    string "うッれしィな☆"                      ; en: I'm so happy ☆
+
+text_045D:
+    string "いや～∥｜ん"                       ; en: Nooo~∥｜
+
+text_046A:
+    string "まだまだ先はわかんないわよ☆"               ; en: You can't tell what's ahead yet ☆
+
+text_0487:
+    string "元気∴"                          ; en: Cheerful ∴
+
+text_048E:
+    string "いかがでしょうか？"                    ; en: How about it?
+
+text_04A1:
+    string "またガンバらなきゃネ∵"                  ; en: I have to try hard again ∵
+
+text_04B8:
+    string "うれしい☆"                        ; en: Happy ☆
+
+text_04C3:
+    string "お金が減っていくぅ～≦≦"                 ; en: My money's dwindling~ ≦≦
+
+text_04DC:
+    string "もうどこか遠くに行きたいな∴"               ; en: I want to go somewhere far away ∴
+
+text_04F9:
+    string "ふえ～∥｜ん≦≦"                     ; en: Waa~∥｜ ≦≦
+
+text_050A:
+    string "のこりあと、半分で～す"                  ; en: Half left to go~
+
+text_0521:
+    string "中間地点に来ました∵"                   ; en: We've reached the midpoint ∵
+
+text_0536:
+    string "あと半分、ファイト！！"                  ; en: Half to go, fight!!
+
+text_054D:
+    string "売りたくないのにィ～・・・"                ; en: And I didn't want to sell~...
+
+text_0568:
+    string "あ～∥｜んもうイヤ！！"                  ; en: Aa~∥｜ I hate this!!
+
+text_057F:
+    string "諦めちゃいたいよぉ～"                   ; en: I want to give up~
+
+text_0594:
+    string "お店ほしいよぉ～"                     ; en: I want a store~
+
+text_05A5:
+    string "いいもん！！"                       ; en: Fine, then!!
+
+text_05B2:
+    string "・・・お店ぇぇぇ≦≦"                   ; en: ...My store... ≦≦
+
+text_05C7:
+    string "お店買いたかったなぁ・・・"                ; en: I wanted to buy a store...
+
+text_05E2:
+    string "エヘヘヘヘ・・・"                     ; en: Ehehehehe...
+
+text_05F3:
+    string "あ、お店買うの忘れたぁ"                  ; en: Oh, I forgot to buy a store
+
+text_060A:
+    string "次はだれじゃ～☆"                     ; en: Who's next~ ☆
+
+text_061B:
+    string "きゃる～ん☆"                       ; en: Kyaru-un ☆
+
+text_0628:
+    string "プルンプルン"                       ; en: Wobble wobble
+    bytes 0x00, 0x00, 0x00    ; padding

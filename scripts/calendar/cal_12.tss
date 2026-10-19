@@ -1,0 +1,373 @@
+; CAL_12.J entry 0
+;
+; The calendar page of December (Board_Task steps 2100-2120, with event scenes on).
+; The picture: Christmas: reindeer (image 0) prance in a row, a girl in a Santa hat (images 1-2),
+; chicks (images 3-5); snowflakes (image 6) fall at random.
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 2064 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    marker "CAL_12"                       ; a name for the script; costs a frame
+    call clear_vars
+    $v96 = 104
+    $v97 = 0
+    $v98 = 24
+    $v99 = 20480
+    $v9A = -56
+    $v9B = 8192
+    $v9C = -136
+    $v9D = 28672
+    sprite_init 30, image=0, attr=0, x=104, y=240, pri=1
+    sprite_init 31, image=0, attr=0, x=104, y=240, pri=2
+    sprite_init 32, image=0, attr=0, x=104, y=240, pri=3
+    sprite_init 33, image=0, attr=0, x=104, y=240, pri=4
+    sprite_init 34, image=0, attr=FLIP_X, x=104, y=240, pri=4
+    sprite_init 35, image=1, attr=0, x=96, y=32, pri=5
+    sprite_init 36, image=3, attr=0, x=16, y=96, pri=6
+    sprite_animate 35, anim_0785
+    sprite_animate 36, anim_07C5
+    sprite_path 34, path_07E5
+
+L_00B1:
+    sprite_init $vA0, image=6, attr=MIDDLE_CENTER, x=0, y=0, pri=0
+    $vA0 += 1
+    if $vA0 != 23 goto L_00B1
+    $vA0 = 0
+
+L_00D5:
+    call snowball_new
+    $v00 = random 2400
+    $v0B[$v04] = $v00
+    $vA0 += 1
+    if $vA0 != 23 goto L_00D5
+    fade_in 15
+
+L_00FB:
+    $vA0 = 0
+
+L_0101:
+    call snow_fall
+    $vA0 += 1
+    if $vA0 != 23 goto L_0101
+    $vA0 = 0
+
+L_011B:
+    $v04 = $vA0
+    $v04 *= 6
+    $v00 = $v0A[$v04]
+    $v01 = $v0B[$v04]
+    $v02 = $v0E[$v04]
+    $v03 = $v0F[$v04]
+    $v05 = $v0C[$v04]
+    $v00 /= 10
+    $v02 /= 3
+    $v00 += $v02
+    $v01 /= 10
+    sprite_pos $vA0, $v00, $v01
+    sprite_rotate $vA0, 500
+    $v03 += $v05
+    sprite_scale $vA0, $v03, $v03
+    $vA0 += 1
+    if $vA0 != 23 goto L_011B
+    $vA0 = 0
+
+L_0199:
+    call reindeer_prance
+    $vA0 += 1
+    if $vA0 != 4 goto L_0199
+    $v9F += 1
+    wait 1
+    $vA0 = 0
+
+L_01BD:
+    $v04 = $vA0
+    $v04 *= 6
+    $v01 = $v0B[$v04]
+    if $v01 <= 2400 goto L_01DF
+    call snowball_new
+
+L_01DF:
+    $vA0 += 1
+    if $vA0 != 23 goto L_01BD
+    if $v9F == 300 goto L_0203
+    if $any_pressed !& CROSS|0x300 goto L_00FB
+
+L_0203:
+    fade_out 15
+    wait_fade
+    end
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $v0A = 0
+    $v0B = 0
+    $v0C = 0
+    $v0D = 0
+    $v0E = 0
+    $v0F = 0
+    $v10 = 0
+    $v11 = 0
+    $v12 = 0
+    $v13 = 0
+    $v14 = 0
+    $v15 = 0
+    $v16 = 0
+    $v17 = 0
+    $v18 = 0
+    $v19 = 0
+    $v1A = 0
+    $v1B = 0
+    $v1C = 0
+    $v1D = 0
+    $v1E = 0
+    $v1F = 0
+    $v20 = 0
+    $v21 = 0
+    $v22 = 0
+    $v23 = 0
+    $v24 = 0
+    $v25 = 0
+    $v26 = 0
+    $v27 = 0
+    $v28 = 0
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $v8C = 0
+    $v8D = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $v93 = 0
+    $v94 = 0
+    $v95 = 0
+    $v96 = 0
+    $v97 = 0
+    $v98 = 0
+    $v99 = 0
+    $v9A = 0
+    $v9B = 0
+    $v9C = 0
+    $v9D = 0
+    $v9E = 0
+    $v9F = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+snowball_new:
+    ; snowball $vA0 (sprite $vA0): a random x along the top, a random size (150-229, 256 = full)
+    ; and sway angle. Particles are records of 6 variables from $v0A: x and y in tenths of a
+    ; pixel, size, sway angle, sway x, sway y
+    $v01 = 0
+    $v00 = random 3200
+    $v04 = $vA0
+    $v04 *= 6
+    $v0A[$v04] = $v00
+    $v0B[$v04] = $v01
+    $v00 = random 80
+    $v00 += 150
+    $v00 *= 1
+    $v0C[$v04] = $v00
+    sprite_scale $vA0, $v00, $v00
+    $v00 = random 32767
+    $v0D[$v04] = $v00
+    return
+
+snow_fall:
+    ; snowflake $vA0 sways and falls
+    $v04 = $vA0
+    $v04 *= 6
+    $v02 = $v0C[$v04]
+    $v02 /= 8
+    $v03 = $v0D[$v04]
+    $v05 = 10
+    $v05 += $v02
+    step_toward x=0, y=0, distance=$v05, angle=$v03, to_x=$v00, to_y=$v01
+    $v0E[$v04] = $v00
+    $v0F[$v04] = $v01
+    $v00 = random 200
+    $v03 += 200
+    $v03 += $v00
+    if $v03 > 0 goto L_06B3
+    $v03 -= 32767
+
+L_06B3:
+    $v0D[$v04] = $v03
+    $v02 /= 2
+    $v00 = random 3
+    $v00 += 5
+    $v00 += $v02
+    $v01 = $v0B[$v04]
+    $v01 += $v00
+    $v0B[$v04] = $v01
+    return
+
+reindeer_prance:
+    ; reindeer $vA0 (sprite 30 + $vA0) moves up to the right 5 pixels a frame, bobbing, and starts
+    ; again from the left when far off screen
+    $l0 = $vA0
+    $l6 = $vA0
+    $l6 += 30
+    $l0 *= 2
+    $l1 = $v96[$l0]
+    $l3 = $v97[$l0]
+    $l2 = 360
+    $l2 -= $l1
+    step_toward x=0, y=0, distance=8, angle=$l3, to_x=$l4, to_y=$l5
+    $l5 = $l4
+    $l4 += $l1
+    $l5 += $l2
+    sprite_pos $l6, $l4, $l5
+    $l1 += 5
+    $l3 += 1280
+    if $l1 < 1000 goto L_0763
+    $l1 = 136
+
+L_0763:
+    if $l3 >= 0 goto L_0773
+    $l3 -= 32767
+
+L_0773:
+    $v96[$l0] = $l1
+    $v97[$l0] = $l3
+    return
+
+anim_0785:
+    frame 1, time=48, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=80, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=8, flip=0, next=anim_0785
+
+anim_07C5:
+    frame 3, time=6, flip=0, next=NEXT
+    frame 4, time=6, flip=0, next=NEXT
+    frame 5, time=16, flip=0, next=anim_07C5
+
+anim_07DD:
+    frame 0, time=8, flip=FLIP_X, next=END
+
+path_07E5:
+    step speed=0, x=100, y=0, anim=anim_07DD, next=path_07EF  ; wait 100 frames
+
+path_07EF:
+    step speed=10, x=320, y=24, anim=anim_07DD, next=NEXT  ; move to 320, 24, 10 pixels a frame
+    step speed=-1, x=104, y=240, anim=anim_07DD, next=NEXT  ; jump to 104, 240
+    step speed=0, x=150, y=0, anim=anim_07DD, next=path_07EF  ; wait 150 frames
+    bytes 0x00, 0x00, 0x00    ; padding

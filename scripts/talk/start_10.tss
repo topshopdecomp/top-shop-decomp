@@ -1,0 +1,306 @@
+; TALK.J entry 10 (LZSS-packed)
+;
+; What Bro says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnStart_PickScript):
+; 0 the first month
+; 1 assets at 7/8 of the goal
+; 2 last at the start of the round, first now
+; 3 first at the start of the round, last now
+; 4 ahead: a rival store it can't afford
+; 5 ahead: a rival store in a chain of 4
+; 6 ahead: a rival store closed, without goods
+; 7 ahead: its own store without goods
+; 8 the bank on the next square
+; 9 ranked better than at the start of the round
+; 10 ranked worse
+; 11 ahead: a rival store in a chain
+; 12 ahead: a vacant lot
+; 13 ahead: a rival store costing over 1/4 of its money
+; 14 ahead: the bank
+; 15 none of its stores ahead
+; 16 ahead: its own store with free goods slots
+; 17 no direction (after the bank)
+; 18 no direction, on an elevator square
+; 19 none of these
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 1992 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 10, $l2                       ; voice: XA track 10 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01F8, 3, 12                ; 0.0 the first month: What a drag~ but let's do this!
+    words text_0215, 3, 12                ; 0.1 the first month: 'Sup! Nice to meet ya!!
+    words text_022C, 3, 12                ; 0.2 the first month: Let's get started already!
+    words text_0241, 3, 1                 ; 1.0 assets at 7/8 of the goal: Piece of cake! No sweat
+    words text_0258, 3, 1                 ; 1.1 assets at 7/8 of the goal: Seriously, my win is settled!
+    words text_0275, 3, 1                 ; 1.2 assets at 7/8 of the goal: I'll nail it right to the end!
+    words text_0290, 3, 1                 ; 2.0 last at the start of the round, first now: Ain't I awesome!
+    words text_02A5, 3, 1                 ; 2.1 last at the start of the round, first now: Well, this is easy!
+    words text_02BC, 3, 1                 ; 2.2 last at the start of the round, first now: Awesome! Awesome! Awesome!
+    words text_02D5, 4, 4                 ; 3.0 first at the start of the round, last now: Seriously!?
+    words text_02E2, 4, 4                 ; 3.1 first at the start of the round, last now: Gimme a break!
+    words text_02F1, 4, 4                 ; 3.2 first at the start of the round, last now: I'm gonna snap!
+    words text_0304, 4, 4                 ; 4.0 ahead: a rival store it can't afford: You're trying to set me up!!!
+    words text_031D, 1, 2                 ; 4.1 ahead: a rival store it can't afford: This sucks! I'm gonna snap!!
+    words text_033A, 1, 2                 ; 4.2 ahead: a rival store it can't afford: Am I just gonna mope like this!
+    words text_0359, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: What's with that huge store!
+    words text_0372, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: I'll blow right through here!
+    words text_038F, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: It's way too dangerous ahead!
+    words text_03A6, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: I'm invincible!
+    words text_03B5, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Closed? / Don't slack off!
+    words text_03DA, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: Don't mess with a fallen angel!!
+    words text_03EF, 1, 2                 ; 7.0 ahead: its own store without goods: My store's out of stock!
+    words text_0404, 1, 2                 ; 7.1 ahead: its own store without goods: Crap! / My store's out of stock!
+    words text_0425, 1, 2                 ; 7.2 ahead: its own store without goods: My store's so popular it's out of goods!
+    words text_0448, 0, 0                 ; 8.0 the bank on the next square: I'll take the pay I worked for!
+    words text_0463, 0, 0                 ; 8.1 the bank on the next square: Shall I blow it all on payday!
+    words text_047E, 0, 0                 ; 8.2 the bank on the next square: It's payday, what should I do?
+    words text_0499, 3, 1                 ; 9.0 ranked better than at the start of the round: Sorry about this! / My rank went up
+    words text_04C0, 3, 1                 ; 9.1 ranked better than at the start of the round: Ain't I cool!!!
+    words text_04D9, 3, 1                 ; 9.2 ranked better than at the start of the round: I'm on a roll!!
+    words text_04EE, 1, 2                 ; 10.0 ranked worse: Why's my rank dropping!
+    words text_050F, 0, 0                 ; 10.1 ranked worse: I'm off my game!!
+    words text_0522, 1, 2                 ; 10.2 ranked worse: Gimme a break!!
+    words text_0533, 1, 2                 ; 11.0 ahead: a rival store in a chain: Don't make me buy expensive stuff!
+    words text_0552, 1, 2                 ; 11.1 ahead: a rival store in a chain: I'm not shopping, got it!
+    words text_056D, 1, 2                 ; 11.2 ahead: a rival store in a chain: Shall I just move on!
+    words text_0582, 0, 0                 ; 12.0 ahead: a vacant lot: Maybe I'll buy a new store!
+    words text_059B, 0, 0                 ; 12.1 ahead: a vacant lot: I'm the one buying it!
+    words text_05AE, 0, 0                 ; 12.2 ahead: a vacant lot: Maybe I'll buy myself a store!
+    words text_05CB, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I'm not buying expensive goods
+    words text_05E6, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I'll steer clear of places I don't like!
+    words text_0605, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I won't stand for it if they sell expensive stuff!
+    words text_0626, 0, 0                 ; 14.0 ahead: the bank: Let me go to the bank
+    words text_0639, 0, 0                 ; 14.1 ahead: the bank: Can't do anything without money
+    words text_0656, 0, 0                 ; 14.2 ahead: the bank: How far is it to the bank?
+    words text_0671, 2, 3                 ; 15.0 none of its stores ahead: What do you mean I don't have a store?
+    words text_0690, 2, 3                 ; 15.1 none of its stores ahead: I'll pay you back for this someday!
+    words text_06AB, 2, 3                 ; 15.2 none of its stores ahead: I can't take it anymore
+    words text_06BE, 0, 0                 ; 16.0 ahead: its own store with free goods slots: What a drag, restocking?
+    words text_06D3, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Hey! / At least restock the goods
+    words text_06F6, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Am I the one restocking the goods?
+    words text_0713, 0, 0                 ; 17.0 no direction (after the bank): It's obviously this way!
+    words text_072C, 0, 0                 ; 17.1 no direction (after the bank): Nothing to worry about
+    words text_0741, 0, 0                 ; 17.2 no direction (after the bank): Neither one's that different, right?
+    words text_075E, 0, 0                 ; 18.0 no direction, on an elevator square: Let's get moving
+    words text_076B, 0, 0                 ; 18.1 no direction, on an elevator square: Could you use the elevator?
+    words text_0788, 0, 0                 ; 18.2 no direction, on an elevator square: What a drag, I wanna take it easy
+    words text_079B, 3, 10                ; 19.0 none of these: I'm starving~ ∥
+    words text_07AC, 3, 10                ; 19.1 none of these: Me?
+    words text_07B7, 3, 10                ; 19.2 none of these: Iron fist!!
+
+text_01F8:
+    string "だりぃ～けどいっちょやるか！"               ; en: What a drag~ but let's do this!
+
+text_0215:
+    string "チーッス！ヨロシク！！"                  ; en: 'Sup! Nice to meet ya!!
+
+text_022C:
+    string "とっとと始めようゼ！"                   ; en: Let's get started already!
+
+text_0241:
+    string "楽勝じゃん！よゆうッス"                  ; en: Piece of cake! No sweat
+
+text_0258:
+    string "まじで俺の勝ちが決定じゃん！"               ; en: Seriously, my win is settled!
+
+text_0275:
+    string "最後までバシッと決めるよ！"                ; en: I'll nail it right to the end!
+
+text_0290:
+    string "俺ってスゲーじゃん！"                   ; en: Ain't I awesome!
+
+text_02A5:
+    string "まあこんなの楽勝っス！"                  ; en: Well, this is easy!
+
+text_02BC:
+    string "スゴイ！スゴイ！スゴイ！"                 ; en: Awesome! Awesome! Awesome!
+
+text_02D5:
+    string "まじかよっ！"                       ; en: Seriously!?
+
+text_02E2:
+    string "ざけんなよっ！"                      ; en: Gimme a break!
+
+text_02F1:
+    string "ブチきれるよっ俺！"                    ; en: I'm gonna snap!
+
+text_0304:
+    string "俺をはめる気だなっ！！！"                 ; en: You're trying to set me up!!!
+
+text_031D:
+    string "まじいよっ！ブチきれるよ！！"               ; en: This sucks! I'm gonna snap!!
+
+text_033A:
+    string "このまましょぼくれんのかよっ！"              ; en: Am I just gonna mope like this!
+
+text_0359:
+    string "デッケェ店はなんだよっ！"                 ; en: What's with that huge store!
+
+text_0372:
+    string "ここは一気に通り抜けるぜっ！"               ; en: I'll blow right through here!
+
+text_038F:
+    string "この先危険すぎるぜっ！"                  ; en: It's way too dangerous ahead!
+
+text_03A6:
+    string "俺は無敵じゃ！"                      ; en: I'm invincible!
+
+text_03B5:
+    string "クローズ？%Kたるんでんじゃねえよっ！"          ; en: Closed? / Don't slack off!
+
+text_03DA:
+    string "堕天使をナメるな！！"                   ; en: Don't mess with a fallen angel!!
+
+text_03EF:
+    string "俺の店が品切れだっ！"                   ; en: My store's out of stock!
+
+text_0404:
+    string "やべっ！%K俺の店が品切れ中だっ！"            ; en: Crap! / My store's out of stock!
+
+text_0425:
+    string "俺の店人気があって商品がないぜっ！"            ; en: My store's so popular it's out of goods!
+
+text_0448:
+    string "働いた分の給料は頂くかっ！"                ; en: I'll take the pay I worked for!
+
+text_0463:
+    string "給料日にパーッといくかっ！"                ; en: Shall I blow it all on payday!
+
+text_047E:
+    string "給料日だぜっ何しよっかな？"                ; en: It's payday, what should I do?
+
+text_0499:
+    string "なんか悪り～な！%K順位があがっちまって"         ; en: Sorry about this! / My rank went up
+
+text_04C0:
+    string "俺ってクールだろっ！！！"                 ; en: Ain't I cool!!!
+
+text_04D9:
+    string "俺調子いいじゃん！！"                   ; en: I'm on a roll!!
+
+text_04EE:
+    string "なんで俺の順位がさがってんだよ！"             ; en: Why's my rank dropping!
+
+text_050F:
+    string "調子悪り～よっ！！"                    ; en: I'm off my game!!
+
+text_0522:
+    string "ざけんなよっ！！"                     ; en: Gimme a break!!
+
+text_0533:
+    string "俺に高いものを買わせるなよっ！"              ; en: Don't make me buy expensive stuff!
+
+text_0552:
+    string "俺は買い物しないからなっ！"                ; en: I'm not shopping, got it!
+
+text_056D:
+    string "さっさと進むかなっ！"                   ; en: Shall I just move on!
+
+text_0582:
+    string "新しい店でも買うかなっ！"                 ; en: Maybe I'll buy a new store!
+
+text_059B:
+    string "俺が買うからなっ！"                    ; en: I'm the one buying it!
+
+text_05AE:
+    string "ちっと店でも買ってやるかっ！"               ; en: Maybe I'll buy myself a store!
+
+text_05CB:
+    string "高い商品は買わないからなっ"                ; en: I'm not buying expensive goods
+
+text_05E6:
+    string "気に入らない所は避けてくぜっ！"              ; en: I'll steer clear of places I don't like!
+
+text_0605:
+    string "高いもの売ってたら承知しないぞ！"             ; en: I won't stand for it if they sell expensive stuff!
+
+text_0626:
+    string "銀行に行かせろよっ"                    ; en: Let me go to the bank
+
+text_0639:
+    string "金がないとなんも出来ないぜっ"               ; en: Can't do anything without money
+
+text_0656:
+    string "銀行までどのくらいあんだ？"                ; en: How far is it to the bank?
+
+text_0671:
+    string "俺の店がないってど～ゆ～こと？"              ; en: What do you mean I don't have a store?
+
+text_0690:
+    string "この借りはいつか返すぜっ！"                ; en: I'll pay you back for this someday!
+
+text_06AB:
+    string "も～やってらんねー"                    ; en: I can't take it anymore
+
+text_06BE:
+    string "だり～な、補充かよぉ"                   ; en: What a drag, restocking?
+
+text_06D3:
+    string "おい！%K品物の補充くらいやっとけよ"           ; en: Hey! / At least restock the goods
+
+text_06F6:
+    string "商品の補充って俺がやんのか？"               ; en: Am I the one restocking the goods?
+
+text_0713:
+    string "こっちに決まってんだろ！"                 ; en: It's obviously this way!
+
+text_072C:
+    string "悩む必要なんかねーな"                   ; en: Nothing to worry about
+
+text_0741:
+    string "どっちもそんな差がね～だろ？"               ; en: Neither one's that different, right?
+
+text_075E:
+    string "早く進もーぜ"                       ; en: Let's get moving
+
+text_076B:
+    string "エレベーターって使えたのか？"               ; en: Could you use the elevator?
+
+text_0788:
+    string "だり～、楽して～ぜ"                    ; en: What a drag, I wanna take it easy
+
+text_079B:
+    string "はらへったぁ～∥"                     ; en: I'm starving~ ∥
+
+text_07AC:
+    string "オレかぁ？"                        ; en: Me?
+
+text_07B7:
+    string "鉄のコブシ！！"                      ; en: Iron fist!!
+    words 0    ; padding

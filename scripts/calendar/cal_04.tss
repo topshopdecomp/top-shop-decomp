@@ -1,0 +1,451 @@
+; CAL_04.J entry 0
+;
+; The calendar page of April (Board_Task steps 2100-2120, with event scenes on).
+; The picture: spring: a sleeping character and the cactus waking up (images 0-6); butterflies
+; (images 12-17) flutter across in three flights.
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 2140 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    call clear_vars
+    sprite_init 30, image=0, attr=0, x=16, y=30, pri=1
+    sprite_init 31, image=3, attr=0, x=245, y=55, pri=2
+    sprite_init 32, image=6, attr=0, x=111, y=184, pri=3
+    sprite_animate 30, anim_07AA
+    sprite_animate 31, anim_07CA
+    sprite_animate 32, anim_07EA
+    $l0 = 0
+
+L_0046:
+    switch $l0: L_0052, L_006A, L_0082
+
+L_0052:
+    ; $l0 = 0
+    sprite_init $vA0, image=12, attr=MIDDLE_CENTER, x=0, y=0, pri=0
+    sprite_animate $vA0, anim_07FA
+    goto L_009A
+
+L_006A:
+    ; $l0 = 1
+    sprite_init $vA0, image=14, attr=MIDDLE_CENTER, x=-200, y=200, pri=0
+    sprite_animate $vA0, anim_081A
+    goto L_009A
+
+L_0082:
+    ; $l0 = 2
+    sprite_init $vA0, image=16, attr=MIDDLE_CENTER, x=-400, y=400, pri=0
+    sprite_animate $vA0, anim_083A
+    goto L_009A
+
+L_009A:
+    $l0 += 1
+    if $l0 != 3 goto L_00B0
+    $l0 = 0
+
+L_00B0:
+    $vA0 += 1
+    if $vA0 != 20 goto L_0046
+    $vA0 = 0
+
+L_00C6:
+    call butterfly_new
+    $vA0 += 1
+    if $vA0 != 20 goto L_00C6
+    fade_in 15
+
+L_00DE:
+    $vA0 = 0
+
+L_00E4:
+    call butterfly_fly
+    $vA0 += 1
+    if $vA0 != 20 goto L_00E4
+    $vA0 = 0
+
+L_00FE:
+    $v04 = $vA0
+    $v04 *= 5
+    $v00 = $v0A[$v04]
+    $v01 = $v0B[$v04]
+    $v00 /= 10
+    $v01 /= 10
+    sprite_pos $vA0, $v00, $v01
+    $vA0 += 1
+    if $vA0 != 20 goto L_00FE
+    $v9F += 1
+    wait 1
+    $vA0 = 0
+
+L_014E:
+    $vA0 += 1
+    if $vA0 != 20 goto L_014E
+    if $v9F == 300 goto L_0172
+    if $any_pressed !& CROSS|0x300 goto L_00DE
+
+L_0172:
+    fade_out 15
+    wait_fade
+    end
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $v0A = 0
+    $v0B = 0
+    $v0C = 0
+    $v0D = 0
+    $v0E = 0
+    $v0F = 0
+    $v10 = 0
+    $v11 = 0
+    $v12 = 0
+    $v13 = 0
+    $v14 = 0
+    $v15 = 0
+    $v16 = 0
+    $v17 = 0
+    $v18 = 0
+    $v19 = 0
+    $v1A = 0
+    $v1B = 0
+    $v1C = 0
+    $v1D = 0
+    $v1E = 0
+    $v1F = 0
+    $v20 = 0
+    $v21 = 0
+    $v22 = 0
+    $v23 = 0
+    $v24 = 0
+    $v25 = 0
+    $v26 = 0
+    $v27 = 0
+    $v28 = 0
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $v8C = 0
+    $v8D = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $v93 = 0
+    $v94 = 0
+    $v95 = 0
+    $v96 = 0
+    $v97 = 0
+    $v98 = 0
+    $v99 = 0
+    $v9A = 0
+    $v9B = 0
+    $v9C = 0
+    $v9D = 0
+    $v9E = 0
+    $v9F = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+butterfly_new:
+    ; butterfly $vA0: a random place, size, wing state and heading (records of 5 from $v0A)
+    $v00 = random 3200
+    $v01 = random 2000
+    $v04 = $vA0
+    $v04 *= 5
+    $v0A[$v04] = $v00
+    $v0B[$v04] = $v01
+    $v00 = random 50
+    $v0C[$v04] = $v00
+    $v00 += 100
+    $v00 *= 1
+    sprite_scale $vA0, $v00, $v00
+    $v00 = random 2
+    $v0D[$v04] = $v00
+    $v00 = random 32767
+    $v0E[$v04] = $v00
+    return
+
+butterfly_fly:
+    ; butterfly $vA0 changes its wing animation one frame in 100 (one of three colors by $vA0 % 3)
+    ; and flutters along, weaving up and down
+    $v04 = $vA0
+    $v04 *= 5
+    $v03 = $v0D[$v04]
+    $v00 = random 100
+    $l0 = $vA0
+    $l0 %= 3
+    if $v00 != 0 goto L_0668
+    if $v03 == 1 goto L_0630
+    $v03 = 1
+    switch $l0: L_060E, L_0618, L_0622
+
+L_060E:
+    ; $l0 = 0
+    sprite_animate $vA0, anim_07FA
+    goto L_062C
+
+L_0618:
+    ; $l0 = 1
+    sprite_animate $vA0, anim_081A
+    goto L_062C
+
+L_0622:
+    ; $l0 = 2
+    sprite_animate $vA0, anim_083A
+    goto L_062C
+
+L_062C:
+    goto L_0660
+
+L_0630:
+    $v03 = 0
+    switch $l0: L_0642, L_064C, L_0656
+
+L_0642:
+    ; $l0 = 0
+    sprite_animate $vA0, anim_080A
+    goto L_0660
+
+L_064C:
+    ; $l0 = 1
+    sprite_animate $vA0, anim_082A
+    goto L_0660
+
+L_0656:
+    ; $l0 = 2
+    sprite_animate $vA0, anim_084A
+    goto L_0660
+
+L_0660:
+    $v0D[$v04] = $v03
+
+L_0668:
+    $v00 = $v0A[$v04]
+    $v01 = $v0B[$v04]
+    $v02 = $v0C[$v04]
+    $v05 = $v0E[$v04]
+    $v02 /= 3
+    $v06 = $v05
+    $v06 += 16383
+    $v07 = $v02
+    $v07 += 50
+    step_toward x=0, y=$v01, distance=$v07, angle=$v06, to_x=$v08, to_y=$v01
+    $v08 = random 1000
+    $v05 += 1000
+    $v05 += $v08
+    if $v05 >= 0 goto L_06D6
+    $v05 -= 32767
+
+L_06D6:
+    step_toward x=0, y=$v01, distance=$v07, angle=$v05, to_x=$v08, to_y=$v01
+    $v08 = random 20
+    $v08 -= 10
+    $v01 += $v08
+    $v01 += 2
+    $v0B[$v04] = $v01
+    $v0E[$v04] = $v05
+    $v01 = random 10
+    $v01 += $v02
+    if $v03 == 1 goto L_072C
+    $v00 += $v01
+    goto L_0732
+
+L_072C:
+    $v00 -= $v01
+
+L_0732:
+    $v0A[$v04] = $v00
+    if $v00 < 0 goto L_0750
+    if $v00 > 3200 goto L_077C
+    return
+
+L_0750:
+    $v0D[$v04] = 0
+    switch $l0: L_0764, L_076C, L_0774
+
+L_0764:
+    ; $l0 = 0
+    sprite_animate $vA0, anim_080A
+    return
+
+L_076C:
+    ; $l0 = 1
+    sprite_animate $vA0, anim_082A
+    return
+
+L_0774:
+    ; $l0 = 2
+    sprite_animate $vA0, anim_084A
+    return
+
+L_077C:
+    $v0D[$v04] = 1
+    switch $l0: L_0792, L_079A, L_07A2
+    end
+
+L_0792:
+    ; $l0 = 0
+    sprite_animate $vA0, anim_07FA
+    return
+
+L_079A:
+    ; $l0 = 1
+    sprite_animate $vA0, anim_081A
+    return
+
+L_07A2:
+    ; $l0 = 2
+    sprite_animate $vA0, anim_083A
+    return
+
+anim_07AA:
+    frame 0, time=40, flip=0, next=NEXT
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=16, flip=0, next=NEXT
+    frame 1, time=4, flip=0, next=anim_07AA
+
+anim_07CA:
+    frame 3, time=8, flip=0, next=NEXT
+    frame 4, time=4, flip=0, next=NEXT
+    frame 5, time=8, flip=0, next=NEXT
+    frame 4, time=2, flip=0, next=anim_07CA
+
+anim_07EA:
+    frame 6, time=4, flip=0, next=NEXT
+    frame 7, time=4, flip=0, next=anim_07EA
+
+anim_07FA:
+    frame 12, time=4, flip=0, next=NEXT
+    frame 13, time=4, flip=0, next=anim_07FA
+
+anim_080A:
+    frame 12, time=4, flip=FLIP_X, next=NEXT
+    frame 13, time=4, flip=FLIP_X, next=anim_080A
+
+anim_081A:
+    frame 14, time=4, flip=FLIP_X, next=NEXT
+    frame 15, time=4, flip=FLIP_X, next=anim_081A
+
+anim_082A:
+    frame 14, time=4, flip=0, next=NEXT
+    frame 15, time=4, flip=0, next=anim_082A
+
+anim_083A:
+    frame 16, time=4, flip=0, next=NEXT
+    frame 17, time=4, flip=0, next=anim_083A
+
+anim_084A:
+    frame 16, time=4, flip=FLIP_X, next=NEXT
+    frame 17, time=4, flip=FLIP_X, next=anim_084A
+    words 0    ; padding

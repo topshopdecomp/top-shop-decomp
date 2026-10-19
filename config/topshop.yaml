@@ -1,0 +1,114 @@
+# splat config for Board Game - Top Shop (USA), SLUS_013.33
+# Layout derived in docs/overview.md (sections) and docs/build.md.
+name: Board Game - Top Shop (USA)
+sha1: 90046482ff47ccf255ef0d9292fdaf354edddfcd
+options:
+  basename: topshop
+  base_path: ..
+  target_path: disc/SLUS_013.33
+  elf_path: build/topshop.elf
+  platform: psx
+  compiler: GCC
+
+  build_path: build
+  asm_path: asm
+  src_path: src
+  asset_path: assets
+  ld_script_path: build/topshop.ld
+  symbol_addrs_path:
+    - config/symbol_addrs.txt
+    - config/symbol_addrs_ptrs.txt     # pointer targets found by tools/audit_shift.py
+    - config/symbol_addrs_c.txt        # data addresses the C refers to (make split generates it)
+    - config/symbol_overrides.txt      # hand-maintained
+  reloc_addrs_path:
+    - config/reloc_addrs.txt
+  undefined_funcs_auto_path: config/undefined_funcs_auto.txt
+  undefined_syms_auto_path: config/undefined_syms_auto.txt
+  create_undefined_funcs_auto: true
+  create_undefined_syms_auto: true
+
+  gp_value: 0x800B1E74
+  global_vram_start: 0x80010000
+  global_vram_end: 0x80200000
+  section_order: [".rodata", ".text", ".data", ".sdata", ".bss"]
+  ld_bss_is_noload: true
+  subalign: 4                    # original sections are only word-aligned (.text at 0x800196E8)
+  ld_align_section_vram_end: false
+  ld_align_segment_vram_end: false
+
+  # the C sources are organised by subsystem (config/c_files.txt), not as the original's
+  # files named below: splat must not write stubs for those
+  create_c_files: false
+  find_file_boundaries: false
+  migrate_rodata_to_functions: true
+  use_legacy_include_asm: false
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  generate_asm_macros_files: true
+  o_as_suffix: true
+  disasm_unknown: true
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: header
+    type: header
+    start: 0x0
+
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80010000
+    bss_size: 0x6D038            # 0x800B2398 .. 0x8011F3D0 (cleared by start)
+    subsegments:
+      - [0x800, .rodata, data]           # 0x80010000 the game's read-only data: src/data.c (string literals of all C files)
+      - [0x96F8, rodata, sdk_rodata]     # 0x80018EF8 PsyQ library read-only data
+      # game code: the original's split of the game code. The C sources are organised
+      # differently (by subsystem): the build links the files of config/c_files.txt in place
+      # of these (tools/ldobjects.py), so the names below are only the original's layout.
+      - [0x9EE8,  c,   sys]             # 0x800196E8 Sys_VSyncCallback, Sys_Init, Sys_EndFrame
+      - [0xA970,  c,   main]             # 0x8001A170 main
+      - [0xAAFC,  c,   frame]            # 0x8001A2FC Gfx_QueueClear, Gfx_SetDrawArea, Debug_DrawBox
+      - [0xB0A8,  c,   lzss]             # 0x8001A8A8 Lzss_Decompress
+      - [0xB1F0,  c,   pad]              # 0x8001A9F0 Pad_Init .. Pad_UpdatePlayers
+      - [0xB524,  c,   card]             # 0x8001AD24 Card_Info .. Card_Clear, Mode10_Stub
+      - [0xD158,  c,   fileio]           # 0x8001C958 File_ReadAsync .. SecHeap_Init
+      - [0xE124,  c,   text]             # 0x8001D924 font glyph cache, text drawing, tile maps
+      - [0x14764, c,   task]             # 0x80023F64 Task_*
+      - [0x155E0, c,   gfx]              # 0x80024DE0 Sprite_LoadSet .. Sprite_DrawAligned
+      - [0x1B82C, c,   sound]            # 0x8002B02C sprite helpers, Bgm_*
+      - [0x1C6D8, c,   anim]             # 0x8002BED8 character animation, menus
+      - [0x26DE0, c,   game]             # 0x800365E0 Game_InitDefaults, fonts
+      - [0x2771C, c,   newgame]          # 0x80036F1C NewGame_Task (mode 5)
+      - [0x316B0, c,   title]            # 0x80040EB0 Title_Task (mode 2)
+      - [0x31C64, c,   logo]             # 0x80041464 Logo_Task
+      - [0x3211C, c,   titlemenu]        # 0x8004191C TitleMenu_Task, title menu effects
+      - [0x3323C, c,   mode]             # 0x80042A3C Mode_CreateSubTasks, sub-task helpers
+      - [0x33AF0, c,   board]            # 0x800432F0 Board_Task .. Board_PhaseEndTurn
+      - [0x385C0, c,   boardload]        # 0x80047DC0 Board_CreateTasks, season graphics, background
+      - [0x3A88C, c,   boardui]          # 0x8004A08C board drawing, HUD, shop-open task
+      - [0x44C10, c,   dice]             # 0x80054410 Move_Task, Dice_Task
+      - [0x4622C, c,   fade]             # 0x80055A2C Fade_*
+      - [0x46DC8, c,   msgtask]          # 0x800565C8 Msg_Task, MsgChoice_Task
+      - [0x4730C, c,   store]            # 0x80056B0C store windows: shopping, buying in, shop view
+      - [0x51E58, c,   menus]            # 0x80061658 StealItem_Task, TurnOptions_Task, SavePrompt_Task
+      - [0x55794, c,   msg]              # 0x80064F94 Msg_Show, Msg_AskYesNo
+      - [0x55DA0, c,   menus2]           # 0x800655A0 status screen and other menus
+      - [0x5B4D4, c,   turnmenu]         # 0x8006ACD4 TurnMenu_Task, event cards
+      - [0x6516C, c,   ending]           # 0x8007496C StageClear_Task, Ending_Task, StaffRoll_Task
+      - [0x66C90, c,   player]           # 0x80076490 player assets, board cells, routes
+      - [0x6BAA8, c,   calendar]         # 0x8007B2A8 Calendar_Advance, camera focus
+      - [0x6C924, c,   scene]            # 0x8007C124 script dispatcher and scene drawing
+      - [0x74334, c,   script]           # 0x80083B34 EventScript_Task
+      - [0x764B4, c,   cpu]           # 0x80085CB4 CPU players' decisions, picking events and talk scripts
+      - [0x7E3FC, asm, sdk]              # 0x8008DBFC __main, start, PsyQ libraries
+      - [0x95ED0, .data, data]           # 0x800A56D0 the game's tables: src/data.c
+      - [0x9E62C, data, sdk_data]        # 0x800ADE2C PsyQ library data
+      - [0xA2674, .sdata, data]          # 0x800B1E74 (= $gp) small game data, now in src/data.c
+      - { start: 0xA2B98, type: .bss, vram: 0x800B2398, name: bss }      # the game's variables: src/bss.c
+      - { start: 0xA2B98, type: bss, vram: 0x80117EB0, name: sdk_bss }  # PsyQ library variables
+
+  - [0xA3000]

@@ -1,0 +1,49 @@
+; CAL_05.J entry 0
+;
+; The calendar page of May (Board_Task steps 2100-2120, with event scenes on).
+; The picture: carp streamers (koinobori) for Children's Day: the cactus in its pot flies as a
+; streamer (images 0-3), with streamers (images 4-7) and wind wheels (images 8-9) turning.
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 204 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    sprite_init 0, image=0, attr=0, x=128, y=96, pri=0
+    sprite_init 1, image=4, attr=0, x=48, y=48, pri=1
+    sprite_init 2, image=6, attr=0, x=80, y=176, pri=2
+    sprite_init 3, image=8, attr=0, x=288, y=16, pri=3
+    sprite_animate 0, anim_007A
+    sprite_animate 1, anim_009A
+    sprite_animate 2, anim_00AA
+    sprite_animate 3, anim_00BA
+    fade_in 15
+
+L_0054:
+    $v9F += 1
+    wait 1
+    if $v9F == 300 goto L_0072
+    if $any_pressed !& CROSS|0x300 goto L_0054
+
+L_0072:
+    fade_out 15
+    wait_fade
+    end
+
+anim_007A:
+    frame 0, time=6, flip=0, next=NEXT
+    frame 1, time=6, flip=0, next=NEXT
+    frame 2, time=6, flip=0, next=NEXT
+    frame 3, time=6, flip=0, next=anim_007A
+
+anim_009A:
+    frame 4, time=10, flip=0, next=NEXT
+    frame 5, time=10, flip=0, next=anim_009A
+
+anim_00AA:
+    frame 6, time=10, flip=0, next=NEXT
+    frame 7, time=10, flip=0, next=anim_00AA
+
+anim_00BA:
+    frame 8, time=6, flip=0, next=NEXT
+    frame 9, time=6, flip=0, next=anim_00BA
+    words 0    ; padding

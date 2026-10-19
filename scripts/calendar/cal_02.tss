@@ -1,0 +1,355 @@
+; CAL_02.J entry 0
+;
+; The calendar page of February (Board_Task steps 2100-2120, with event scenes on).
+; The picture: a snowman (images 0-8) on the page; eight snowballs (image 13) drift about at
+; random; a small snowman head (image 9) rolls in from the right and back, spinning.
+; It fades in over 15 frames, plays for 300 frames or until anyone presses cross, and
+; fades out.
+;
+; 1912 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    call clear_vars
+    sprite_init 30, image=0, attr=0, x=192, y=80, pri=2
+    sprite_init 31, image=3, attr=0, x=64, y=32, pri=3
+    sprite_init 32, image=5, attr=0, x=48, y=112, pri=4
+    sprite_init 33, image=6, attr=0, x=96, y=64, pri=5
+    sprite_init 34, image=9, attr=MIDDLE_CENTER, x=520, y=148, pri=6
+    sprite_animate 30, anim_06FA
+    sprite_animate 31, anim_071A
+    sprite_animate 33, anim_073A
+
+L_005C:
+    sprite_init $vA0, image=13, attr=MIDDLE_CENTER, x=0, y=0, pri=1
+    $vA0 += 1
+    if $vA0 != 8 goto L_005C
+    $vA0 = 0
+
+L_0080:
+    call snowball_new
+    $v00 = random 2400
+    $v0B[$v04] = $v00
+    $vA0 += 1
+    if $vA0 != 8 goto L_0080
+    fade_in 15
+
+L_00A6:
+    $vA0 = 0
+
+L_00AC:
+    call snowball_fall
+    $vA0 += 1
+    if $vA0 != 8 goto L_00AC
+    $vA0 = 0
+
+L_00C6:
+    $v04 = $vA0
+    $v04 *= 6
+    $v00 = $v0A[$v04]
+    $v01 = $v0B[$v04]
+    $v02 = $v0E[$v04]
+    $v03 = $v0F[$v04]
+    $v05 = $v0C[$v04]
+    $v00 /= 10
+    $v02 /= 3
+    $v00 += $v02
+    $v01 /= 10
+    sprite_pos $vA0, $v00, $v01
+    $v03 += $v05
+    $v03 /= 2
+    sprite_scale $vA0, $v03, $v03
+    $vA0 += 1
+    if $vA0 != 8 goto L_00C6
+    $v9F += 1
+    sprite_get_pos 34, $v00, $v01
+    if $v9E != 0 goto L_018E
+    sprite_move_by 34, -5, 0
+    sprite_rotate 34, 2048
+    if $v00 > -200 goto L_01C2
+    sprite_init 34, image=9, attr=MIDDLE_CENTER, x=-200, y=220, pri=0
+    sprite_scale 34, 1024, 1024
+    $v9E = 1
+    goto L_01C2
+
+L_018E:
+    sprite_move_by 34, 15, 0
+    sprite_rotate 34, -2048
+    if $v00 < 520 goto L_01C2
+    sprite_init 34, image=9, attr=MIDDLE_CENTER, x=520, y=148, pri=6
+    sprite_scale 34, 256, 256
+    $v9E = 0
+
+L_01C2:
+    wait 1
+    $vA0 = 0
+
+L_01CC:
+    $v04 = $vA0
+    $v04 *= 6
+    $v01 = $v0B[$v04]
+    if $v01 <= 3400 goto L_01EE
+    call snowball_new
+
+L_01EE:
+    $vA0 += 1
+    if $vA0 != 8 goto L_01CC
+    if $v9F == 300 goto L_0212
+    if $any_pressed !& CROSS|0x300 goto L_00A6
+
+L_0212:
+    fade_out 15
+    wait_fade
+    end
+
+clear_vars:
+    ; variables 0x00-0xA4 = 0
+    $v00 = 0
+    $v01 = 0
+    $v02 = 0
+    $v03 = 0
+    $v04 = 0
+    $v05 = 0
+    $v06 = 0
+    $v07 = 0
+    $v08 = 0
+    $v09 = 0
+    $v0A = 0
+    $v0B = 0
+    $v0C = 0
+    $v0D = 0
+    $v0E = 0
+    $v0F = 0
+    $v10 = 0
+    $v11 = 0
+    $v12 = 0
+    $v13 = 0
+    $v14 = 0
+    $v15 = 0
+    $v16 = 0
+    $v17 = 0
+    $v18 = 0
+    $v19 = 0
+    $v1A = 0
+    $v1B = 0
+    $v1C = 0
+    $v1D = 0
+    $v1E = 0
+    $v1F = 0
+    $v20 = 0
+    $v21 = 0
+    $v22 = 0
+    $v23 = 0
+    $v24 = 0
+    $v25 = 0
+    $v26 = 0
+    $v27 = 0
+    $v28 = 0
+    $v29 = 0
+    $v2A = 0
+    $v2B = 0
+    $v2C = 0
+    $v2D = 0
+    $v2E = 0
+    $v2F = 0
+    $v30 = 0
+    $v31 = 0
+    $v32 = 0
+    $v33 = 0
+    $v34 = 0
+    $v35 = 0
+    $v36 = 0
+    $v37 = 0
+    $v38 = 0
+    $v39 = 0
+    $v3A = 0
+    $v3B = 0
+    $v3C = 0
+    $v3D = 0
+    $v3E = 0
+    $v3F = 0
+    $v40 = 0
+    $v41 = 0
+    $v42 = 0
+    $v43 = 0
+    $v44 = 0
+    $v45 = 0
+    $v46 = 0
+    $v47 = 0
+    $v48 = 0
+    $v49 = 0
+    $v4A = 0
+    $v4B = 0
+    $v4C = 0
+    $v4D = 0
+    $v4E = 0
+    $v4F = 0
+    $v50 = 0
+    $v51 = 0
+    $v52 = 0
+    $v53 = 0
+    $v54 = 0
+    $v55 = 0
+    $v56 = 0
+    $v57 = 0
+    $v58 = 0
+    $v59 = 0
+    $v5A = 0
+    $v5B = 0
+    $v5C = 0
+    $v5D = 0
+    $v5E = 0
+    $v5F = 0
+    $v60 = 0
+    $v61 = 0
+    $v62 = 0
+    $v63 = 0
+    $v64 = 0
+    $v65 = 0
+    $v66 = 0
+    $v67 = 0
+    $v68 = 0
+    $v69 = 0
+    $v6A = 0
+    $v6B = 0
+    $v6C = 0
+    $v6D = 0
+    $v6E = 0
+    $v6F = 0
+    $v70 = 0
+    $v71 = 0
+    $v72 = 0
+    $v73 = 0
+    $v74 = 0
+    $v75 = 0
+    $v76 = 0
+    $v77 = 0
+    $v78 = 0
+    $v79 = 0
+    $v7A = 0
+    $v7B = 0
+    $v7C = 0
+    $v7D = 0
+    $v7E = 0
+    $v7F = 0
+    $v80 = 0
+    $v81 = 0
+    $v82 = 0
+    $v83 = 0
+    $v84 = 0
+    $v85 = 0
+    $v86 = 0
+    $v87 = 0
+    $v88 = 0
+    $v89 = 0
+    $v8A = 0
+    $v8B = 0
+    $v8C = 0
+    $v8D = 0
+    $v8E = 0
+    $v8F = 0
+    $v90 = 0
+    $v91 = 0
+    $v92 = 0
+    $v93 = 0
+    $v94 = 0
+    $v95 = 0
+    $v96 = 0
+    $v97 = 0
+    $v98 = 0
+    $v99 = 0
+    $v9A = 0
+    $v9B = 0
+    $v9C = 0
+    $v9D = 0
+    $v9E = 0
+    $v9F = 0
+    $vA0 = 0
+    $vA1 = 0
+    $vA2 = 0
+    $vA3 = 0
+    $vA4 = 0
+    return
+
+snowball_new:
+    ; snowball $vA0 (sprite $vA0): a random x along the top, a random size (150-229, 256 = full)
+    ; and sway angle. Particles are records of 6 variables from $v0A: x and y in tenths of a
+    ; pixel, size, sway angle, sway x, sway y
+    $v01 = 0
+    $v00 = random 3200
+    $v04 = $vA0
+    $v04 *= 6
+    $v0A[$v04] = $v00
+    $v0B[$v04] = $v01
+    $v00 = random 80
+    $v00 += 150
+    $v00 *= 1
+    $v0C[$v04] = $v00
+    sprite_scale $vA0, $v00, $v00
+    $v00 = random 32767
+    $v0D[$v04] = $v00
+    return
+
+snowball_fall:
+    ; snowball $vA0 sways (wider for bigger ones) and falls 5-9 + size/16 tenths of a pixel
+    $v04 = $vA0
+    $v04 *= 6
+    $v02 = $v0C[$v04]
+    $v02 /= 8
+    $v03 = $v0D[$v04]
+    $v05 = 10
+    $v05 += $v02
+    step_toward x=0, y=0, distance=$v05, angle=$v03, to_x=$v00, to_y=$v01
+    $v0E[$v04] = $v00
+    $v0F[$v04] = $v01
+    $v00 = random 200
+    $v03 += 200
+    $v03 += $v00
+    if $v03 > 0 goto L_06C2
+    $v03 -= 32767
+
+L_06C2:
+    $v0D[$v04] = $v03
+    $v00 = random 5
+    $v00 += 5
+    $v02 /= 2
+    $v00 += $v02
+    $v01 = $v0B[$v04]
+    $v01 += $v00
+    $v0B[$v04] = $v01
+    return
+
+anim_06FA:
+    frame 0, time=60, flip=0, next=anim_0702
+
+anim_0702:
+    frame 1, time=8, flip=0, next=NEXT
+    frame 2, time=16, flip=0, next=NEXT
+    frame 0, time=66, flip=0, next=anim_0702
+
+anim_071A:
+    frame 3, time=60, flip=0, next=anim_0722
+
+anim_0722:
+    frame 4, time=20, flip=0, next=NEXT
+    frame 3, time=8, flip=0, next=NEXT
+    frame 3, time=62, flip=0, next=anim_0722
+
+anim_073A:
+    frame 6, time=60, flip=0, next=anim_0742
+
+anim_0742:
+    frame 7, time=20, flip=0, next=NEXT
+    frame 8, time=8, flip=0, next=NEXT
+    frame 6, time=62, flip=0, next=anim_0742
+
+anim_075A:
+    ; (nothing names this)
+    frame 9, time=8, flip=0, next=END
+
+path_0762:
+    ; (nothing names this)
+    step speed=5, x=-40, y=152, anim=anim_075A, next=END  ; move to -40, 152, 5 pixels a frame
+
+path_076C:
+    ; (nothing names this)
+    step speed=5, x=360, y=152, anim=anim_075A, next=END  ; move to 360, 152, 5 pixels a frame
+    words 0    ; padding

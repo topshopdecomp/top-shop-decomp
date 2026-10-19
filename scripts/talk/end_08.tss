@@ -1,0 +1,293 @@
+; TALK.J entry 24 (LZSS-packed)
+;
+; What Chat says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
+; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
+; $entry (TurnEnd_PickScript, the TURN_* flag):
+; 0 (no comment)
+; 1 a chain of 4
+; 2 a chain of 2 or 3
+; 3 landed on a rival store closed for now
+; 4 landed on a rival store with lowered prices
+; 5 landed on its own store / opened a store
+; 6 did not take the elevator
+; 7 landed on the bank
+; 8 took the elevator
+; 9 shopping cost a fifth of its money or more
+; 10 shopping: got the money back
+; 11 shopping
+; 12 bought a rival's store
+; 13 shopped this turn and the last
+; 14 assets passed half the goal
+; 15 sold a store
+; 16 declined a vacant lot it could not afford
+; 17 declined a vacant lot
+; 18 an event card (the default)
+;
+; The code picks row $entry * 3 + (random 3) of the table: the offset of a text, the
+; portrait's face and the voice's XA channel. It shows the speaker's name and that text in
+; the talk panel, the portrait (face, at a random position), plays the voice, and waits for
+; cross (30 frames at most). Table comments: entry.variant situation: what is said.
+;
+; What it says: "[<player>]"
+;
+; 2164 bytes on the disc. Written by `tools/tss.py extract`; `make scripts` (`tools/tss.py build`)
+; assembles the scripts into the disc's files again, in scripts/build/.
+    $v00 = random 1
+    $v01 = random 3
+    $v02 = random 3
+    talk_speaker PLAYER
+    talk_clear
+    talk "【%NMY】"                         ; [<player>]
+    talk "%K"
+    $v04 = $entry
+    $v04 *= 3
+    $v04 += $v02
+    $v04 *= 3
+    $l0 = table_0090[$v04]
+    $v04 += 1
+    $l1 = table_0090[$v04]
+    $v04 += 1
+    $l2 = table_0090[$v04]
+    talk_data $l0
+    talk_show 0
+    talk_open
+    portrait_show unused=$v00, face=$l1, pos=$v01
+    talk_wait_open
+    play_xa 8, $l2                        ; voice: XA track 8 * 16 + $l2 (g_xaSets[1])
+    yield
+    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    portrait_hide 0
+    talk_close
+    talk_wait_closed
+    end
+
+table_0090:
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Don't step on the monitor, pi-pip
+    words text_01FB, 4, 9                 ; 0.1 (no comment): Getting my show canceled is a shame, pi-pip ≦
+    words text_0218, 1, 7                 ; 0.2 (no comment): Click!! (turns off)
+    words text_0223, 3, 6                 ; 1.0 a chain of 4: Let's run flashy commercials, pi-pip ♪
+    words text_023E, 3, 6                 ; 1.1 a chain of 4: Now everything's ready, pi-pip ♪
+    words text_025D, 3, 6                 ; 1.2 a chain of 4: Maybe I'll put up an ad balloon / to advertise, pi-pip ★
+    words text_028C, 3, 6                 ; 2.0 a chain of 2 or 3: I'll advertise with newspaper inserts, pi-pip
+    words text_02AB, 0, 5                 ; 2.1 a chain of 2 or 3: Maybe a little bigger would be better, pi-pip
+    words text_02CE, 0, 5                 ; 2.2 a chain of 2 or 3: Can I double the sales, pi-pip?
+    words text_02ED, 3, 6                 ; 3.0 landed on a rival store closed for now: Pi-pip, that's the end of today's broadcast
+    words text_030A, 3, 6                 ; 3.1 landed on a rival store closed for now: Delivery date not set.. pi-pip ♪
+    words text_0325, 0, 5                 ; 3.2 landed on a rival store closed for now: If I don't rest sometimes I'll break, pi-pip
+    words text_0348, 3, 6                 ; 4.0 landed on a rival store with lowered prices: I'll buy it all up while I can, pi-pip
+    words text_0363, 3, 6                 ; 4.1 landed on a rival store with lowered prices: I want anti-electromagnetic-wave goods, pi-pip ★
+    words text_0384, 0, 5                 ; 4.2 landed on a rival store with lowered prices: If I don't hurry it'll sell out, pi-pip ≦
+    words text_03A7, 3, 6                 ; 5.0 landed on its own store / opened a store: For electromagnetic goods, come to our store, pi-pip
+    words text_03C6, 3, 6                 ; 5.1 landed on its own store / opened a store: The mobile street TV, / <player>, is here, pi-pip
+    words text_03EF, 1, 7                 ; 5.2 landed on its own store / opened a store: <player>'s store / is bursting with electromagnetic waves, pi-pip
+    words text_0412, 3, 6                 ; 6.0 did not take the elevator: Not getting on, pi-pip ♪
+    words text_0423, 2, 8                 ; 6.1 did not take the elevator: It's a detour, pi-pip!
+    words text_0438, 3, 6                 ; 6.2 did not take the elevator: I'll watch some rakugo, pi-pip ♪
+    words text_044F, 1, 7                 ; 7.0 landed on the bank: I withdrew my meager pay, pi-pip
+    words text_046E, 3, 6                 ; 7.1 landed on the bank: I'll buy a video camera with this, pi-pip ★
+    words text_048D, 1, 7                 ; 7.2 landed on the bank: Pip? / I thought there'd be lots ≦
+    words text_04B0, 3, 6                 ; 8.0 took the elevator: <player> has just arrived, pi-pip
+    words text_04C9, 3, 6                 ; 8.1 took the elevator: That was suffocating, pi-pip / (apparently it does breathe)
+    words text_04F6, 2, 8                 ; 8.2 took the elevator: <player> is / not luggage, pi-pip!!
+    words text_0515, 0, 5                 ; 9.0 shopping cost a fifth of its money or more: Are you up to something bad, pi-pip?
+    words text_0532, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: ★ I'd like a store like this too, pi-pip
+    words text_054F, 0, 5                 ; 9.2 shopping cost a fifth of its money or more: Pi-pip, what's this place? / Looks like a pricey store, pi-pip?
+    words text_0578, 3, 6                 ; 10.0 shopping: got the money back: Let's keep this a secret, pi-pip ♪
+    words text_0597, 3, 6                 ; 10.1 shopping: got the money back: Cash back / makes me happy, pi-pip ♪
+    words text_05BE, 3, 6                 ; 10.2 shopping: got the money back: A crazy good deal, pi-pip
+    words text_05D9, 4, 9                 ; 11.0 shopping: Not feeling well, pi-pip
+    words text_05EA, 4, 9                 ; 11.1 shopping: Sad, pip ♪
+    words text_05F9, 4, 9                 ; 11.2 shopping: Pi-pip?!
+    words text_0604, 0, 5                 ; 12.0 bought a rival's store: A journey of a thousand miles starts with one step, pi-pip
+    words text_061F, 0, 5                 ; 12.1 bought a rival's store: The owner is a TV ♪ a TV ♪
+    words text_063A, 0, 5                 ; 12.2 bought a rival's store: Make lots of money for me, pi-pip
+    words text_0653, 4, 9                 ; 13.0 shopped this turn and the last: Pip? I won't be able to pay the license fee
+    words text_0672, 4, 9                 ; 13.1 shopped this turn and the last: The screen looks like snow, pi-pip ≦
+    words text_068D, 4, 9                 ; 13.2 shopped this turn and the last: I have to economize, pi-pip
+    words text_06A8, 0, 5                 ; 14.0 assets passed half the goal: Pi-pip ♪ / Level up to Clear Vision!
+    words text_06D3, 0, 5                 ; 14.1 assets passed half the goal: Pi-peee! / Halfway reached! A commemorative broadcast ☆
+    words text_06F8, 0, 5                 ; 14.2 assets passed half the goal: I need higher ratings, pi-pip
+    words text_0715, 4, 9                 ; 15.0 sold a store: Do I really have to sell, pip?
+    words text_0734, 4, 9                 ; 15.1 sold a store: ...So it's goodbye, pi-pip
+    words text_074B, 4, 9                 ; 15.2 sold a store: Pi-piiii ≦ / I wish you'd waited a little longer, pi-pip
+    words text_0778, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I can't open a store, pi-pip!!
+    words text_0791, 0, 5                 ; 16.1 declined a vacant lot it could not afford: Lalala ♭ Music show ♪ / (↑ broadcasting a music program)
+    words text_07C8, 2, 8                 ; 16.2 declined a vacant lot it could not afford: I'll buy a better place, pi-pip
+    words text_07E7, 1, 7                 ; 17.0 declined a vacant lot: I don't feel like buying anything, pi-pip
+    words text_0804, 1, 7                 ; 17.1 declined a vacant lot: Reception is bad here, pi-pip
+    words text_0823, 1, 7                 ; 17.2 declined a vacant lot: I don't need this, pi-pip
+    words text_083A, 3, 10                ; 18.0 an event card (the default): Horore-chuchupare-ro, pi-pip
+    words text_0855, 3, 10                ; 18.1 an event card (the default): Pip-pi!
+    words text_085E, 3, 10                ; 18.2 an event card (the default): A talking TV, pip
+
+text_01E6:
+    string "モニター踏むなピピッ"                   ; en: Don't step on the monitor, pi-pip
+
+text_01FB:
+    string "番組打ち切りは無念だピピッ≦"               ; en: Getting my show canceled is a shame, pi-pip ≦
+
+text_0218:
+    string "プツン！！"                        ; en: Click!! (turns off)
+
+text_0223:
+    string "派手にＣＭを流そうピピッ♪"                ; en: Let's run flashy commercials, pi-pip ♪
+
+text_023E:
+    string "これで準備はバンタンさピピッ♪"              ; en: Now everything's ready, pi-pip ♪
+
+text_025D:
+    string "アドバルーンをあげて%K宣伝しようかなっピピッ★"     ; en: Maybe I'll put up an ad balloon / to advertise, pi-pip ★
+
+text_028C:
+    string "折り込みチラシで宣伝するピピッ"              ; en: I'll advertise with newspaper inserts, pi-pip
+
+text_02AB:
+    string "もうちょっと大きいといいかなピピッ"            ; en: Maybe a little bigger would be better, pi-pip
+
+text_02CE:
+    string "売り上げ倍増できるのかピピッ？"              ; en: Can I double the sales, pi-pip?
+
+text_02ED:
+    string "ピピッ今日は放送終わりマース"               ; en: Pi-pip, that's the end of today's broadcast
+
+text_030A:
+    string "入荷日は未定・・だピピッ♪"                ; en: Delivery date not set.. pi-pip ♪
+
+text_0325:
+    string "たまには休まないと壊れちゃうピピッ"            ; en: If I don't rest sometimes I'll break, pi-pip
+
+text_0348:
+    string "今のうちに買い占めるピピッ"                ; en: I'll buy it all up while I can, pi-pip
+
+text_0363:
+    string "電磁波防止グッズが欲しいピピッ★"             ; en: I want anti-electromagnetic-wave goods, pi-pip ★
+
+text_0384:
+    string "早くしないと売りきれちゃうピピッ≦"            ; en: If I don't hurry it'll sell out, pi-pip ≦
+
+text_03A7:
+    string "電磁波グッズは当店までーピピッ"              ; en: For electromagnetic goods, come to our store, pi-pip
+
+text_03C6:
+    string "移動式街頭テレビ%K%NMYはここにいるピピッ"      ; en: The mobile street TV, / <player>, is here, pi-pip
+
+text_03EF:
+    string "%NMYのお店は%K電磁波出まくりピピッ"         ; en: <player>'s store / is bursting with electromagnetic waves, pi-pip
+
+text_0412:
+    string "のらないピピッ♪"                     ; en: Not getting on, pi-pip ♪
+
+text_0423:
+    string "遠回りになるピピッ！"                   ; en: It's a detour, pi-pip!
+
+text_0438:
+    string "落語でも見てるピピッ♪"                  ; en: I'll watch some rakugo, pi-pip ♪
+
+text_044F:
+    string "なけなしの給料をおろしたピピッ"              ; en: I withdrew my meager pay, pi-pip
+
+text_046E:
+    string "これでビデオカメラ買うピピッ★"              ; en: I'll buy a video camera with this, pi-pip ★
+
+text_048D:
+    string "ピッ？%Kイッパイあると思ったのに≦"           ; en: Pip? / I thought there'd be lots ≦
+
+text_04B0:
+    string "%NMYただいま参上だピピッ"               ; en: <player> has just arrived, pi-pip
+
+text_04C9:
+    string "息苦しかったピピッ%K（一応息はしてるらしい）"      ; en: That was suffocating, pi-pip / (apparently it does breathe)
+
+text_04F6:
+    string "%NMYは%K荷物じゃないピピッ！！"           ; en: <player> is / not luggage, pi-pip!!
+
+text_0515:
+    string "悪いことデモしてるっピピッ？"               ; en: Are you up to something bad, pi-pip?
+
+text_0532:
+    string "★こんなお店も欲しいなピピッ"               ; en: ★ I'd like a store like this too, pi-pip
+
+text_054F:
+    string "ピピッ何々ここ？%K高そうなお店だピピッ？"        ; en: Pi-pip, what's this place? / Looks like a pricey store, pi-pip?
+
+text_0578:
+    string "この事は内緒にしとこうピピッ♪"              ; en: Let's keep this a secret, pi-pip ♪
+
+text_0597:
+    string "キャッシュバックって%Kうれしいピピッ♪"         ; en: Cash back / makes me happy, pi-pip ♪
+
+text_05BE:
+    string "ムチャクチャ得したっピピッ"                ; en: A crazy good deal, pi-pip
+
+text_05D9:
+    string "調子が悪いピピッ"                     ; en: Not feeling well, pi-pip
+
+text_05EA:
+    string "かなしいピッ♪"                      ; en: Sad, pip ♪
+
+text_05F9:
+    string "ピピッ？！"                        ; en: Pi-pip?!
+
+text_0604:
+    string "千里の道も一歩からだピピッ"                ; en: A journey of a thousand miles starts with one step, pi-pip
+
+text_061F:
+    string "オーナーはテレビ♪テレビ♪"                ; en: The owner is a TV ♪ a TV ♪
+
+text_063A:
+    string "ばっちり儲けてくれピピッ"                 ; en: Make lots of money for me, pi-pip
+
+text_0653:
+    string "ピッ？受信料払えなくなっちゃう"              ; en: Pip? I won't be able to pay the license fee
+
+text_0672:
+    string "画面が砂嵐みたいだピピッ≦"                ; en: The screen looks like snow, pi-pip ≦
+
+text_068D:
+    string "倹約しなくちゃだめっピピッ"                ; en: I have to economize, pi-pip
+
+text_06A8:
+    string "ピピッ♪%Kクリアビジョンにレベルアッープ！"       ; en: Pi-pip ♪ / Level up to Clear Vision!
+
+text_06D3:
+    string "ピピー！%K半分達成！記念放送ぉぉぉ☆"          ; en: Pi-peee! / Halfway reached! A commemorative broadcast ☆
+
+text_06F8:
+    string "もっと視聴率とんなきゃピピッ"               ; en: I need higher ratings, pi-pip
+
+text_0715:
+    string "どうしても売らなきゃダメピッ？"              ; en: Do I really have to sell, pip?
+
+text_0734:
+    string "・・・お別れだねピピッ"                  ; en: ...So it's goodbye, pi-pip
+
+text_074B:
+    string "ピピィィィ≦%Kもう少しまって欲しかったピピッ"      ; en: Pi-piiii ≦ / I wish you'd waited a little longer, pi-pip
+
+text_0778:
+    string "お店を開けないピピッ！！"                 ; en: I can't open a store, pi-pip!!
+
+text_0791:
+    string "ラララ♭ミュージーックショー♪%K（↑音楽番組を放送中）"  ; en: Lalala ♭ Music show ♪ / (↑ broadcasting a music program)
+
+text_07C8:
+    string "もっとイイトコ買ってやるピピッ"              ; en: I'll buy a better place, pi-pip
+
+text_07E7:
+    string "なんか買う気がおきないピピッ"               ; en: I don't feel like buying anything, pi-pip
+
+text_0804:
+    string "ここだと受信状態が悪いっピピッ"              ; en: Reception is bad here, pi-pip
+
+text_0823:
+    string "こんなのいらないピピッ"                  ; en: I don't need this, pi-pip
+
+text_083A:
+    string "ホロレチュチュパレロピピッ"                ; en: Horore-chuchupare-ro, pi-pip
+
+text_0855:
+    string "ピッピ！"                         ; en: Pip-pi!
+
+text_085E:
+    string "しゃべるテレビッピ"                    ; en: A talking TV, pip
+    bytes 0x00, 0x00, 0x00    ; padding

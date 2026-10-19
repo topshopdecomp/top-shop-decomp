@@ -1,0 +1,5 @@
+// Relocations spimdisasm cannot pair on its own (hi and lo on different paths).
+// Found by tools/audit_shift.py.
+rom:0x62114 reloc:MIPS_HI16 symbol:func_8005FDC0
+rom:0x9081C reloc:MIPS_HI16 symbol:D_800B1CA5
+rom:0x90820 reloc:MIPS_LO16 symbol:D_800B1CA5
