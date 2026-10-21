@@ -1,5 +1,9 @@
 ; TALK.J entry 7 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Patty says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,18 +60,18 @@
     talk_wait_open
     play_xa 7, $l2                        ; voice: XA track 7 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01F8, 3, 12                ; 0.0 the first month: I'm in a good mood, so I'll try hard ♪
+    words text_01F8, 3, 12                ; 0.0 the first month: I'm in a good mood, so I'll try / hard ♪
     words text_0217, 3, 12                ; 0.1 the first month: Cheerful <player> / is in the groove ♪
     words text_023A, 3, 12                ; 0.2 the first month: Pop <player> / is all fired up ☆
     words text_025B, 3, 1                 ; 1.0 assets at 7/8 of the goal: <player> therapy effect ☆ / just kidding ☆
-    words text_027E, 3, 1                 ; 1.1 assets at 7/8 of the goal: <player> beam? / Dokadokadoka~∥n ☆
+    words text_027E, 3, 1                 ; 1.1 assets at 7/8 of the goal: <player> beam? / Dokadokadokaaa ☆
     words text_02A1, 3, 1                 ; 1.2 assets at 7/8 of the goal: I want to try harder and harder ∵
     words text_02BE, 3, 1                 ; 2.0 last at the start of the round, first now: Step up ☆
     words text_02CF, 3, 1                 ; 2.1 last at the start of the round, first now: Don't look at me with prejudice ♪
@@ -77,16 +81,16 @@ table_0090:
     words text_0331, 4, 4                 ; 3.2 first at the start of the round, last now: Send me fan letters... ≦
     words text_034E, 4, 4                 ; 4.0 ahead: a rival store it can't afford: My cavity hurts~....
     words text_0363, 1, 2                 ; 4.1 ahead: a rival store it can't afford: Aren't I sinful
-    words text_0378, 1, 2                 ; 4.2 ahead: a rival store it can't afford: Daddy, help me~
-    words text_0389, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: There's a big pinch ahead~
-    words text_03A4, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: Eek, it's negative~
-    words text_03BD, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: I'm getting nervous~
+    words text_0378, 1, 2                 ; 4.2 ahead: a rival store it can't afford: Daddy, help meee
+    words text_0389, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: There's a big pinch ahead.
+    words text_03A4, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: Eek, it's negative.
+    words text_03BD, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: I'm getting nervous.
     words text_03DC, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: It'd be best if I bought it ★
     words text_03FB, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Closed? / Whatever happened, I don't care ★
     words text_0424, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: Did they close it for me?
     words text_043F, 1, 2                 ; 7.0 ahead: its own store without goods: Huh? It's totally empty
     words text_0458, 1, 2                 ; 7.1 ahead: its own store without goods: Kind of miserable...
-    words text_046B, 1, 2                 ; 7.2 ahead: its own store without goods: It feels like a pinch, whatever~
+    words text_046B, 1, 2                 ; 7.2 ahead: its own store without goods: It feels like a pinch, whatever.
     words text_0488, 0, 0                 ; 8.0 the bank on the next square: Strawberry candy ♪
     words text_049D, 0, 0                 ; 8.1 the bank on the next square: In a great mood ♪
     words text_04AC, 0, 0                 ; 8.2 the bank on the next square: It's payday~
@@ -97,27 +101,27 @@ table_0090:
     words text_04F7, 1, 2                 ; 10.1 ranked worse: I'm going to catch a cold...
     words text_050E, 1, 2                 ; 10.2 ranked worse: I'll struggle to the end!
     words text_0521, 1, 2                 ; 11.0 ahead: a rival store in a chain: I should have taken out insurance~
-    words text_053E, 1, 2                 ; 11.1 ahead: a rival store in a chain: Don't merge~ ∥
-    words text_054F, 1, 2                 ; 11.2 ahead: a rival store in a chain: I hate this road~ ♪
+    words text_053E, 1, 2                 ; 11.1 ahead: a rival store in a chain: Don't merge.
+    words text_054F, 1, 2                 ; 11.2 ahead: a rival store in a chain: I hate this road. ♪
     words text_0560, 0, 0                 ; 12.0 ahead: a vacant lot: I want lots of stores
     words text_0577, 0, 0                 ; 12.1 ahead: a vacant lot: I want to play wild
-    words text_058E, 0, 0                 ; 12.2 ahead: a vacant lot: ♪ Are you listening to the BGM properly?
+    words text_058E, 0, 0                 ; 12.2 ahead: a vacant lot: ♪ Are you listening to the BGM?
     words text_05A9, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: Please don't let me stop / anywhere expensive ∵
-    words text_05CE, 2, 3                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I wish they'd just fall already...
+    words text_05CE, 2, 3                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I wish they'd just close / already...
     words text_05ED, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I absolutely don't want to stop / anywhere expensive ∵
-    words text_0616, 0, 0                 ; 14.0 ahead: the bank: I wonder if my pay went into my account?
+    words text_0616, 0, 0                 ; 14.0 ahead: the bank: I wonder if my pay went into my / account?
     words text_0639, 0, 0                 ; 14.1 ahead: the bank: Lots of work
     words text_064A, 0, 0                 ; 14.2 ahead: the bank: Kyurun
-    words text_0653, 0, 0                 ; 15.0 none of its stores ahead: I'm already sick of this floor~
-    words text_066C, 1, 2                 ; 15.1 none of its stores ahead: Uh, my store isn't here~!!
+    words text_0653, 0, 0                 ; 15.0 none of its stores ahead: I'm already sick of this floor.
+    words text_066C, 1, 2                 ; 15.1 none of its stores ahead: Uh, my store isn't here!!
     words text_0689, 1, 2                 ; 15.2 none of its stores ahead: Shock, the great demon king
-    words text_0698, 0, 0                 ; 16.0 ahead: its own store with free goods slots: I have to put out lots and lots of goods
+    words text_0698, 0, 0                 ; 16.0 ahead: its own store with free goods slots: I have to put out lots and lots of / goods
     words text_06BB, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Gotta try hard
     words text_06CC, 0, 0                 ; 16.2 ahead: its own store with free goods slots: What do I do now...
     words text_06E5, 0, 0                 ; 17.0 no direction (after the bank): Which road shall I take
-    words text_06FA, 0, 0                 ; 17.1 no direction (after the bank): I can't decide~
+    words text_06FA, 0, 0                 ; 17.1 no direction (after the bank): I can't decide...
     words text_0709, 0, 0                 ; 17.2 no direction (after the bank): I have no sense of direction
-    words text_0714, 1, 2                 ; 18.0 no direction, on an elevator square: I hate elevators~
+    words text_0714, 1, 2                 ; 18.0 no direction, on an elevator square: I hate elevators.
     words text_0729, 0, 0                 ; 18.1 no direction, on an elevator square: Topsy-turvy today and tomorrow too
     words text_0744, 0, 0                 ; 18.2 no direction, on an elevator square: Kukyun?
     words text_074F, 3, 10                ; 19.0 none of these: I want to be cute
@@ -125,182 +129,182 @@ table_0090:
     words text_0771, 3, 10                ; 19.2 none of these: Hegyu...
 
 text_01F8:
-    string "気分いいからガンバッちゃうネ♪"              ; en: I'm in a good mood, so I'll try hard ♪
+    string "I'm in a good mood, so I'll try%Khard ♪"  ; ja: 気分いいからガンバッちゃうネ♪
 
 text_0217:
-    string "うきうき%NMY%Kノリノリしちゃうネ♪"         ; en: Cheerful <player> / is in the groove ♪
+    string "Cheerful %NMY%Kis in the groove ♪"  ; ja: うきうき%NMY%Kノリノリしちゃうネ♪
 
 text_023A:
-    string "ポップな%NMY%Kはりきっちゃうネ☆"          ; en: Pop <player> / is all fired up ☆
+    string "Pop %NMY%Kis all fired up ☆"  ; ja: ポップな%NMY%Kはりきっちゃうネ☆
 
 text_025B:
-    string "%NMYセラピー効果☆%Kなんちゃって☆"         ; en: <player> therapy effect ☆ / just kidding ☆
+    string "%NMY therapy effect ☆%Kjust kidding ☆"  ; ja: %NMYセラピー効果☆%Kなんちゃって☆
 
 text_027E:
-    string "%NMYビーム？%Kどかどかどか～∥ん☆"         ; en: <player> beam? / Dokadokadoka~∥n ☆
+    string "%NMY beam?%KDokadokadokaaa ☆"  ; ja: %NMYビーム？%Kどかどかどか～∥ん☆
 
 text_02A1:
-    string "もっともっとガンバりたいネ∵"               ; en: I want to try harder and harder ∵
+    string "I want to try harder and harder ∵"  ; ja: もっともっとガンバりたいネ∵
 
 text_02BE:
-    string "ステップアップ☆"                     ; en: Step up ☆
+    string "Step up ☆"                    ; ja: ステップアップ☆
 
 text_02CF:
-    string "偏見した目で見ないでネ♪"                 ; en: Don't look at me with prejudice ♪
+    string "Don't look at me with prejudice ♪"  ; ja: 偏見した目で見ないでネ♪
 
 text_02E8:
-    string "若さには勝てないのよネ♪"                 ; en: You can't beat youth ♪
+    string "You can't beat youth ♪"       ; ja: 若さには勝てないのよネ♪
 
 text_0301:
-    string "もうこれ以上は許さない！"                 ; en: I won't allow any more of this!
+    string "I won't allow any more of this!"  ; ja: もうこれ以上は許さない！
 
 text_031A:
-    string "返り討ちにしちゃいます"                  ; en: I'll turn the tables on you
+    string "I'll turn the tables on you"  ; ja: 返り討ちにしちゃいます
 
 text_0331:
-    string "ファンレター送ってネ・・・≦"               ; en: Send me fan letters... ≦
+    string "Send me fan letters... ≦"     ; ja: ファンレター送ってネ・・・≦
 
 text_034E:
-    string "虫歯痛いよ～・・・・"                   ; en: My cavity hurts~....
+    string "My cavity hurts~...."         ; ja: 虫歯痛いよ～・・・・
 
 text_0363:
-    string "あたしって罪じゃない"                   ; en: Aren't I sinful
+    string "Aren't I sinful"              ; ja: あたしって罪じゃない
 
 text_0378:
-    string "パパたすけてェ～"                     ; en: Daddy, help me~
+    string "Daddy, help meee"              ; ja: パパたすけてェ～
 
 text_0389:
-    string "おっきなピンチがあるよぉ～"                ; en: There's a big pinch ahead~
+    string "There's a big pinch ahead."   ; ja: おっきなピンチがあるよぉ～
 
 text_03A4:
-    string "きゃ～ネガティブだよぉ～"                 ; en: Eek, it's negative~
+    string "Eek, it's negative."          ; ja: きゃ～ネガティブだよぉ～
 
 text_03BD:
-    string "ナーバスになっちゃってるよぉ～"              ; en: I'm getting nervous~
+    string "I'm getting nervous."         ; ja: ナーバスになっちゃってるよぉ～
 
 text_03DC:
-    string "私に買ってもらえれば最高だよ★"              ; en: It'd be best if I bought it ★
+    string "It'd be best if I bought it ★"  ; ja: 私に買ってもらえれば最高だよ★
 
 text_03FB:
-    string "クローズ？%K何があったって知らないから★"        ; en: Closed? / Whatever happened, I don't care ★
+    string "Closed?%KWhatever happened, I don't care ★"  ; ja: クローズ？%K何があったって知らないから★
 
 text_0424:
-    string "私のために閉めてくれたの？"                ; en: Did they close it for me?
+    string "Did they close it for me?"    ; ja: 私のために閉めてくれたの？
 
 text_043F:
-    string "あれェ？すっからかんだぁ"                 ; en: Huh? It's totally empty
+    string "Huh? It's totally empty"      ; ja: あれェ？すっからかんだぁ
 
 text_0458:
-    string "なんかミジメ・・・"                    ; en: Kind of miserable...
+    string "Kind of miserable..."         ; ja: なんかミジメ・・・
 
 text_046B:
-    string "気分勝手にピンチっぽいよぉ～"               ; en: It feels like a pinch, whatever~
+    string "It feels like a pinch, whatever."  ; ja: 気分勝手にピンチっぽいよぉ～
 
 text_0488:
-    string "いちごキャンディー♪"                   ; en: Strawberry candy ♪
+    string "Strawberry candy ♪"           ; ja: いちごキャンディー♪
 
 text_049D:
-    string "ゴキゲンだね♪"                      ; en: In a great mood ♪
+    string "In a great mood ♪"            ; ja: ゴキゲンだね♪
 
 text_04AC:
-    string "お給料日で～す"                      ; en: It's payday~
+    string "It's payday~"                 ; ja: お給料日で～す
 
 text_04BB:
-    string "うれしいよ★"                       ; en: I'm happy ★
+    string "I'm happy ★"                  ; ja: うれしいよ★
 
 text_04C8:
-    string "天下取ったりィ♪"                     ; en: I took the world ♪
+    string "I took the world ♪"           ; ja: 天下取ったりィ♪
 
 text_04D9:
-    string "冷たく行こッ♪"                      ; en: Let's go cool ♪
+    string "Let's go cool ♪"              ; ja: 冷たく行こッ♪
 
 text_04E8:
-    string "女の子みたい♭"                      ; en: Like a girl ♭
+    string "Like a girl ♭"                ; ja: 女の子みたい♭
 
 text_04F7:
-    string "風邪ひいちゃうよ・・・"                  ; en: I'm going to catch a cold...
+    string "I'm going to catch a cold..."  ; ja: 風邪ひいちゃうよ・・・
 
 text_050E:
-    string "悪あがきしちゃう！"                    ; en: I'll struggle to the end!
+    string "I'll struggle to the end!"    ; ja: 悪あがきしちゃう！
 
 text_0521:
-    string "保険でも懸けとけばよかった～"               ; en: I should have taken out insurance~
+    string "I should have taken out insurance~"  ; ja: 保険でも懸けとけばよかった～
 
 text_053E:
-    string "合体するなぁ～∥"                     ; en: Don't merge~ ∥
+    string "Don't merge."               ; ja: 合体するなぁ～∥
 
 text_054F:
-    string "この道きら～い♪"                     ; en: I hate this road~ ♪
+    string "I hate this road. ♪"          ; ja: この道きら～い♪
 
 text_0560:
-    string "たくさんお店がほしいな"                  ; en: I want lots of stores
+    string "I want lots of stores"        ; ja: たくさんお店がほしいな
 
 text_0577:
-    string "ウギャウギャ遊びたいネ"                  ; en: I want to play wild
+    string "I want to play wild"          ; ja: ウギャウギャ遊びたいネ
 
 text_058E:
-    string "♪ＢＧＭチャンと聞いてる？"                ; en: ♪ Are you listening to the BGM properly?
+    string "♪ Are you listening to the BGM?"  ; ja: ♪ＢＧＭチャンと聞いてる？
 
 text_05A9:
-    string "高いところには%K止まりませんように∵"          ; en: Please don't let me stop / anywhere expensive ∵
+    string "Please don't let me stop%Kanywhere expensive ∵"  ; ja: 高いところには%K止まりませんように∵
 
 text_05CE:
-    string "さっさと堕ちればいいのに・・・"              ; en: I wish they'd just fall already...
+    string "I wish they'd just close%Kalready..."  ; ja: さっさと堕ちればいいのに・・・
 
 text_05ED:
-    string "絶対に高いところには%K止まりたくないネ∵"        ; en: I absolutely don't want to stop / anywhere expensive ∵
+    string "I absolutely don't want to stop%Kanywhere expensive ∵"  ; ja: 絶対に高いところには%K止まりたくないネ∵
 
 text_0616:
-    string "お給料チャンと口座に入ってるかな？"            ; en: I wonder if my pay went into my account?
+    string "I wonder if my pay went into my%Kaccount?"  ; ja: お給料チャンと口座に入ってるかな？
 
 text_0639:
-    string "お仕事いっぱいネ"                     ; en: Lots of work
+    string "Lots of work"                 ; ja: お仕事いっぱいネ
 
 text_064A:
-    string "キュルン"                         ; en: Kyurun
+    string "Kyurun"                       ; ja: キュルン
 
 text_0653:
-    string "このフロアもう飽きたぁ～"                 ; en: I'm already sick of this floor~
+    string "I'm already sick of this floor."  ; ja: このフロアもう飽きたぁ～
 
 text_066C:
-    string "う、わたしのお店がない～！！"               ; en: Uh, my store isn't here~!!
+    string "Uh, my store isn't here!!"   ; ja: う、わたしのお店がない～！！
 
 text_0689:
-    string "ショック大魔王"                      ; en: Shock, the great demon king
+    string "Shock, the great demon king"  ; ja: ショック大魔王
 
 text_0698:
-    string "いっぱい、いっぱい品物置かなくちゃ"            ; en: I have to put out lots and lots of goods
+    string "I have to put out lots and lots of%Kgoods"  ; ja: いっぱい、いっぱい品物置かなくちゃ
 
 text_06BB:
-    string "ガンバんなきゃネ"                     ; en: Gotta try hard
+    string "Gotta try hard"               ; ja: ガンバんなきゃネ
 
 text_06CC:
-    string "これからどうしよう・・・"                 ; en: What do I do now...
+    string "What do I do now..."          ; ja: これからどうしよう・・・
 
 text_06E5:
-    string "どの道に進もうかしら"                   ; en: Which road shall I take
+    string "Which road shall I take"      ; ja: どの道に進もうかしら
 
 text_06FA:
-    string "迷っちゃ～うッ"                      ; en: I can't decide~
+    string "I can't decide..."              ; ja: 迷っちゃ～うッ
 
 text_0709:
-    string "方向音痴ィ"                        ; en: I have no sense of direction
+    string "I have no sense of direction"  ; ja: 方向音痴ィ
 
 text_0714:
-    string "エレベーターキラ～イ"                   ; en: I hate elevators~
+    string "I hate elevators."            ; ja: エレベーターキラ～イ
 
 text_0729:
-    string "今日も明日もてんやわんやネ"                ; en: Topsy-turvy today and tomorrow too
+    string "Topsy-turvy today and tomorrow too"  ; ja: 今日も明日もてんやわんやネ
 
 text_0744:
-    string "くきゅん？"                        ; en: Kukyun?
+    string "Kukyun?"                      ; ja: くきゅん？
 
 text_074F:
-    string "かわいくなりたい"                     ; en: I want to be cute
+    string "I want to be cute"            ; ja: かわいくなりたい
 
 text_0760:
-    string "お茶の間アイドル"                     ; en: Living-room idol
+    string "Living-room idol"             ; ja: お茶の間アイドル
 
 text_0771:
-    string "へぎゅ・・・"                       ; en: Hegyu...
+    string "Hegyu..."                     ; ja: へぎゅ・・・
     words 0    ; padding

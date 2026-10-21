@@ -1,5 +1,9 @@
 ; TALK.J entry 9 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Oilow says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,7 +60,7 @@
     talk_wait_open
     play_xa 9, $l2                        ; voice: XA track 9 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -64,29 +68,29 @@
 
 table_0090:
     words text_01F8, 3, 12                ; 0.0 the first month: Let's do our best, ryu ♪
-    words text_020D, 3, 12                ; 0.1 the first month: I'll make it all mysteries, ryu ♭
+    words text_020D, 3, 12                ; 0.1 the first month: I'll make it full of mysteries, / ryu ♭
     words text_0224, 3, 12                ; 0.2 the first month: <player> is all set, ryu ★
-    words text_0237, 3, 1                 ; 1.0 assets at 7/8 of the goal: Still a mystery, I made it this far, ryu ♪
-    words text_0256, 3, 1                 ; 1.1 assets at 7/8 of the goal: It's become quite full of mysteries, ryu ♪
+    words text_0237, 3, 1                 ; 1.0 assets at 7/8 of the goal: Still a mystery, I made it this / far, ryu ♪
+    words text_0256, 3, 1                 ; 1.1 assets at 7/8 of the goal: It's become quite full of / mysteries, ryu ♪
     words text_0275, 1, 2                 ; 1.2 assets at 7/8 of the goal: Now you know / <player>'s power, ryu ♪
     words text_0292, 3, 1                 ; 2.0 last at the start of the round, first now: Think better of me now, ryu ♭
-    words text_02A3, 3, 1                 ; 2.1 last at the start of the round, first now: Riddle-riddle power explodes, ryu ♭
+    words text_02A3, 3, 1                 ; 2.1 last at the start of the round, first now: Riddle-riddle power explodes, / ryu ♭
     words text_02C2, 3, 1                 ; 2.2 last at the start of the round, first now: A big comeback, ryu ♭
-    words text_02D1, 4, 4                 ; 3.0 first at the start of the round, last now: A sudden fall makes me feel weird, ryu ≦
-    words text_02EA, 4, 4                 ; 3.1 first at the start of the round, last now: It's not <player>'s fault, ryu ≦
+    words text_02D1, 4, 4                 ; 3.0 first at the start of the round, last now: A sudden fall makes me feel weird, / ryu ≦
+    words text_02EA, 4, 4                 ; 3.1 first at the start of the round, last now: It's not <player>'s fault, / ryu ≦
     words text_02FF, 4, 4                 ; 3.2 first at the start of the round, last now: I'll get back somehow, ryu!
     words text_0314, 4, 4                 ; 4.0 ahead: a rival store it can't afford: I'm about to be crushed, ryu ≦
     words text_0325, 1, 2                 ; 4.1 ahead: a rival store it can't afford: Looks dangerous, ryu
     words text_0336, 1, 2                 ; 4.2 ahead: a rival store it can't afford: Th-e e-nd, ryu ≦
-    words text_034B, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: I sense I'll be spending money, ryu...
+    words text_034B, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: I sense I'll be spending money, / ryu...
     words text_0368, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: I want to pass safely, ryu...
-    words text_0385, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Has <player> no human rights, ryu?
+    words text_0385, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Has <player> no human rights, / ryu?
     words text_03A0, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: If it's closed / I'll take it, ryu ♭
     words text_03C1, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: A pitiful store, ryu ♪
     words text_03D8, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: Closed, ryu ★
     words text_03E3, 1, 2                 ; 7.0 ahead: its own store without goods: Empty? / Kind of a pi-inch, ryu
     words text_0404, 1, 2                 ; 7.1 ahead: its own store without goods: It's out of stock, ryu ≦≦
-    words text_041D, 1, 2                 ; 7.2 ahead: its own store without goods: It'll be trouble if they don't put out goods, ryu~ ≦
+    words text_041D, 1, 2                 ; 7.2 ahead: its own store without goods: It'll be trouble if they don't put / out goods, ryu~ ≦
     words text_043A, 0, 0                 ; 8.0 the bank on the next square: I get my pay, ryu ★
     words text_044F, 0, 0                 ; 8.1 the bank on the next square: I want lots of money, ryu ♪
     words text_046A, 0, 0                 ; 8.2 the bank on the next square: I'll get money at the bank, ryu ★
@@ -98,208 +102,208 @@ table_0090:
     words text_04F6, 1, 2                 ; 10.2 ranked worse: Just because it's <player>... / that's cruel, ryu ≦...
     words text_051D, 1, 2                 ; 11.0 ahead: a rival store in a chain: Is it easy to get through, ryu?
     words text_0536, 1, 2                 ; 11.1 ahead: a rival store in a chain: I'm about to spend money, ryu ≦
-    words text_054F, 1, 2                 ; 11.2 ahead: a rival store in a chain: Recognize <player>'s human rights too, ryu
+    words text_054F, 1, 2                 ; 11.2 ahead: a rival store in a chain: Recognize <player>'s human / rights too, ryu
     words text_056A, 0, 0                 ; 12.0 ahead: a vacant lot: I want a mysterious store, ryu ★
     words text_0583, 0, 0                 ; 12.1 ahead: a vacant lot: <player> will buy / the store, ryu ♪
     words text_059C, 0, 0                 ; 12.2 ahead: a vacant lot: I'm aiming for a new store, ryu ♪
     words text_05B7, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: It's way out of reach, ryu
-    words text_05CC, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Expensive goods are too much luxury, ryu ≦
+    words text_05CC, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Expensive goods are too much / luxury, ryu ≦
     words text_05E9, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: If I buy it I'll be dirt poor, ryu
     words text_05FE, 0, 0                 ; 14.0 ahead: the bank: I-I want money, ryu
     words text_0613, 0, 0                 ; 14.1 ahead: the bank: Can I make it to the bank, ryu
     words text_062C, 0, 0                 ; 14.2 ahead: the bank: Do I have savings left, ryu?
     words text_0641, 1, 2                 ; 15.0 none of its stores ahead: Is this area enemy territory, ryu?
-    words text_0656, 1, 2                 ; 15.1 none of its stores ahead: I can't find / <player>'s stores anymore, ryu ≦
-    words text_067D, 1, 2                 ; 15.2 none of its stores ahead: Nothing but stores I don't know, ryu...
+    words text_0656, 1, 2                 ; 15.1 none of its stores ahead: I can't find <player>'s stores / anymore, ryu ≦
+    words text_067D, 1, 2                 ; 15.2 none of its stores ahead: Nothing but stores I don't know, / ryu...
     words text_069A, 3, 1                 ; 16.0 ahead: its own store with free goods slots: May I put out mystery goods, ryu?
     words text_06B9, 3, 1                 ; 16.1 ahead: its own store with free goods slots: I want to restock soon, ryu ♪
     words text_06D0, 3, 1                 ; 16.2 ahead: its own store with free goods slots: I'll fill it up with goods, ryu ♪
-    words text_06EB, 0, 0                 ; 17.0 no direction (after the bank): I'll choose with mysterious wisdom, ryu ★
+    words text_06EB, 0, 0                 ; 17.0 no direction (after the bank): I'll choose with mysterious / wisdom, ryu ★
     words text_0702, 0, 0                 ; 17.1 no direction (after the bank): Which one is the favorite, ryu?
     words text_0715, 0, 0                 ; 17.2 no direction (after the bank): Which shall I choose, ryu ∵
     words text_072C, 0, 0                 ; 18.0 no direction, on an elevator square: Elevators are fun, ryu ♪
-    words text_0749, 0, 0                 ; 18.1 no direction, on an elevator square: I want to take it easy sometimes, ryu ★
-    words text_0760, 0, 0                 ; 18.2 no direction, on an elevator square: <player> is weak against shocks, ryu ≦
+    words text_0749, 0, 0                 ; 18.1 no direction, on an elevator square: I want to take it easy sometimes, / ryu ★
+    words text_0760, 0, 0                 ; 18.2 no direction, on an elevator square: <player> is weak against / shocks, ryu ≦
     words text_0779, 3, 10                ; 19.0 none of these: Nowahha
     words text_0782, 3, 10                ; 19.1 none of these: Tomorrow's weather: sunny
     words text_0793, 3, 10                ; 19.2 none of these: Kirarin (sparkle)
 
 text_01F8:
-    string "がんばっていくりゅ♪"                   ; en: Let's do our best, ryu ♪
+    string "Let's do our best, ryu ♪"     ; ja: がんばっていくりゅ♪
 
 text_020D:
-    string "なぞだらけしてやりゅ♭"                  ; en: I'll make it all mysteries, ryu ♭
+    string "I'll make it full of mysteries,%Kryu ♭"  ; ja: なぞだらけしてやりゅ♭
 
 text_0224:
-    string "%NMY準備完了りゅ★"                  ; en: <player> is all set, ryu ★
+    string "%NMY is all set, ryu ★"       ; ja: %NMY準備完了りゅ★
 
 text_0237:
-    string "謎なまま、ここまで来れたりゅ♪"              ; en: Still a mystery, I made it this far, ryu ♪
+    string "Still a mystery, I made it this%Kfar, ryu ♪"  ; ja: 謎なまま、ここまで来れたりゅ♪
 
 text_0256:
-    string "かなりナゾだらけになったりゅ♪"              ; en: It's become quite full of mysteries, ryu ♪
+    string "It's become quite full of%Kmysteries, ryu ♪"  ; ja: かなりナゾだらけになったりゅ♪
 
 text_0275:
-    string "%NMYの力%K思い知ったかりゅ♪"            ; en: Now you know / <player>'s power, ryu ♪
+    string "Now you know%K%NMY's power, ryu ♪"  ; ja: %NMYの力%K思い知ったかりゅ♪
 
 text_0292:
-    string "見直したかりゅ♭"                     ; en: Think better of me now, ryu ♭
+    string "Think better of me now, ryu ♭"  ; ja: 見直したかりゅ♭
 
 text_02A3:
-    string "ナゾナゾぱわーさくれつりゅー♭"              ; en: Riddle-riddle power explodes, ryu ♭
+    string "Riddle-riddle power explodes,%Kryu ♭"  ; ja: ナゾナゾぱわーさくれつりゅー♭
 
 text_02C2:
-    string "大逆転だりゅ♭"                      ; en: A big comeback, ryu ♭
+    string "A big comeback, ryu ♭"        ; ja: 大逆転だりゅ♭
 
 text_02D1:
-    string "急に落ちると変になりゅ≦"                 ; en: A sudden fall makes me feel weird, ryu ≦
+    string "A sudden fall makes me feel weird,%Kryu ≦"  ; ja: 急に落ちると変になりゅ≦
 
 text_02EA:
-    string "%NMYは悪くないりゅ≦"                 ; en: It's not <player>'s fault, ryu ≦
+    string "It's not %NMY's fault,%Kryu ≦"  ; ja: %NMYは悪くないりゅ≦
 
 text_02FF:
-    string "何とか復帰するりゅ！"                   ; en: I'll get back somehow, ryu!
+    string "I'll get back somehow, ryu!"  ; ja: 何とか復帰するりゅ！
 
 text_0314:
-    string "潰れそうだりゅ≦"                     ; en: I'm about to be crushed, ryu ≦
+    string "I'm about to be crushed, ryu ≦"  ; ja: 潰れそうだりゅ≦
 
 text_0325:
-    string "危なそうだりゅー"                     ; en: Looks dangerous, ryu
+    string "Looks dangerous, ryu"         ; ja: 危なそうだりゅー
 
 text_0336:
-    string "じ・えんどだりゅー≦"                   ; en: Th-e e-nd, ryu ≦
+    string "Th-e e-nd, ryu ≦"             ; ja: じ・えんどだりゅー≦
 
 text_034B:
-    string "お金使いそうな予感りゅ・・・"               ; en: I sense I'll be spending money, ryu...
+    string "I sense I'll be spending money,%Kryu..."  ; ja: お金使いそうな予感りゅ・・・
 
 text_0368:
-    string "無事に通して欲しいりゅ・・・"               ; en: I want to pass safely, ryu...
+    string "I want to pass safely, ryu..."  ; ja: 無事に通して欲しいりゅ・・・
 
 text_0385:
-    string "%NMYに人権はないのかりゅ？"              ; en: Has <player> no human rights, ryu?
+    string "Has %NMY no human rights,%Kryu?"  ; ja: %NMYに人権はないのかりゅ？
 
 text_03A0:
-    string "休業中なら%K僕が貰っちゃうりゅ♭"            ; en: If it's closed / I'll take it, ryu ♭
+    string "If it's closed%KI'll take it, ryu ♭"  ; ja: 休業中なら%K僕が貰っちゃうりゅ♭
 
 text_03C1:
-    string "かわいそうなお店りゅ♪"                  ; en: A pitiful store, ryu ♪
+    string "A pitiful store, ryu ♪"       ; ja: かわいそうなお店りゅ♪
 
 text_03D8:
-    string "休業りゅ★"                        ; en: Closed, ryu ★
+    string "Closed, ryu ★"                ; ja: 休業りゅ★
 
 text_03E3:
-    string "からっぽ？%Kなんかピーンチだりゅ"            ; en: Empty? / Kind of a pi-inch, ryu
+    string "Empty?%KKind of a pi-inch, ryu"  ; ja: からっぽ？%Kなんかピーンチだりゅ
 
 text_0404:
-    string "品切れ中になってりゅ≦≦"                 ; en: It's out of stock, ryu ≦≦
+    string "It's out of stock, ryu ≦≦"    ; ja: 品切れ中になってりゅ≦≦
 
 text_041D:
-    string "商品を置かなきゃ大変りゅ～≦"               ; en: It'll be trouble if they don't put out goods, ryu~ ≦
+    string "It'll be trouble if they don't put%Kout goods, ryu~ ≦"  ; ja: 商品を置かなきゃ大変りゅ～≦
 
 text_043A:
-    string "お給料がもらえりゅ★"                   ; en: I get my pay, ryu ★
+    string "I get my pay, ryu ★"          ; ja: お給料がもらえりゅ★
 
 text_044F:
-    string "たくさんお金が欲しいりゅ♪"                ; en: I want lots of money, ryu ♪
+    string "I want lots of money, ryu ♪"  ; ja: たくさんお金が欲しいりゅ♪
 
 text_046A:
-    string "銀行でお金もらってくりゅ★"                ; en: I'll get money at the bank, ryu ★
+    string "I'll get money at the bank, ryu ★"  ; ja: 銀行でお金もらってくりゅ★
 
 text_0485:
-    string "いい天気だりゅ∴・・・"                  ; en: Nice weather, ryu ∴...
+    string "Nice weather, ryu ∴..."       ; ja: いい天気だりゅ∴・・・
 
 text_049C:
-    string "好位置をきーぷすりゅ♪"                  ; en: Keeping a good position, ryu ♪
+    string "Keeping a good position, ryu ♪"  ; ja: 好位置をきーぷすりゅ♪
 
 text_04B3:
-    string "ん？順位が上がってりゅ♭"                 ; en: Hm? My rank's going up, ryu ♭
+    string "Hm? My rank's going up, ryu ♭"  ; ja: ん？順位が上がってりゅ♭
 
 text_04CC:
-    string "ボロくなっちゃうりゅ・・・"                ; en: I'm getting run-down, ryu...
+    string "I'm getting run-down, ryu..."  ; ja: ボロくなっちゃうりゅ・・・
 
 text_04E7:
-    string "ナゾりゅ・・・"                      ; en: A mystery, ryu...
+    string "A mystery, ryu..."            ; ja: ナゾりゅ・・・
 
 text_04F6:
-    string "%NMYだからって・・・%K酷いりゅ≦・・・"       ; en: Just because it's <player>... / that's cruel, ryu ≦...
+    string "Just because it's %NMY...%Kthat's cruel, ryu ≦..."  ; ja: %NMYだからって・・・%K酷いりゅ≦・・・
 
 text_051D:
-    string "通り抜けるのは簡単りゅ？"                 ; en: Is it easy to get through, ryu?
+    string "Is it easy to get through, ryu?"  ; ja: 通り抜けるのは簡単りゅ？
 
 text_0536:
-    string "お金使っちゃいそうりゅ≦"                 ; en: I'm about to spend money, ryu ≦
+    string "I'm about to spend money, ryu ≦"  ; ja: お金使っちゃいそうりゅ≦
 
 text_054F:
-    string "%NMYにも人権認めてくれりゅ"              ; en: Recognize <player>'s human rights too, ryu
+    string "Recognize %NMY's human%Krights too, ryu"  ; ja: %NMYにも人権認めてくれりゅ
 
 text_056A:
-    string "ナゾなお店がほしいりゅ★"                 ; en: I want a mysterious store, ryu ★
+    string "I want a mysterious store, ryu ★"  ; ja: ナゾなお店がほしいりゅ★
 
 text_0583:
-    string "お店は%K%NMYが買うりゅ♪"              ; en: <player> will buy / the store, ryu ♪
+    string "%NMY will buy%Kthe store, ryu ♪"  ; ja: お店は%K%NMYが買うりゅ♪
 
 text_059C:
-    string "新しいお店を狙うんだりゅ♪"                ; en: I'm aiming for a new store, ryu ♪
+    string "I'm aiming for a new store, ryu ♪"  ; ja: 新しいお店を狙うんだりゅ♪
 
 text_05B7:
-    string "とても手が出ないりゅ"                   ; en: It's way out of reach, ryu
+    string "It's way out of reach, ryu"   ; ja: とても手が出ないりゅ
 
 text_05CC:
-    string "高い商品はぜいたくすぎりゅ≦"               ; en: Expensive goods are too much luxury, ryu ≦
+    string "Expensive goods are too much%Kluxury, ryu ≦"  ; ja: 高い商品はぜいたくすぎりゅ≦
 
 text_05E9:
-    string "買ったら赤貧になりゅ"                   ; en: If I buy it I'll be dirt poor, ryu
+    string "If I buy it I'll be dirt poor, ryu"  ; ja: 買ったら赤貧になりゅ
 
 text_05FE:
-    string "お・お金が欲しいりゅ"                   ; en: I-I want money, ryu
+    string "I-I want money, ryu"          ; ja: お・お金が欲しいりゅ
 
 text_0613:
-    string "銀行にたどり着けるかりゅ"                 ; en: Can I make it to the bank, ryu
+    string "Can I make it to the bank, ryu"  ; ja: 銀行にたどり着けるかりゅ
 
 text_062C:
-    string "預金残ってたかりゅ？"                   ; en: Do I have savings left, ryu?
+    string "Do I have savings left, ryu?"  ; ja: 預金残ってたかりゅ？
 
 text_0641:
-    string "この辺は敵地かりゅ？"                   ; en: Is this area enemy territory, ryu?
+    string "Is this area enemy territory, ryu?"  ; ja: この辺は敵地かりゅ？
 
 text_0656:
-    string "%NMYのお店が%K見当たらなくなったりゅ≦"       ; en: I can't find / <player>'s stores anymore, ryu ≦
+    string "I can't find %NMY's stores%Kanymore, ryu ≦"  ; ja: %NMYのお店が%K見当たらなくなったりゅ≦
 
 text_067D:
-    string "知らないお店ばっかりゅ・・・"               ; en: Nothing but stores I don't know, ryu...
+    string "Nothing but stores I don't know,%Kryu..."  ; ja: 知らないお店ばっかりゅ・・・
 
 text_069A:
-    string "なぞグッズを置いてもいいりゅ？"              ; en: May I put out mystery goods, ryu?
+    string "May I put out mystery goods, ryu?"  ; ja: なぞグッズを置いてもいいりゅ？
 
 text_06B9:
-    string "早く補充をしたいりゅ♪"                  ; en: I want to restock soon, ryu ♪
+    string "I want to restock soon, ryu ♪"  ; ja: 早く補充をしたいりゅ♪
 
 text_06D0:
-    string "品物で満杯にしてあげりゅ♪"                ; en: I'll fill it up with goods, ryu ♪
+    string "I'll fill it up with goods, ryu ♪"  ; ja: 品物で満杯にしてあげりゅ♪
 
 text_06EB:
-    string "ナゾの知恵で選ぶりゅ★"                  ; en: I'll choose with mysterious wisdom, ryu ★
+    string "I'll choose with mysterious%Kwisdom, ryu ★"  ; ja: ナゾの知恵で選ぶりゅ★
 
 text_0702:
-    string "どっちが本命りゅ？"                    ; en: Which one is the favorite, ryu?
+    string "Which one is the favorite, ryu?"  ; ja: どっちが本命りゅ？
 
 text_0715:
-    string "どちらにしようかりゅ∵"                  ; en: Which shall I choose, ryu ∵
+    string "Which shall I choose, ryu ∵"  ; ja: どちらにしようかりゅ∵
 
 text_072C:
-    string "エレベーターって面白いりゅ♪"               ; en: Elevators are fun, ryu ♪
+    string "Elevators are fun, ryu ♪"     ; ja: エレベーターって面白いりゅ♪
 
 text_0749:
-    string "たまには楽したいりゅ★"                  ; en: I want to take it easy sometimes, ryu ★
+    string "I want to take it easy sometimes,%Kryu ★"  ; ja: たまには楽したいりゅ★
 
 text_0760:
-    string "%NMYは衝撃には弱いりゅ≦"               ; en: <player> is weak against shocks, ryu ≦
+    string "%NMY is weak against%Kshocks, ryu ≦"  ; ja: %NMYは衝撃には弱いりゅ≦
 
 text_0779:
-    string "のわっは"                         ; en: Nowahha
+    string "Nowahha"                      ; ja: のわっは
 
 text_0782:
-    string "明日の天気は晴れ"                     ; en: Tomorrow's weather: sunny
+    string "Tomorrow's weather: sunny"    ; ja: 明日の天気は晴れ
 
 text_0793:
-    string "きらりん"                         ; en: Kirarin (sparkle)
+    string "Kirarin (sparkle)"            ; ja: きらりん

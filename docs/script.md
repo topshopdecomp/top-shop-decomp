@@ -142,6 +142,19 @@ table at `0x800186D0`; every entry not listed here goes to the "unknown code" me
 | `calendar/cal_01.tss`–`cal_13.tss` | `CAL_NN.J` |
 | `talk/start_NN.tss`, `talk/end_NN.tss` | entries NN and 16 + NN of `TALK.J` (LZSS) |
 
+The talk scripts in `scripts/` are edited from the disc's:
+- every text is in English, the English of `tools/tss_english.json` fitted to the talk panel, with the
+  Japanese in the comment;
+- the text stays up 90 frames before the talk goes on, not 30 (`wait_buttons_for`, cross ends it
+  sooner);
+- the talk scripts of characters 14 and 15, whom no one can choose, are empty: with the English texts
+  all 32 would not fit in `TALK.J`'s 22 sectors.
+
+The disc image the build makes takes the script files built from `scripts/` ([build.md](build.md)), so
+the talk of a `CPU_TALK` build is in English (below). `tools/tss.py extract` writes the scripts as they
+are on the disc; over a directory that holds edited scripts it keeps those (`--force` writes the
+disc's over them), so it never undoes the edits in `scripts/`.
+
 `scripts/README.md` describes the language: how a script runs (which statements end a frame, the
 start, the end, an event's result, calls), how statements are written and stored, the variables and
 their values, every opcode, the constants, the data, the texts, and the event card scene's shared
@@ -154,7 +167,9 @@ the routines and variables, the opcode descriptions, the calendar pictures) and 
 
 The scripts can be edited and built back into the disc's files: `make scripts` (`tools/tss.py build
 [DIR] [-o OUT]`) assembles every file and writes `EVE_*.J`, `CNT*.J`, `CAL_*.J` and `TALK.J` into
-`scripts/build/`.
+`scripts/build/`. The disc image (`make`, `make image`) builds them first and takes them in place of
+the disc's, so edited scripts play. A text of an edited talk script must fit the talk panel (2 rows
+of 240 pixels, below), else the build stops with an error.
 - A file with an edited script gets the new bytecode (a talk script is LZSS-packed again by
   `lzss_compress`, which `Lzss_Decompress` unpacks); its other entries come from `disc/A`, padded to 4
   bytes as on the disc.
@@ -218,8 +233,18 @@ All checked in the code or the emulator:
   the disc stores their files as plain data, which the drive does not play, and the build writes
   them back as XA ([fileio.md](fileio.md)). Seen in the emulator: the sound recorded during each
   talk matches the voice it asks for (Meower's voice 12 at the start of a first-month turn) and no
-  other. It also unpacks every talk script into 2 sectors (4096 bytes): the game's buffer, the packed
-  size rounded up to whole sectors, is overrun by the disc's talk scripts by up to 416 bytes.
+  other.
+- **The talk's limits.** The game unpacks a talk script into a buffer of its packed size rounded up
+  to whole sectors (Board_Task steps 3201 and 9200), which the talk scripts on the disc already
+  overrun by up to 416 bytes, and the English ones by more; a `CPU_TALK` build gives every one 2
+  sectors (4096 bytes; `tools/tss.py build` stops a talk script that unpacks to more). The talk panel
+  wraps a row after 38 characters, and the original, wrapping off its third row, writes past the
+  panel's characters (`Talk_PutChar`, `0x80081450`); a `CPU_TALK` build leaves the rest out instead.
+  The English texts are fitted so that neither happens: 2 rows of 240 pixels below the speaker's name
+  (`Script_OpTalkOpen`, `0x800853E4`: the player's frame at x 0x20, 0x100 wide; a half-width
+  character is drawn 7 pixels wide, a full-width one 14; a name is up to 12 characters). Seen in the
+  emulator: 11 talks of four CPU players, one round and a half, in English on one row and on two,
+  with the emoticons and the players' names; the sector heap 176 of 296 sectors used during a talk.
 - **A talk script's layout**: row `$entry * 3 + random 3` of a table of (text offset, face, XA
   channel).
 - **The script's button bits** (`Scene_Update`, through `Script_Buttons`): right 0x0001, L1 0x0008, R2

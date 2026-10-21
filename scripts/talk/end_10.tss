@@ -1,5 +1,9 @@
 ; TALK.J entry 26 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Bro says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,7 +59,7 @@
     talk_wait_open
     play_xa 10, $l2                       ; voice: XA track 10 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -65,229 +69,229 @@ table_0090:
     words text_01E6, 2, 8                 ; 0.0 (no comment): I don't believe it
     words text_01F3, 4, 9                 ; 0.1 (no comment): Why!!
     words text_0202, 1, 7                 ; 0.2 (no comment): Ah, forget it, forget it! / I can't be bothered
-    words text_0227, 3, 6                 ; 1.0 a chain of 4: You beating me? Dream on
+    words text_0227, 3, 6                 ; 1.0 a chain of 4: You? Beating me? Dream on.
     words text_0244, 3, 6                 ; 1.1 a chain of 4: Heh! Mine's the best
     words text_0259, 3, 6                 ; 1.2 a chain of 4: As good as won now!
-    words text_0272, 3, 6                 ; 2.0 a chain of 2 or 3: This much is a piece of cake~
-    words text_0287, 3, 6                 ; 2.1 a chain of 2 or 3: I'm not satisfied with just this
-    words text_02A6, 3, 6                 ; 2.2 a chain of 2 or 3: Merge! is kind of embarrassing!
-    words text_02C1, 3, 6                 ; 3.0 landed on a rival store closed for now: Does this store even care?
-    words text_02DC, 0, 5                 ; 3.1 landed on a rival store closed for now: I can't be bothered~
+    words text_0272, 3, 6                 ; 2.0 a chain of 2 or 3: Getting a store this size / is a piece of cake.
+    words text_0287, 3, 6                 ; 2.1 a chain of 2 or 3: This is okay, but I need more!
+    words text_02A6, 3, 6                 ; 2.2 a chain of 2 or 3: MEEERGE!! / (oof that was embarrassing)
+    words text_02C1, 3, 6                 ; 3.0 landed on a rival store closed for now: Do they even care?
+    words text_02DC, 0, 5                 ; 3.1 landed on a rival store closed for now: I can't be bothered.
     words text_02ED, 0, 5                 ; 3.2 landed on a rival store closed for now: You think this is good enough?
-    words text_030C, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Oh! It's cheap
-    words text_0321, 0, 5                 ; 4.1 landed on a rival store with lowered prices: Keep it cheap all the time~
+    words text_030C, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Oh! It's cheap.
+    words text_0321, 0, 5                 ; 4.1 landed on a rival store with lowered prices: Keep it cheap all the time.
     words text_0338, 3, 6                 ; 4.2 landed on a rival store with lowered prices: Don't slack off even on a sale!
     words text_0351, 1, 7                 ; 5.0 landed on its own store / opened a store: I've got time on my hands today!
     words text_036E, 0, 5                 ; 5.1 landed on its own store / opened a store: What'll I do next?
     words text_0385, 3, 6                 ; 5.2 landed on its own store / opened a store: Stop by my store once in a while!
-    words text_03A2, 3, 6                 ; 6.0 did not take the elevator: I'm fine without riding it!
-    words text_03B9, 3, 6                 ; 6.1 did not take the elevator: I've got no intention of taking it easy
-    words text_03D2, 0, 5                 ; 6.2 did not take the elevator: It's good because I only use it sometimes!
+    words text_03A2, 3, 6                 ; 6.0 did not take the elevator: I don't need to ride it!
+    words text_03B9, 3, 6                 ; 6.1 did not take the elevator: I've got no intention of taking it / easy
+    words text_03D2, 0, 5                 ; 6.2 did not take the elevator: It's fine. I only use it / sometimes!
     words text_03ED, 3, 6                 ; 7.0 landed on the bank: Let's go wild today!
     words text_0408, 3, 6                 ; 7.1 landed on the bank: I grabbed my pay!
-    words text_041D, 3, 6                 ; 7.2 landed on the bank: Gotta save money
-    words text_042C, 2, 8                 ; 8.0 took the elevator: This elevator's slow!
-    words text_044B, 0, 5                 ; 8.1 took the elevator: We're here...
-    words text_045C, 3, 6                 ; 8.2 took the elevator: Had it all to myself ♪
+    words text_041D, 3, 6                 ; 7.2 landed on the bank: Gotta save money.
+    words text_042C, 2, 8                 ; 8.0 took the elevator: This elevator's so slow!
+    words text_044B, 0, 5                 ; 8.1 took the elevator: Finally we're here...
+    words text_045C, 3, 6                 ; 8.2 took the elevator: I was the only one in there ♪
     words text_046F, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: Making me spend money!!
     words text_0484, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: I can't lose either!
-    words text_049B, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: Dammit~∥｜!
+    words text_049B, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: Dammit!
     words text_04AA, 3, 6                 ; 10.0 shopping: got the money back: Oh! You're paying me back?
     words text_04C5, 3, 6                 ; 10.1 shopping: got the money back: I'll be back
-    words text_04D4, 3, 6                 ; 10.2 shopping: got the money back: Can't quit now
-    words text_04E9, 3, 6                 ; 11.0 shopping: Not cold at all~ ∥
+    words text_04D4, 3, 6                 ; 10.2 shopping: got the money back: Can't quit now.
+    words text_04E9, 3, 6                 ; 11.0 shopping: Hope it's not cold.
     words text_04FC, 2, 8                 ; 11.1 shopping: Don't get in my way!
-    words text_0509, 2, 8                 ; 11.2 shopping: My choice!
+    words text_0509, 2, 8                 ; 11.2 shopping: It's my call!
     words text_0514, 3, 6                 ; 12.0 bought a rival's store: I got it
-    words text_0521, 0, 5                 ; 12.1 bought a rival's store: Not too cool, but / I'll put up with it!
+    words text_0521, 0, 5                 ; 12.1 bought a rival's store: Not too cool, but / I'll deal with it!
     words text_054C, 3, 6                 ; 12.2 bought a rival's store: 'Cause I'm the manager!
     words text_055F, 2, 8                 ; 13.0 shopped this turn and the last: What's going on!
     words text_0572, 1, 7                 ; 13.1 shopped this turn and the last: Help me out
-    words text_0581, 1, 7                 ; 13.2 shopped this turn and the last: It's not building up at all!
-    words text_059C, 0, 5                 ; 14.0 assets passed half the goal: Only halfway at last
+    words text_0581, 1, 7                 ; 13.2 shopped this turn and the last: I can't save up at all!
+    words text_059C, 0, 5                 ; 14.0 assets passed half the goal: I'm halfway at last
     words text_05AD, 3, 6                 ; 14.1 assets passed half the goal: That's what I can do!
     words text_05C0, 3, 6                 ; 14.2 assets passed half the goal: Not done yet!
     words text_05CF, 2, 8                 ; 15.0 sold a store: I'll definitely get even!
-    words text_05EA, 1, 7                 ; 15.1 sold a store: I'm seriously blue
+    words text_05EA, 1, 7                 ; 15.1 sold a store: Man I'm really feeling down.
     words text_05FF, 1, 7                 ; 15.2 sold a store: Is this even allowed!
     words text_0616, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I can't buy a store... / is this even allowed!
-    words text_0643, 0, 5                 ; 16.1 declined a vacant lot it could not afford: If I've got no money I'll just have to give up
-    words text_0662, 1, 7                 ; 16.2 declined a vacant lot it could not afford: I'm super blue...
+    words text_0643, 0, 5                 ; 16.1 declined a vacant lot it could not afford: If I've got no money I'll just / have to give up
+    words text_0662, 1, 7                 ; 16.2 declined a vacant lot it could not afford: I'm super down...
     words text_067B, 0, 5                 ; 17.0 declined a vacant lot: Not even worth buying!
     words text_068E, 0, 5                 ; 17.1 declined a vacant lot: Maybe next time...
-    words text_06A3, 3, 6                 ; 17.2 declined a vacant lot: I'm doing fine without buying / a store like this!
-    words text_06CC, 3, 10                ; 18.0 an event card (the default): I'm starving~ ∥
+    words text_06A3, 3, 6                 ; 17.2 declined a vacant lot: I'm doing fine without buying / stores like this!
+    words text_06CC, 3, 10                ; 18.0 an event card (the default): I'm starving.
     words text_06DD, 0, 10                ; 18.1 an event card (the default): Me?
-    words text_06E8, 0, 10                ; 18.2 an event card (the default): Well~ lately, it's been tough for me...
+    words text_06E8, 0, 10                ; 18.2 an event card (the default): Well lately, it's been tough for / me...
 
 text_01E6:
-    string "俺は信じねー"                       ; en: I don't believe it
+    string "I don't believe it"           ; ja: 俺は信じねー
 
 text_01F3:
-    string "なんでだよ！！"                      ; en: Why!!
+    string "Why!!"                        ; ja: なんでだよ！！
 
 text_0202:
-    string "あ～やめたやめた！%Kやってらんねーぜ"          ; en: Ah, forget it, forget it! / I can't be bothered
+    string "Ah, forget it, forget it!%KI can't be bothered"  ; ja: あ～やめたやめた！%Kやってらんねーぜ
 
 text_0227:
-    string "俺に勝とーなんてあめ～んだよ"               ; en: You beating me? Dream on
+    string "You? Beating me? Dream on."     ; ja: 俺に勝とーなんてあめ～んだよ
 
 text_0244:
-    string "へっ！俺のが一番だぜ"                   ; en: Heh! Mine's the best
+    string "Heh! Mine's the best"         ; ja: へっ！俺のが一番だぜ
 
 text_0259:
-    string "これで勝ったも同然だぜ！"                 ; en: As good as won now!
+    string "As good as won now!"          ; ja: これで勝ったも同然だぜ！
 
 text_0272:
-    string "このくらい楽勝だぜ～"                   ; en: This much is a piece of cake~
+    string "Getting a store this size%Kis a piece of cake."  ; ja: このくらい楽勝だぜ～
 
 text_0287:
-    string "俺はこんなもんじゃ納得しねーぜ"              ; en: I'm not satisfied with just this
+    string "This is okay, but I need more!"  ; ja: 俺はこんなもんじゃ納得しねーぜ
 
 text_02A6:
-    string "合体！ってなんか恥じ～ぜ！"                ; en: Merge! is kind of embarrassing!
+    string "MEEERGE!!%K(oof that was embarrassing)"  ; ja: 合体！ってなんか恥じ～ぜ！
 
 text_02C1:
-    string "この店やる気あんのかねぇ？"                ; en: Does this store even care?
+    string "Do they even care?"           ; ja: この店やる気あんのかねぇ？
 
 text_02DC:
-    string "やってられね～な"                     ; en: I can't be bothered~
+    string "I can't be bothered."         ; ja: やってられね～な
 
 text_02ED:
-    string "こんなんでいいと思ってんのか？"              ; en: You think this is good enough?
+    string "You think this is good enough?"  ; ja: こんなんでいいと思ってんのか？
 
 text_030C:
-    string "おっ！安いじゃんかよ"                   ; en: Oh! It's cheap
+    string "Oh! It's cheap."               ; ja: おっ！安いじゃんかよ
 
 text_0321:
-    string "いつも安くしておけよ～"                  ; en: Keep it cheap all the time~
+    string "Keep it cheap all the time."  ; ja: いつも安くしておけよ～
 
 text_0338:
-    string "安売りでも手ぇぬくなよ！"                 ; en: Don't slack off even on a sale!
+    string "Don't slack off even on a sale!"  ; ja: 安売りでも手ぇぬくなよ！
 
 text_0351:
-    string "今日は暇をもてあましてるぜ！"               ; en: I've got time on my hands today!
+    string "I've got time on my hands today!"  ; ja: 今日は暇をもてあましてるぜ！
 
 text_036E:
-    string "次はどうしてやるかな？"                  ; en: What'll I do next?
+    string "What'll I do next?"           ; ja: 次はどうしてやるかな？
 
 text_0385:
-    string "たまには俺の店にも寄れよな！"               ; en: Stop by my store once in a while!
+    string "Stop by my store once in a while!"  ; ja: たまには俺の店にも寄れよな！
 
 text_03A2:
-    string "のんなくても平気だぜ！"                  ; en: I'm fine without riding it!
+    string "I don't need to ride it!"  ; ja: のんなくても平気だぜ！
 
 text_03B9:
-    string "まったく楽する気はねーぜ"                 ; en: I've got no intention of taking it easy
+    string "I've got no intention of taking it%Keasy"  ; ja: まったく楽する気はねーぜ
 
 text_03D2:
-    string "たまに使うからいいんだよ！"                ; en: It's good because I only use it sometimes!
+    string "It's fine. I only use it%Ksometimes!"  ; ja: たまに使うからいいんだよ！
 
 text_03ED:
-    string "今日はパァ～っとやろーぜ！"                ; en: Let's go wild today!
+    string "Let's go wild today!"         ; ja: 今日はパァ～っとやろーぜ！
 
 text_0408:
-    string "給料ふんだくったぜ！"                   ; en: I grabbed my pay!
+    string "I grabbed my pay!"            ; ja: 給料ふんだくったぜ！
 
 text_041D:
-    string "金ためねーとな"                      ; en: Gotta save money
+    string "Gotta save money."             ; ja: 金ためねーとな
 
 text_042C:
-    string "とろいぜ！このエレベータはよ！"              ; en: This elevator's slow!
+    string "This elevator's so slow!"        ; ja: とろいぜ！このエレベータはよ！
 
 text_044B:
-    string "着いたのか・・・"                     ; en: We're here...
+    string "Finally we're here..."                ; ja: 着いたのか・・・
 
 text_045C:
-    string "貸し切りだったぜ♪"                    ; en: Had it all to myself ♪
+    string "I was the only one in there ♪"       ; ja: 貸し切りだったぜ♪
 
 text_046F:
-    string "金使わせやがって！！"                   ; en: Making me spend money!!
+    string "Making me spend money!!"      ; ja: 金使わせやがって！！
 
 text_0484:
-    string "俺も負けてらんねーぜ！"                  ; en: I can't lose either!
+    string "I can't lose either!"         ; ja: 俺も負けてらんねーぜ！
 
 text_049B:
-    string "くっそ～∥｜！"                      ; en: Dammit~∥｜!
+    string "Dammit!"                      ; ja: くっそ～∥｜！
 
 text_04AA:
-    string "おっ！金返してくれんのか？"                ; en: Oh! You're paying me back?
+    string "Oh! You're paying me back?"   ; ja: おっ！金返してくれんのか？
 
 text_04C5:
-    string "また来るからな"                      ; en: I'll be back
+    string "I'll be back"                 ; ja: また来るからな
 
 text_04D4:
-    string "やめられねーな、もう"                   ; en: Can't quit now
+    string "Can't quit now."               ; ja: やめられねーな、もう
 
 text_04E9:
-    string "冷たくないねェ～∥"                    ; en: Not cold at all~ ∥
+    string "Hope it's not cold."           ; ja: 冷たくないねェ～∥
 
 text_04FC:
-    string "邪魔するな！"                       ; en: Don't get in my way!
+    string "Don't get in my way!"         ; ja: 邪魔するな！
 
 text_0509:
-    string "俺の勝手！"                        ; en: My choice!
+    string "It's my call!"                   ; ja: 俺の勝手！
 
 text_0514:
-    string "俺が貰ったぜ"                       ; en: I got it
+    string "I got it"                     ; ja: 俺が貰ったぜ
 
 text_0521:
-    string "ちょっとクールじゃないけど%Kガマンするか！"       ; en: Not too cool, but / I'll put up with it!
+    string "Not too cool, but%KI'll deal with it!"  ; ja: ちょっとクールじゃないけど%Kガマンするか！
 
 text_054C:
-    string "俺が店長だからな！"                    ; en: 'Cause I'm the manager!
+    string "'Cause I'm the manager!"      ; ja: 俺が店長だからな！
 
 text_055F:
-    string "どーなってんだよ！"                    ; en: What's going on!
+    string "What's going on!"             ; ja: どーなってんだよ！
 
 text_0572:
-    string "助けてくれよぉ"                      ; en: Help me out
+    string "Help me out"                  ; ja: 助けてくれよぉ
 
 text_0581:
-    string "全然たまんねーじゃないか！"                ; en: It's not building up at all!
+    string "I can't save up at all!"  ; ja: 全然たまんねーじゃないか！
 
 text_059C:
-    string "やっと半分かよぉ"                     ; en: Only halfway at last
+    string "I'm halfway at last"         ; ja: やっと半分かよぉ
 
 text_05AD:
-    string "俺の実力って奴さ！"                    ; en: That's what I can do!
+    string "That's what I can do!"        ; ja: 俺の実力って奴さ！
 
 text_05C0:
-    string "まだまだぁぁぁ"                      ; en: Not done yet!
+    string "Not done yet!"                ; ja: まだまだぁぁぁ
 
 text_05CF:
-    string "絶対仕返ししてやっからな！"                ; en: I'll definitely get even!
+    string "I'll definitely get even!"    ; ja: 絶対仕返ししてやっからな！
 
 text_05EA:
-    string "なんかマジブルーだぜ"                   ; en: I'm seriously blue
+    string "Man I'm really feeling down."  ; ja: なんかマジブルーだぜ
 
 text_05FF:
-    string "こんなのありなのかよ！"                  ; en: Is this even allowed!
+    string "Is this even allowed!"        ; ja: こんなのありなのかよ！
 
 text_0616:
-    string "店が買えないなんて・・・%Kこんなのありかよ！"      ; en: I can't buy a store... / is this even allowed!
+    string "I can't buy a store...%Kis this even allowed!"  ; ja: 店が買えないなんて・・・%Kこんなのありかよ！
 
 text_0643:
-    string "金がないんじゃ諦めるしかねーな"              ; en: If I've got no money I'll just have to give up
+    string "If I've got no money I'll just%Khave to give up"  ; ja: 金がないんじゃ諦めるしかねーな
 
 text_0662:
-    string "むっちゃブルーだぜ・・・"                 ; en: I'm super blue...
+    string "I'm super down..."            ; ja: むっちゃブルーだぜ・・・
 
 text_067B:
-    string "買う価値もないぜ！"                    ; en: Not even worth buying!
+    string "Not even worth buying!"       ; ja: 買う価値もないぜ！
 
 text_068E:
-    string "またにすっかな・・・"                   ; en: Maybe next time...
+    string "Maybe next time..."           ; ja: またにすっかな・・・
 
 text_06A3:
-    string "こんな店なんか買わなくたって%K余裕だぜ！"        ; en: I'm doing fine without buying / a store like this!
+    string "I'm doing fine without buying%Kstores like this!"  ; ja: こんな店なんか買わなくたって%K余裕だぜ！
 
 text_06CC:
-    string "はらへったぁ～∥"                     ; en: I'm starving~ ∥
+    string "I'm starving."              ; ja: はらへったぁ～∥
 
 text_06DD:
-    string "オレかぁ？"                        ; en: Me?
+    string "Me?"                          ; ja: オレかぁ？
 
 text_06E8:
-    string "いや～最近ね。オイラ辛くて・・・"             ; en: Well~ lately, it's been tough for me...
+    string "Well lately, it's been tough for%Kme..."  ; ja: いや～最近ね。オイラ辛くて・・・
     bytes 0x00, 0x00, 0x00    ; padding

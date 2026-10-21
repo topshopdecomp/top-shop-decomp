@@ -10,12 +10,17 @@ scripts share, comments, and an English rendering of each text.
     make scripts                              # assemble every file here into the disc's files,
                                               # in scripts/build/ (tools/tss.py build)
     python3 -I tools/tss.py build [DIR] [-o OUT]   # the same for the files in DIR, into OUT
-    python3 -I tools/tss.py extract           # write this directory again from the disc
+    python3 -I tools/tss.py extract           # write this directory again from the disc,
+                                              # but not over the edited scripts (--force)
+    python3 -I tools/tss.py extract DIR       # every script as on the disc, into DIR
     python3 -I tools/tss.py asm FILE.tss OUT  # one file to raw bytecode
     python3 -I tools/tss.py dis disc/A/EVE_049.J      # disassemble a script file to stdout
     python3 -I tools/tss.py dis disc/A/TALK.J 3       # (TALK.J: the entry number)
 
-The files are UTF-8. As they are, they assemble back to exactly the bytes on the disc.
+The files are UTF-8. As they are, they assemble back to exactly the bytes on the disc, except
+the talk scripts, which are edited: their texts are in English and stay up three times as long (see
+"Texts" below). `tools/tss.py extract` keeps a file that holds an edited script, unless given
+`--force`; into a new directory it writes every script as it is on the disc.
 
 ## Editing the scripts
 
@@ -37,9 +42,11 @@ paths) is written as a label, so instructions and data can be added, removed or 
   bytes, which some talk scripts on the disc already overrun (by up to 416 bytes); it never plays
   them. A build with `CPU_TALK` (`make CPU_TALK=1`), which plays them, unpacks every one into 4096
   bytes, and the build stops a talk script that unpacks to more (an error, as above).
+- A text of an edited talk script must fit the talk panel (see "Texts" below); the build reports
+  one that does not as an error.
 
-The disc image the build makes still takes these files from `disc/`: to play an edited script,
-put the file from `scripts/build/` in its place in the image.
+The disc image the build makes (`make`) builds the scripts first and takes these files from
+`scripts/build/` in place of the disc's, so edited scripts play.
 
 ## The files
 
@@ -369,8 +376,8 @@ them back. `\"` and `\\` stand for `"` and `\`, `\xNN` for a byte that is no cha
 Codes in the text: `%NMY` the current player's name (the letter after `M` is not read),
 `%Nnn` player nn's name, `%K` the next line, `%Snn` nn spaces. The panel has 3 lines of 38
 half-width characters. A text with double-byte characters has a comment: the English for a
-Japanese text (`en: ...`), else the text as it reads in plain ASCII (`%K` as ` / `, names as
-`<player>`). The game's font (`FONT0.FNT`) draws some symbols as small pictures, so they
+Japanese text (`en: ...`; in the talk scripts, which are in English, the Japanese: `ja: ...`),
+else the text as it reads in plain ASCII (`%K` as ` / `, names as `<player>`). The game's font (`FONT0.FNT`) draws some symbols as small pictures, so they
 read as emoticons in the talk: ≧ a cat's face, ☆ a heart, ∝ an outlined heart, ∈ a star,
 ★ a sparkle, ♪ and ♭ music notes, ∴ a cup of tea, ≦ two drops, ∵ a puff, ∥ and ｜ a long
 dash (a drawn-out sound). The files keep the Shift-JIS characters.
@@ -401,6 +408,17 @@ set to 0 (in an emulator), the talk shows, the character's line in the talk pane
 portrait, and then the turn waits for the voice forever (the voices' positions are wrong). A
 build with `CPU_TALK` (`make CPU_TALK=1`) plays the talk, with its voices. (A guess: it was
 switched off because it was not translated.)
+
+The talk scripts here are edited. Each text is in English, the English of
+`tools/tss_english.json` (where `<player>` stands for `%NMY` and ` / ` for a new row) fitted to
+the talk panel, with the Japanese in the comment; and the text stays up 90 frames before the
+talk goes on, not 30 (`wait_buttons_for`). The panel gives a talk text 2 rows of 240 pixels below
+the speaker's name: a half-width character is 7 pixels wide, a full-width one (an emoticon) 14,
+a name up to 12 half-width characters. A text keeps the rows of the Japanese when they fit, else
+its words are wrapped again; a percent sign is the full-width ％, since the game reads % as the
+start of a code. The talk scripts of characters 14 and 15, whom no one can choose, are left
+empty: with the English texts all 32 would not fit in `TALK.J`'s 22 sectors. The disc image the
+build makes takes the built `TALK.J`, so the talk is in English.
 
 ## The event card scene
 

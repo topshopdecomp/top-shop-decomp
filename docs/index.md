@@ -18,7 +18,8 @@ decompiling it, and how the decompilation is built. Start with [build.md](build.
 - **It builds and plays**: `make` builds a bootable `build/topshop.cue` / `.bin` whose game state
   matches the original's in 25 test scenarios played in an emulator ([build.md](build.md)).
 - **The scripts** the game runs are decompiled into `scripts/`, and can be edited and built back into
-  the disc's files ([script.md](script.md)).
+  the disc's files ([script.md](script.md)). The characters' talk scripts are edited into English,
+  and the disc image is built with the scripts of `scripts/`.
 - **A build option**: `make CPU_TALK=1` plays the CPU players' talk, which the retail game switched
   off, with the characters' voices, restored from the disc ([build.md](build.md),
   [script.md](script.md), [fileio.md](fileio.md)).

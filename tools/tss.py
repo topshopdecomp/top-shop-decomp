@@ -13,9 +13,13 @@ the scripts read) and assembles .tss files back into bytecode.
                                                disc. Edited scripts may change size; each file must
                                                still fit in the sectors the game reads (a shorter
                                                one is padded to its size on the disc)
-    python3 -I tools/tss.py extract [OUTDIR]   disassemble every script on the disc into OUTDIR
+    python3 -I tools/tss.py extract [OUTDIR] [--force]
+                                               disassemble every script on the disc into OUTDIR
                                                (default scripts/) and check that each assembles
-                                               back to the same bytes
+                                               back to the same bytes; a file already in OUTDIR
+                                               that holds an edited script (one that assembles to
+                                               other bytes than the disc's) is kept, unless
+                                               --force
     python3 -I tools/tss.py asm FILE.tss OUT   assemble one file into raw bytecode
     python3 -I tools/tss.py dis FILE.J [ENTRY] disassemble one script to stdout (ENTRY: the
                                                TALK.J entry)
@@ -1232,6 +1236,46 @@ def text_note(raw):
     return plain(literal)
 
 
+# ---------------------------------------------------------------------------------------------
+# The talk scripts in English
+
+# The panel a CPU player's talk is shown in (Script_OpTalkOpen, 0x800853E4: the player's frame at
+# x 0x20, 0x100 wide, the text from 8 pixels in; Scene_Update draws a half-width character 7
+# pixels wide and a full-width one 14): 240 pixels to a row. Of its 3 rows the first holds the
+# speaker's name, so a talk text has 2. A player's name is up to 12 half-width characters
+# (NE_MAX_LEN in src/setup.c). tools/tss.py build checks the texts of an edited talk script
+# against these.
+TALK_ROW_PX = 240
+TALK_TEXT_ROWS = 2
+TALK_NAME_PX = 12 * 7
+STRING_LINE = re.compile(r'^(    string )"((?:[^"\\]|\\.)*)"')
+
+
+def talk_px(text):
+    """How wide a row of game text is in the talk panel, in pixels (a name at its longest)"""
+    px = 0
+    i = 0
+    while i < len(text):
+        if text.startswith("%N", i):
+            px += TALK_NAME_PX
+            i += 4
+        elif text.startswith("%S", i):
+            px += 7 * int(text[i + 2:i + 4])
+            i += 4
+        else:
+            ch = text[i]
+            px += 7 if ord(ch) < 0x80 or 0xFF61 <= ord(ch) <= 0xFF9F else 14
+            i += 1
+    return px
+
+
+def talk_fits(literal):
+    """Whether a text, as written between quotes in a .tss file, fits the talk panel"""
+    text = re.sub(r"\\(x[0-9A-Fa-f]{2}|.)", lambda m: "x" if len(m.group(1)) == 3 else m.group(1), literal)
+    rows = text.split("%K")
+    return len(rows) <= TALK_TEXT_ROWS and all(talk_px(r) <= TALK_ROW_PX for r in rows)
+
+
 class Printer:
     def __init__(self, dis, row_note=None):
         self.dis = dis
@@ -1751,7 +1795,17 @@ def assemble(text):
 # Commands
 
 
-def cmd_extract(outdir):
+def edited(path, data):
+    """Whether the script file at path holds a script other than data (it does not assemble to it)"""
+    try:
+        return assemble(open(path, encoding="utf-8").read()) != data
+    except (AsmError, OSError, UnicodeDecodeError):
+        return True
+
+
+def cmd_extract(outdir, force=False):
+    """Write every script on the disc into outdir and check that each assembles back to the same
+    bytes. A script file already there that holds an edited script is kept, unless force."""
     sources = script_sources()
     os.makedirs(outdir, exist_ok=True)
     try:
@@ -1763,10 +1817,14 @@ def cmd_extract(outdir):
             tss_readme.readme(sys.modules[__name__], tss_names))
     bad = 0
     problems = 0
+    kept = []
     for path, title, how, data, row_note, _, _, _ in sources:
         text, dis = disassemble(data, title, how, row_note)
         problems += len(dis.problems)
         full = os.path.join(outdir, path)
+        if not force and os.path.exists(full) and edited(full, data):
+            kept.append(path)
+            continue
         os.makedirs(os.path.dirname(full), exist_ok=True)
         open(full, "w", encoding="utf-8").write(text)
         try:
@@ -1781,7 +1839,11 @@ def cmd_extract(outdir):
             print("%s: assembles to different bytes (first at 0x%04X; %d vs %d bytes)"
                   % (path, k, len(again), len(data)))
             bad += 1
-    print("%d scripts written to %s; %d do not assemble back; %d notes" % (len(sources), outdir, bad, problems))
+    print("%d scripts written to %s; %d do not assemble back; %d notes" % (len(sources) - len(kept), outdir,
+                                                                        bad, problems))
+    if kept:
+        print("%d edited scripts kept as they are (--force writes the disc's over them): %s"
+              % (len(kept), ", ".join(kept)))
     return bad
 
 
@@ -1808,7 +1870,8 @@ def build_files(srcdir, disc=DISC):
         for path, entry, packed, data in scripts:
             full = os.path.join(srcdir, path)
             try:
-                code = assemble(open(full, encoding="utf-8").read())
+                source = open(full, encoding="utf-8").read()
+                code = assemble(source)
             except (AsmError, OSError) as e:
                 errors.append("%s: %s" % (full, e))
                 bad = True
@@ -1817,6 +1880,12 @@ def build_files(srcdir, disc=DISC):
                 continue                    # as on the disc: the original bytes stay
             changed.setdefault(name, []).append(path)
             if packed:
+                for line in source.split("\n"):
+                    m = STRING_LINE.match(line)
+                    if m and not talk_fits(m.group(2)):
+                        errors.append('%s: "%s" does not fit the talk panel (%d rows of %d pixels: a half-width '
+                                      'character 7, a full-width one 14, a name %d)' % (full, m.group(2),
+                                      TALK_TEXT_ROWS, TALK_ROW_PX, TALK_NAME_PX))
                 entries[entry] = lzss_compress(code)
                 if len(code) > TALK_MAX_UNPACKED:
                     errors.append("%s: unpacks to %d bytes; a CPU_TALK build unpacks a talk script into "
@@ -1860,7 +1929,12 @@ def main(argv):
         sys.exit(__doc__)
     cmd = argv[1]
     if cmd == "extract":
-        sys.exit(1 if cmd_extract(argv[2] if len(argv) > 2 else "scripts") else 0)
+        args = argv[2:]
+        force = "--force" in args
+        args = [a for a in args if a != "--force"]
+        if len(args) > 1:
+            sys.exit(__doc__)
+        sys.exit(1 if cmd_extract(args[0] if args else "scripts", force) else 0)
     if cmd == "build":
         args = argv[2:]
         outdir = None

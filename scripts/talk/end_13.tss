@@ -1,5 +1,9 @@
 ; TALK.J entry 29 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Colin says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,16 +59,16 @@
     talk_wait_open
     play_xa 13, $l2                       ; voice: XA track 13 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01E6, 4, 9                 ; 0.0 (no comment): I'm melting away, yuki~∥｜ ≦
-    words text_0207, 4, 9                 ; 0.1 (no comment): Me-el-ting a-way, yuki~.. ≦≦
-    words text_0226, 4, 9                 ; 0.2 (no comment): Looks hopeless, yuki~ ≦
+    words text_01E6, 4, 9                 ; 0.0 (no comment): I'm melting away, yuki ≦
+    words text_0207, 4, 9                 ; 0.1 (no comment): Meeelting aaway, yukiii.. ≦≦
+    words text_0226, 4, 9                 ; 0.2 (no comment): Looks hopeless, yukiii ≦
     words text_0237, 3, 6                 ; 1.0 a chain of 4: It got really big, yuki ★
     words text_0254, 3, 6                 ; 1.1 a chain of 4: A four-snowman chain, yuki ♪
     words text_0269, 3, 6                 ; 1.2 a chain of 4: As good as won, yuki ★
@@ -74,220 +78,220 @@ table_0090:
     words text_02DD, 3, 6                 ; 3.0 landed on a rival store closed for now: Closed for now, how cold, yuki ♭
     words text_02F8, 3, 6                 ; 3.1 landed on a rival store closed for now: Never let your guard down, yuki ★
     words text_0309, 3, 6                 ; 3.2 landed on a rival store closed for now: I'll let the snow pile up, yuki ♪
-    words text_0324, 0, 5                 ; 4.0 landed on a rival store with lowered prices: If you're shopping, now's the time, yuki
-    words text_0343, 3, 6                 ; 4.1 landed on a rival store with lowered prices: Now if only it would snow I'd be satisfied, yuki ♪
-    words text_0360, 3, 6                 ; 4.2 landed on a rival store with lowered prices: It'd be a loss not to buy here, yuki ★
-    words text_0381, 3, 6                 ; 5.0 landed on its own store / opened a store: The air conditioner's on full here, yuki~
-    words text_03A0, 3, 6                 ; 5.1 landed on its own store / opened a store: A smoke effect with dry ice, yuki ♪
-    words text_03C3, 3, 6                 ; 5.2 landed on its own store / opened a store: The store is snow country~∥｜ yuki ★
+    words text_0324, 0, 5                 ; 4.0 landed on a rival store with lowered prices: If you're going to shop, / now's the time, yuki
+    words text_0343, 3, 6                 ; 4.1 landed on a rival store with lowered prices: Now if it would only snow, / I'd be satisfied, yuki ♪
+    words text_0360, 3, 6                 ; 4.2 landed on a rival store with lowered prices: It'd be a loss not to buy here, / yuki ★
+    words text_0381, 3, 6                 ; 5.0 landed on its own store / opened a store: The air conditioner's on full / here, yuki~
+    words text_03A0, 3, 6                 ; 5.1 landed on its own store / opened a store: A smoke effect with dry ice, / yuki ♪
+    words text_03C3, 3, 6                 ; 5.2 landed on its own store / opened a store: This store is snow country now. / yuki ★
     words text_03E0, 1, 7                 ; 6.0 did not take the elevator: It's hot, yuki ≦
-    words text_03EB, 4, 9                 ; 6.1 did not take the elevator: In the elevator my body / gets smaller, yuki~ ≦
+    words text_03EB, 4, 9                 ; 6.1 did not take the elevator: In the elevator, my body / gets smaller, yukiii ≦
     words text_0412, 0, 5                 ; 6.2 did not take the elevator: It looks cold outside, yuki....
     words text_042B, 3, 6                 ; 7.0 landed on the bank: Showtime with dry ice, yuki ♪
     words text_044E, 3, 6                 ; 7.1 landed on the bank: Which way shall I go now, yuki ★
     words text_046B, 0, 5                 ; 7.2 landed on the bank: Bored, yuki...
     words text_047A, 1, 7                 ; 8.0 took the elevator: Hmm, is <player> / heavier than it looks, yuki?
-    words text_04A3, 3, 6                 ; 8.1 took the elevator: I was a refrigerator for a while, yuki ♪
-    words text_04C2, 1, 7                 ; 8.2 took the elevator: The people riding with me looked cold, yuki ♪
-    words text_04E5, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: I'll start an avalanche to get even, yuki!
-    words text_0504, 2, 8                 ; 9.1 shopping cost a fifth of its money or more: I hope a heavy snow / buries it, yuki!
+    words text_04A3, 3, 6                 ; 8.1 took the elevator: I turned it into a refrigerator, / yuki ♪
+    words text_04C2, 1, 7                 ; 8.2 took the elevator: The people riding with me looked / cold, yuki ♪
+    words text_04E5, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: I'll start an avalanche to get / even, yuki!
+    words text_0504, 2, 8                 ; 9.1 shopping cost a fifth of its money or more: I hope a heavy snow / buries them, yuki!
     words text_052B, 4, 9                 ; 9.2 shopping cost a fifth of its money or more: I'm starting to melt, yuki ≦≦
     words text_0544, 3, 6                 ; 10.0 shopping: got the money back: Seems I got a good deal, yuki ♪
-    words text_0563, 3, 6                 ; 10.1 shopping: got the money back: I'll make it snow to thank you, yuki ♭
-    words text_0580, 3, 6                 ; 10.2 shopping: got the money back: Feels like a snow festival, yuki ★
+    words text_0563, 3, 6                 ; 10.1 shopping: got the money back: I'll make it snow to thank you, / yuki ♭
+    words text_0580, 3, 6                 ; 10.2 shopping: got the money back: Feels like a snow festival, / yuki ★
     words text_0593, 3, 6                 ; 11.0 shopping: Sorry to intrude, yuki ♭
     words text_05AA, 3, 6                 ; 11.1 shopping: I want an air conditioner, yuki ♪
-    words text_05BF, 3, 6                 ; 11.2 shopping: City snow doesn't taste good, yuki ∈
+    words text_05BF, 3, 6                 ; 11.2 shopping: City snow doesn't taste good, / yuki ∈
     words text_05DE, 3, 6                 ; 12.0 bought a rival's store: Hello from snow country, yuki
-    words text_05FB, 0, 5                 ; 12.1 bought a rival's store: From today there's no heating here in winter, yuki ★
-    words text_061E, 3, 6                 ; 12.2 bought a rival's store: I'll build a snow hut here, yuki ♪
-    words text_0641, 1, 7                 ; 13.0 shopped this turn and the last: Hot days keep coming lately, yuki ≦
+    words text_05FB, 0, 5                 ; 12.1 bought a rival's store: From today there's no heating here / in winter, yuki ★
+    words text_061E, 3, 6                 ; 12.2 bought a rival's store: I'll build an igloo here, / yuki ♪
+    words text_0641, 1, 7                 ; 13.0 shopped this turn and the last: Hot days keep coming lately, / yuki ≦
     words text_0660, 1, 7                 ; 13.1 shopped this turn and the last: I hear a drip, drip / sound, yuki~ ≦
-    words text_0689, 4, 9                 ; 13.2 shopped this turn and the last: Thinking of nothing but spending, yuki ≦≦
-    words text_069E, 3, 6                 ; 14.0 assets passed half the goal: This is where it really starts, yuki ∈
-    words text_06B5, 3, 6                 ; 14.1 assets passed half the goal: The snow will keep piling up, yuki ★
+    words text_0689, 4, 9                 ; 13.2 shopped this turn and the last: Thinking of nothing but spending, / yuki ≦≦
+    words text_069E, 3, 6                 ; 14.0 assets passed half the goal: This is where it really starts, / yuki ∈
+    words text_06B5, 3, 6                 ; 14.1 assets passed half the goal: The snow will keep piling up, / yuki ★
     words text_06D2, 3, 6                 ; 14.2 assets passed half the goal: I've grown halfway, yuki ♪
-    words text_06ED, 4, 9                 ; 15.0 sold a store: My body got a size smaller, yuki ≦≦
-    words text_070C, 2, 8                 ; 15.1 sold a store: Next time I'll bury you in snow, yuki!
+    words text_06ED, 4, 9                 ; 15.0 sold a store: My body got a size smaller, / yuki ≦≦
+    words text_070C, 2, 8                 ; 15.1 sold a store: Next time I'll bury you in snow, / yuki!
     words text_0727, 4, 9                 ; 15.2 sold a store: Paying off debt, yuki ≦
-    words text_073A, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I counted in the expenses ahead, yuki ≦
+    words text_073A, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I counted the expenses ahead, / yuki ≦
     words text_075B, 4, 9                 ; 16.1 declined a vacant lot it could not afford: If I can't buy this / it'll be terrible, yuki ≦≦
     words text_0784, 1, 7                 ; 16.2 declined a vacant lot it could not afford: My money is disappearing, yuki ≦
-    words text_079D, 2, 8                 ; 17.0 declined a vacant lot: Thinking of not buying stores, yuki!
-    words text_07B2, 3, 6                 ; 17.1 declined a vacant lot: I'll keep my money this time, yuki ♪
+    words text_079D, 2, 8                 ; 17.0 declined a vacant lot: Thinking of not buying stores, / yuki!
+    words text_07B2, 3, 6                 ; 17.1 declined a vacant lot: I'll keep my money this time, / yuki ♪
     words text_07CD, 0, 5                 ; 17.2 declined a vacant lot: I'll let you have this one, yuki
-    words text_07E6, 3, 10                ; 18.0 an event card (the default): So happy~
+    words text_07E6, 3, 10                ; 18.0 an event card (the default): So happyyy
     words text_07EF, 0, 10                ; 18.1 an event card (the default): Thanks for having me, yuki
     words text_0800, 3, 10                ; 18.2 an event card (the default): Yukki ya konkon (snow song)...
 
 text_01E6:
-    string "溶けてなくなっちゃうゆき～∥｜≦"             ; en: I'm melting away, yuki~∥｜ ≦
+    string "I'm melting away, yuki ≦"  ; ja: 溶けてなくなっちゃうゆき～∥｜≦
 
 text_0207:
-    string "と～け～て～く～ゆき～・・≦≦"              ; en: Me-el-ting a-way, yuki~.. ≦≦
+    string "Meeelting aaway, yukiii.. ≦≦"  ; ja: と～け～て～く～ゆき～・・≦≦
 
 text_0226:
-    string "ダメそうゆき～≦"                     ; en: Looks hopeless, yuki~ ≦
+    string "Looks hopeless, yukiii ≦"      ; ja: ダメそうゆき～≦
 
 text_0237:
-    string "とってもおっきくなったゆき★"               ; en: It got really big, yuki ★
+    string "It got really big, yuki ★"    ; ja: とってもおっきくなったゆき★
 
 text_0254:
-    string "４連雪だるまだゆき♪"                   ; en: A four-snowman chain, yuki ♪
+    string "A four-snowman chain, yuki ♪"  ; ja: ４連雪だるまだゆき♪
 
 text_0269:
-    string "勝ったも同然ゆき★"                    ; en: As good as won, yuki ★
+    string "As good as won, yuki ★"       ; ja: 勝ったも同然ゆき★
 
 text_027C:
-    string "ちょっと小手調べだゆき♭"                 ; en: Just a warm-up, yuki ♭
+    string "Just a warm-up, yuki ♭"       ; ja: ちょっと小手調べだゆき♭
 
 text_0295:
-    string "もっとおっきくなって欲しいゆき"              ; en: I want it to get bigger, yuki
+    string "I want it to get bigger, yuki"  ; ja: もっとおっきくなって欲しいゆき
 
 text_02B4:
-    string "この辺はドライアイスで%K冷やしとくゆき★"        ; en: I'll cool this area / with dry ice, yuki ★
+    string "I'll cool this area%Kwith dry ice, yuki ★"  ; ja: この辺はドライアイスで%K冷やしとくゆき★
 
 text_02DD:
-    string "休業中なんて寒そうゆきね♭"                ; en: Closed for now, how cold, yuki ♭
+    string "Closed for now, how cold, yuki ♭"  ; ja: 休業中なんて寒そうゆきね♭
 
 text_02F8:
-    string "油断大敵ゆきね★"                     ; en: Never let your guard down, yuki ★
+    string "Never let your guard down, yuki ★"  ; ja: 油断大敵ゆきね★
 
 text_0309:
-    string "雪をつもらせてあげるゆき♪"                ; en: I'll let the snow pile up, yuki ♪
+    string "I'll let the snow pile up, yuki ♪"  ; ja: 雪をつもらせてあげるゆき♪
 
 text_0324:
-    string "買い物するなら今しかないゆきね"              ; en: If you're shopping, now's the time, yuki
+    string "If you're going to shop,%Know's the time, yuki"  ; ja: 買い物するなら今しかないゆきね
 
 text_0343:
-    string "これで雪さえ降れば満足ゆき♪"               ; en: Now if only it would snow I'd be satisfied, yuki ♪
+    string "Now if it would only snow,%KI'd be satisfied, yuki ♪"  ; ja: これで雪さえ降れば満足ゆき♪
 
 text_0360:
-    string "ここで買わないと損しちゃうゆき★"             ; en: It'd be a loss not to buy here, yuki ★
+    string "It'd be a loss not to buy here,%Kyuki ★"  ; ja: ここで買わないと損しちゃうゆき★
 
 text_0381:
-    string "ここはクーラーガンガンだゆき～"              ; en: The air conditioner's on full here, yuki~
+    string "The air conditioner's on full%Khere, yuki~"  ; ja: ここはクーラーガンガンだゆき～
 
 text_03A0:
-    string "ドライアイスでスモーク効果だゆき♪"            ; en: A smoke effect with dry ice, yuki ♪
+    string "A smoke effect with dry ice,%Kyuki ♪"  ; ja: ドライアイスでスモーク効果だゆき♪
 
 text_03C3:
-    string "お店はゆきぃぐに～∥｜ゆき★"               ; en: The store is snow country~∥｜ yuki ★
+    string "This store is snow country now.%Kyuki ★"  ; ja: お店はゆきぃぐに～∥｜ゆき★
 
 text_03E0:
-    string "暑いゆき≦"                        ; en: It's hot, yuki ≦
+    string "It's hot, yuki ≦"             ; ja: 暑いゆき≦
 
 text_03EB:
-    string "エレベーターは体が%K小さくなるゆき～≦"         ; en: In the elevator my body / gets smaller, yuki~ ≦
+    string "In the elevator, my body%Kgets smaller, yukiii ≦"  ; ja: エレベーターは体が%K小さくなるゆき～≦
 
 text_0412:
-    string "外が寒そうだゆき・・・・"                 ; en: It looks cold outside, yuki....
+    string "It looks cold outside, yuki...."  ; ja: 外が寒そうだゆき・・・・
 
 text_042B:
-    string "ドライアイスでショータイムだゆき♪"            ; en: Showtime with dry ice, yuki ♪
+    string "Showtime with dry ice, yuki ♪"  ; ja: ドライアイスでショータイムだゆき♪
 
 text_044E:
-    string "今度はどっちにいこうかゆき★"               ; en: Which way shall I go now, yuki ★
+    string "Which way shall I go now, yuki ★"  ; ja: 今度はどっちにいこうかゆき★
 
 text_046B:
-    string "暇だゆき・・・"                      ; en: Bored, yuki...
+    string "Bored, yuki..."               ; ja: 暇だゆき・・・
 
 text_047A:
-    string "う～ん、%NMYって%K見かけより重いゆきか？"      ; en: Hmm, is <player> / heavier than it looks, yuki?
+    string "Hmm, is %NMY%Kheavier than it looks, yuki?"  ; ja: う～ん、%NMYって%K見かけより重いゆきか？
 
 text_04A3:
-    string "一時的に冷蔵庫になってたゆき♪"              ; en: I was a refrigerator for a while, yuki ♪
+    string "I turned it into a refrigerator,%Kyuki ♪"  ; ja: 一時的に冷蔵庫になってたゆき♪
 
 text_04C2:
-    string "一緒に乗ってた人寒そうだったゆき♪"            ; en: The people riding with me looked cold, yuki ♪
+    string "The people riding with me looked%Kcold, yuki ♪"  ; ja: 一緒に乗ってた人寒そうだったゆき♪
 
 text_04E5:
-    string "仕返しに雪崩おこしてやるゆき！"              ; en: I'll start an avalanche to get even, yuki!
+    string "I'll start an avalanche to get%Keven, yuki!"  ; ja: 仕返しに雪崩おこしてやるゆき！
 
 text_0504:
-    string "大雪になって%K埋まっちゃえばいいゆき！"         ; en: I hope a heavy snow / buries it, yuki!
+    string "I hope a heavy snow%Kburies them, yuki!"  ; ja: 大雪になって%K埋まっちゃえばいいゆき！
 
 text_052B:
-    string "溶けはじめちゃうゆき≦≦"                 ; en: I'm starting to melt, yuki ≦≦
+    string "I'm starting to melt, yuki ≦≦"  ; ja: 溶けはじめちゃうゆき≦≦
 
 text_0544:
-    string "なんか得しちゃったみたいゆき♪"              ; en: Seems I got a good deal, yuki ♪
+    string "Seems I got a good deal, yuki ♪"  ; ja: なんか得しちゃったみたいゆき♪
 
 text_0563:
-    string "お礼に雪降らせてあげるゆき♭"               ; en: I'll make it snow to thank you, yuki ♭
+    string "I'll make it snow to thank you,%Kyuki ♭"  ; ja: お礼に雪降らせてあげるゆき♭
 
 text_0580:
-    string "雪祭り気分だゆき★"                    ; en: Feels like a snow festival, yuki ★
+    string "Feels like a snow festival,%Kyuki ★"  ; ja: 雪祭り気分だゆき★
 
 text_0593:
-    string "じゃましちゃったゆき♭"                  ; en: Sorry to intrude, yuki ♭
+    string "Sorry to intrude, yuki ♭"     ; ja: じゃましちゃったゆき♭
 
 text_05AA:
-    string "クーラーほしいゆき♪"                   ; en: I want an air conditioner, yuki ♪
+    string "I want an air conditioner, yuki ♪"  ; ja: クーラーほしいゆき♪
 
 text_05BF:
-    string "都会のゆきはおいしくないゆき∈"              ; en: City snow doesn't taste good, yuki ∈
+    string "City snow doesn't taste good,%Kyuki ∈"  ; ja: 都会のゆきはおいしくないゆき∈
 
 text_05DE:
-    string "雪の国からこんにちわーだゆき"               ; en: Hello from snow country, yuki
+    string "Hello from snow country, yuki"  ; ja: 雪の国からこんにちわーだゆき
 
 text_05FB:
-    string "今日からここは冬は暖房なしだゆき★"            ; en: From today there's no heating here in winter, yuki ★
+    string "From today there's no heating here%Kin winter, yuki ★"  ; ja: 今日からここは冬は暖房なしだゆき★
 
 text_061E:
-    string "ここにカマクラでも作っちゃうゆき♪"            ; en: I'll build a snow hut here, yuki ♪
+    string "I'll build an igloo here,%Kyuki ♪"  ; ja: ここにカマクラでも作っちゃうゆき♪
 
 text_0641:
-    string "このごろ暑い日が続いてるゆき≦"              ; en: Hot days keep coming lately, yuki ≦
+    string "Hot days keep coming lately,%Kyuki ≦"  ; ja: このごろ暑い日が続いてるゆき≦
 
 text_0660:
-    string "なんかポタポタっていう音が%Kするゆき～≦"        ; en: I hear a drip, drip / sound, yuki~ ≦
+    string "I hear a drip, drip%Ksound, yuki~ ≦"  ; ja: なんかポタポタっていう音が%Kするゆき～≦
 
 text_0689:
-    string "連続出費思考ゆき≦≦"                   ; en: Thinking of nothing but spending, yuki ≦≦
+    string "Thinking of nothing but spending,%Kyuki ≦≦"  ; ja: 連続出費思考ゆき≦≦
 
 text_069E:
-    string "ここからが本番だゆき∈"                  ; en: This is where it really starts, yuki ∈
+    string "This is where it really starts,%Kyuki ∈"  ; ja: ここからが本番だゆき∈
 
 text_06B5:
-    string "雪はまだまだ積もってくゆき★"               ; en: The snow will keep piling up, yuki ★
+    string "The snow will keep piling up,%Kyuki ★"  ; ja: 雪はまだまだ積もってくゆき★
 
 text_06D2:
-    string "半分まで大きくなったゆき♪"                ; en: I've grown halfway, yuki ♪
+    string "I've grown halfway, yuki ♪"   ; ja: 半分まで大きくなったゆき♪
 
 text_06ED:
-    string "体が一回り小さくなったゆき≦≦"              ; en: My body got a size smaller, yuki ≦≦
+    string "My body got a size smaller,%Kyuki ≦≦"  ; ja: 体が一回り小さくなったゆき≦≦
 
 text_070C:
-    string "こんど雪でうめてやるゆき！"                ; en: Next time I'll bury you in snow, yuki!
+    string "Next time I'll bury you in snow,%Kyuki!"  ; ja: こんど雪でうめてやるゆき！
 
 text_0727:
-    string "借金の返済だゆき≦"                    ; en: Paying off debt, yuki ≦
+    string "Paying off debt, yuki ≦"      ; ja: 借金の返済だゆき≦
 
 text_073A:
-    string "この先の出費を計算に入れたゆき≦"             ; en: I counted in the expenses ahead, yuki ≦
+    string "I counted the expenses ahead,%Kyuki ≦"  ; ja: この先の出費を計算に入れたゆき≦
 
 text_075B:
-    string "ここ買えないと%K大変なことになるゆき≦≦"        ; en: If I can't buy this / it'll be terrible, yuki ≦≦
+    string "If I can't buy this%Kit'll be terrible, yuki ≦≦"  ; ja: ここ買えないと%K大変なことになるゆき≦≦
 
 text_0784:
-    string "お金がなくなってるゆき≦"                 ; en: My money is disappearing, yuki ≦
+    string "My money is disappearing, yuki ≦"  ; ja: お金がなくなってるゆき≦
 
 text_079D:
-    string "店買わない思考ゆき！"                   ; en: Thinking of not buying stores, yuki!
+    string "Thinking of not buying stores,%Kyuki!"  ; ja: 店買わない思考ゆき！
 
 text_07B2:
-    string "今回はお金をとっとくゆき♪"                ; en: I'll keep my money this time, yuki ♪
+    string "I'll keep my money this time,%Kyuki ♪"  ; ja: 今回はお金をとっとくゆき♪
 
 text_07CD:
-    string "ここはゆずってあげるゆき"                 ; en: I'll let you have this one, yuki
+    string "I'll let you have this one, yuki"  ; ja: ここはゆずってあげるゆき
 
 text_07E6:
-    string "うれち～"                         ; en: So happy~
+    string "So happyyy"                    ; ja: うれち～
 
 text_07EF:
-    string "おそまつさまゆき"                     ; en: Thanks for having me, yuki
+    string "Thanks for having me, yuki"   ; ja: おそまつさまゆき
 
 text_0800:
-    string "ゆっきやコンコン・・・"                  ; en: Yukki ya konkon (snow song)...
+    string "Yukki ya konkon (snow song)..."  ; ja: ゆっきやコンコン・・・
     bytes 0x00    ; padding

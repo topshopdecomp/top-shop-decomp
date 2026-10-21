@@ -792,8 +792,8 @@ int Talk_Print(u8 *text, int inlineText)
 }
 
 /* Add one Shift-JIS character (two bytes, or one half-width byte) to the talk panel; wraps after 38
- * columns, ignored after the third row (wrapping off the third row writes past chars, into kind)
- * (0x80081450) */
+ * columns, ignored after the third row (wrapping off the third row writes past chars, into kind;
+ * a CPU_TALK build, which plays the talk scripts, leaves the rest out instead) (0x80081450) */
 /* 0x80081450 */
 void Talk_PutChar(u8 *ch)
 {
@@ -803,7 +803,11 @@ void Talk_PutChar(u8 *ch)
     code = ch[0] | ch[1] << 8;
     if (g_talk.col >= TALK_COLS)
     {
+#ifdef CPU_TALK
+        if (g_talk.row >= TALK_ROWS - 1)
+#else
         if (g_talk.row > 2)
+#endif
         {
             return;
         }

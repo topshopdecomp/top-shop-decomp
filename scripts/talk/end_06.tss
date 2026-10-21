@@ -1,5 +1,9 @@
 ; TALK.J entry 22 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Rob says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,239 +59,239 @@
     talk_wait_open
     play_xa 6, $l2                        ; voice: XA track 6 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01E6, 4, 9                 ; 0.0 (no comment): Looks like it's hopeless now~
-    words text_01FF, 1, 7                 ; 0.1 (no comment): I was just off my game this time~
-    words text_021C, 4, 9                 ; 0.2 (no comment): My board's getting wrecked~ ≦
-    words text_0237, 3, 6                 ; 1.0 a chain of 4: Oh! This doesn't look shabby at all~
-    words text_0256, 3, 6                 ; 1.1 a chain of 4: My store really got big~
-    words text_0277, 3, 6                 ; 1.2 a chain of 4: I guess this is a big lead~
-    words text_0298, 3, 6                 ; 2.0 a chain of 2 or 3: They merged~
-    words text_02A5, 3, 6                 ; 2.1 a chain of 2 or 3: I guess this is a normal size~
-    words text_02C0, 3, 6                 ; 2.2 a chain of 2 or 3: Would bigger be better~
-    words text_02DB, 0, 5                 ; 3.0 landed on a rival store closed for now: I have time on my hands~
-    words text_02EE, 3, 6                 ; 3.1 landed on a rival store closed for now: Today was really easy~
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Looks like it's hopeless now
+    words text_01FF, 1, 7                 ; 0.1 (no comment): I was just off my game this time
+    words text_021C, 4, 9                 ; 0.2 (no comment): My board's getting wrecked ≦
+    words text_0237, 3, 6                 ; 1.0 a chain of 4: Oh! This doesn't look / too shabby at all.
+    words text_0256, 3, 6                 ; 1.1 a chain of 4: My store really got big.
+    words text_0277, 3, 6                 ; 1.2 a chain of 4: I guess this is a big lead.
+    words text_0298, 3, 6                 ; 2.0 a chain of 2 or 3: They merged.
+    words text_02A5, 3, 6                 ; 2.1 a chain of 2 or 3: I guess this is a normal size.
+    words text_02C0, 3, 6                 ; 2.2 a chain of 2 or 3: Would bigger be better?
+    words text_02DB, 0, 5                 ; 3.0 landed on a rival store closed for now: I have time on my hands.
+    words text_02EE, 3, 6                 ; 3.1 landed on a rival store closed for now: Today was really easy.
     words text_0307, 0, 5                 ; 3.2 landed on a rival store closed for now: Nothing to do, so what now?
-    words text_0328, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Oh! A buy~
-    words text_0339, 0, 5                 ; 4.1 landed on a rival store with lowered prices: Do they make a profit like this~
-    words text_0354, 3, 6                 ; 4.2 landed on a rival store with lowered prices: It'd be a loss not to buy, right
-    words text_036F, 0, 5                 ; 5.0 landed on its own store / opened a store: I'll rest here today~
+    words text_0328, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Wow! Thats a good deal.
+    words text_0339, 0, 5                 ; 4.1 landed on a rival store with lowered prices: How do they make a profit / like this?
+    words text_0354, 3, 6                 ; 4.2 landed on a rival store with lowered prices: It'd be stupid not to buy, right?
+    words text_036F, 0, 5                 ; 5.0 landed on its own store / opened a store: I'll rest here today.
     words text_0388, 1, 7                 ; 5.1 landed on its own store / opened a store: Did I have anything to do?
-    words text_039D, 3, 6                 ; 5.2 landed on its own store / opened a store: I'm kind of bored~
-    words text_03B4, 1, 7                 ; 6.0 did not take the elevator: Not using it is a shortcut~
-    words text_03CB, 0, 5                 ; 6.1 did not take the elevator: Well, that's how the world goes~
-    words text_03E2, 4, 9                 ; 6.2 did not take the elevator: No use complaining~
-    words text_03FF, 3, 6                 ; 7.0 landed on the bank: I got my pay~
-    words text_0410, 3, 6                 ; 7.1 landed on the bank: I'll play all day today~
-    words text_0425, 3, 6                 ; 7.2 landed on the bank: Getting money makes you happy~
-    words text_0442, 0, 5                 ; 8.0 took the elevator: This is nice once in a while?
-    words text_0461, 1, 7                 ; 8.1 took the elevator: I'm not / that fond of elevators~
-    words text_048C, 0, 5                 ; 8.2 took the elevator: Right! Where to next~
-    words text_04A5, 1, 7                 ; 9.0 shopping cost a fifth of its money or more: This store's a little risky~
-    words text_04C0, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: I wanted to avoid it~
-    words text_04D7, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: I came somewhere bad~
-    words text_04F6, 3, 6                 ; 10.0 shopping: got the money back: Yes~ pure profit~
+    words text_039D, 3, 6                 ; 5.2 landed on its own store / opened a store: I'm kind of bored.
+    words text_03B4, 1, 7                 ; 6.0 did not take the elevator: Not using it is faster.
+    words text_03CB, 0, 5                 ; 6.1 did not take the elevator: Well, I guess that's / the way things are.
+    words text_03E2, 4, 9                 ; 6.2 did not take the elevator: No use complaining.
+    words text_03FF, 3, 6                 ; 7.0 landed on the bank: I got my pay.
+    words text_0410, 3, 6                 ; 7.1 landed on the bank: I'll play all day today.
+    words text_0425, 3, 6                 ; 7.2 landed on the bank: It's nice to get money, / isn't it?
+    words text_0442, 0, 5                 ; 8.0 took the elevator: Maybe this is nice / once in a while?
+    words text_0461, 1, 7                 ; 8.1 took the elevator: I don't like elevators.
+    words text_048C, 0, 5                 ; 8.2 took the elevator: Right! Where to next...
+    words text_04A5, 1, 7                 ; 9.0 shopping cost a fifth of its money or more: This store's a little risky.
+    words text_04C0, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: I tried to avoid that.
+    words text_04D7, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: I ended up in a bad spot, / didn't I?
+    words text_04F6, 3, 6                 ; 10.0 shopping: got the money back: Yes. pure profit.
     words text_0509, 3, 6                 ; 10.1 shopping: got the money back: Really? Really? ♪
-    words text_051C, 3, 6                 ; 10.2 shopping: got the money back: Sorry to make you go out of your way~
+    words text_051C, 3, 6                 ; 10.2 shopping: got the money back: Sorry to make you go out of your / way.
     words text_0531, 3, 6                 ; 11.0 shopping: Now that's cool
-    words text_0542, 0, 5                 ; 11.1 shopping: I can't get serious?!
-    words text_055B, 1, 7                 ; 11.2 shopping: Can't win...
-    words text_056A, 0, 5                 ; 12.0 bought a rival's store: This place is my store now
-    words text_0583, 3, 6                 ; 12.1 bought a rival's store: Hey! Sorry about that
+    words text_0542, 0, 5                 ; 11.1 shopping: I can't seem to take / this seriously?!
+    words text_055B, 1, 7                 ; 11.2 shopping: I can't win...
+    words text_056A, 0, 5                 ; 12.0 bought a rival's store: This place is my store now.
+    words text_0583, 3, 6                 ; 12.1 bought a rival's store: Hey! Sorry about that.
     words text_0594, 3, 6                 ; 12.2 bought a rival's store: Just give up already ♪
-    words text_05AD, 1, 7                 ; 13.0 shopped this turn and the last: No money~
-    words text_05BC, 1, 7                 ; 13.1 shopped this turn and the last: I have to save a little~
-    words text_05D3, 4, 9                 ; 13.2 shopped this turn and the last: Why is it~ / that I end up spending money?
-    words text_05F6, 3, 6                 ; 14.0 assets passed half the goal: Half, huh~ still a long way~
-    words text_060D, 3, 6                 ; 14.1 assets passed half the goal: This is where it really starts~
-    words text_0628, 3, 6                 ; 14.2 assets passed half the goal: Half is no big deal
-    words text_0645, 1, 7                 ; 15.0 sold a store: I've had no luck lately~
+    words text_05AD, 1, 7                 ; 13.0 shopped this turn and the last: No money.
+    words text_05BC, 1, 7                 ; 13.1 shopped this turn and the last: I have to save a little.
+    words text_05D3, 4, 9                 ; 13.2 shopped this turn and the last: Why is it that I always / end up spending money?
+    words text_05F6, 3, 6                 ; 14.0 assets passed half the goal: Half way, huh? / Still a long way to go.
+    words text_060D, 3, 6                 ; 14.1 assets passed half the goal: This is where it really starts.
+    words text_0628, 3, 6                 ; 14.2 assets passed half the goal: Half way is no big deal.
+    words text_0645, 1, 7                 ; 15.0 sold a store: I've had no luck lately.
     words text_065E, 1, 7                 ; 15.1 sold a store: Well, I don't need it anyway...
-    words text_0679, 4, 9                 ; 15.2 sold a store: The store turned into money~
-    words text_0692, 4, 9                 ; 16.0 declined a vacant lot it could not afford: I really have no money~
-    words text_06AD, 2, 8                 ; 16.1 declined a vacant lot it could not afford: Can't even use a card, no good
-    words text_06CC, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Couldn't buy the store~
-    words text_06E3, 1, 7                 ; 17.0 declined a vacant lot: I want a new board too, / so I'll hold back today~
-    words text_070E, 3, 6                 ; 17.1 declined a vacant lot: Shall I show I can afford it~?
-    words text_0729, 2, 8                 ; 17.2 declined a vacant lot: That's not very cool~
-    words text_0744, 3, 10                ; 18.0 an event card (the default): I want to go snowboarding
+    words text_0679, 4, 9                 ; 15.2 sold a store: The store turned into money.
+    words text_0692, 4, 9                 ; 16.0 declined a vacant lot it could not afford: I really have no money.
+    words text_06AD, 2, 8                 ; 16.1 declined a vacant lot it could not afford: Can't even use a card, no good.
+    words text_06CC, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Couldn't buy the store.
+    words text_06E3, 1, 7                 ; 17.0 declined a vacant lot: I want a new board too, / so I'll hold off today.
+    words text_070E, 3, 6                 ; 17.1 declined a vacant lot: I'd buy it if I wanted to.
+    words text_0729, 2, 8                 ; 17.2 declined a vacant lot: That wasn't very cool.
+    words text_0744, 3, 10                ; 18.0 an event card (the default): I want to go snowboarding.
     words text_0755, 3, 10                ; 18.1 an event card (the default): Itchy knees!!
     words text_0762, 3, 10                ; 18.2 an event card (the default): It's <player>
 
 text_01E6:
-    string "なんかもうダメそうだね～"                 ; en: Looks like it's hopeless now~
+    string "Looks like it's hopeless now"  ; ja: なんかもうダメそうだね～
 
 text_01FF:
-    string "今回は調子がわるかったのさ～"               ; en: I was just off my game this time~
+    string "I was just off my game this time"  ; ja: 今回は調子がわるかったのさ～
 
 text_021C:
-    string "ボードがぼろぼろになる～≦"                ; en: My board's getting wrecked~ ≦
+    string "My board's getting wrecked ≦"  ; ja: ボードがぼろぼろになる～≦
 
 text_0237:
-    string "おっ！これなら見劣りしないね～"              ; en: Oh! This doesn't look shabby at all~
+    string "Oh! This doesn't look%Ktoo shabby at all."  ; ja: おっ！これなら見劣りしないね～
 
 text_0256:
-    string "ホント僕のお店も大きくなったね～"             ; en: My store really got big~
+    string "My store really got big."     ; ja: ホント僕のお店も大きくなったね～
 
 text_0277:
-    string "これで大きくリードってとこかな～"             ; en: I guess this is a big lead~
+    string "I guess this is a big lead."  ; ja: これで大きくリードってとこかな～
 
 text_0298:
-    string "合体したよ～"                       ; en: They merged~
+    string "They merged."                 ; ja: 合体したよ～
 
 text_02A5:
-    string "これなら普通の大きさかな～"                ; en: I guess this is a normal size~
+    string "I guess this is a normal size."  ; ja: これなら普通の大きさかな～
 
 text_02C0:
-    string "もっと大きい方がいいかな～"                ; en: Would bigger be better~
+    string "Would bigger be better?"      ; ja: もっと大きい方がいいかな～
 
 text_02DB:
-    string "暇もてあましだね～"                    ; en: I have time on my hands~
+    string "I have time on my hands."     ; ja: 暇もてあましだね～
 
 text_02EE:
-    string "ホント今日は楽だったね～"                 ; en: Today was really easy~
+    string "Today was really easy."       ; ja: ホント今日は楽だったね～
 
 text_0307:
-    string "やることないけど、どーしよーか？"             ; en: Nothing to do, so what now?
+    string "Nothing to do, so what now?"  ; ja: やることないけど、どーしよーか？
 
 text_0328:
-    string "おっ！買いだね～"                     ; en: Oh! A buy~
+    string "Wow! Thats a good deal."           ; ja: おっ！買いだね～
 
 text_0339:
-    string "こんなんで儲けでてるのか～"                ; en: Do they make a profit like this~
+    string "How do they make a profit%Klike this?"  ; ja: こんなんで儲けでてるのか～
 
 text_0354:
-    string "買わないと損でしょ、やっぱ"                ; en: It'd be a loss not to buy, right
+    string "It'd be stupid not to buy, right?"  ; ja: 買わないと損でしょ、やっぱ
 
 text_036F:
-    string "今日はここで休んじゃお～"                 ; en: I'll rest here today~
+    string "I'll rest here today."        ; ja: 今日はここで休んじゃお～
 
 text_0388:
-    string "やることあったっけ？"                   ; en: Did I have anything to do?
+    string "Did I have anything to do?"   ; ja: やることあったっけ？
 
 text_039D:
-    string "な～んか暇なんだよね～"                  ; en: I'm kind of bored~
+    string "I'm kind of bored."           ; ja: な～んか暇なんだよね～
 
 text_03B4:
-    string "使わない方が近道だね～"                  ; en: Not using it is a shortcut~
+    string "Not using it is faster."  ; ja: 使わない方が近道だね～
 
 text_03CB:
-    string "ま、これも世の常かな～"                  ; en: Well, that's how the world goes~
+    string "Well, I guess that's%Kthe way things are."  ; ja: ま、これも世の常かな～
 
 text_03E2:
-    string "文句言ってもしょうがないね～"               ; en: No use complaining~
+    string "No use complaining."          ; ja: 文句言ってもしょうがないね～
 
 text_03FF:
-    string "給料もらったよ～"                     ; en: I got my pay~
+    string "I got my pay."                ; ja: 給料もらったよ～
 
 text_0410:
-    string "今日は遊びまくるよ～"                   ; en: I'll play all day today~
+    string "I'll play all day today."     ; ja: 今日は遊びまくるよ～
 
 text_0425:
-    string "お金ってもらうとうれし～ね～"               ; en: Getting money makes you happy~
+    string "It's nice to get money,%Kisn't it?"  ; ja: お金ってもらうとうれし～ね～
 
 text_0442:
-    string "たまにはこういうのもいいかな？"              ; en: This is nice once in a while?
+    string "Maybe this is nice%Konce in a while?"  ; ja: たまにはこういうのもいいかな？
 
 text_0461:
-    string "エレベーターって%Kあんまり好きじゃないよ～"       ; en: I'm not / that fond of elevators~
+    string "I don't like elevators."  ; ja: エレベーターって%Kあんまり好きじゃないよ～
 
 text_048C:
-    string "さっ！次はどこ行くんだ～"                 ; en: Right! Where to next~
+    string "Right! Where to next..."        ; ja: さっ！次はどこ行くんだ～
 
 text_04A5:
-    string "ちょっとやばいね～このお店"                ; en: This store's a little risky~
+    string "This store's a little risky."  ; ja: ちょっとやばいね～このお店
 
 text_04C0:
-    string "避けて通りたかったね～"                  ; en: I wanted to avoid it~
+    string "I tried to avoid that."        ; ja: 避けて通りたかったね～
 
 text_04D7:
-    string "まずいところに来ちゃったよね～"              ; en: I came somewhere bad~
+    string "I ended up in a bad spot,%Kdidn't I?"        ; ja: まずいところに来ちゃったよね～
 
 text_04F6:
-    string "やりぃ～まる儲け～"                    ; en: Yes~ pure profit~
+    string "Yes. pure profit."            ; ja: やりぃ～まる儲け～
 
 text_0509:
-    string "ホント？ホントに♪"                    ; en: Really? Really? ♪
+    string "Really? Really? ♪"            ; ja: ホント？ホントに♪
 
 text_051C:
-    string "気ぃ使わせて悪いね～"                   ; en: Sorry to make you go out of your way~
+    string "Sorry to make you go out of your%Kway."  ; ja: 気ぃ使わせて悪いね～
 
 text_0531:
-    string "クールだねこりゃ"                     ; en: Now that's cool
+    string "Now that's cool"              ; ja: クールだねこりゃ
 
 text_0542:
-    string "本気になりきれないぞ？！"                 ; en: I can't get serious?!
+    string "I can't seem to take%Kthis seriously?!"        ; ja: 本気になりきれないぞ？！
 
 text_055B:
-    string "勝てねぇ・・・"                      ; en: Can't win...
+    string "I can't win..."                 ; ja: 勝てねぇ・・・
 
 text_056A:
-    string "僕のお店になったよここは"                 ; en: This place is my store now
+    string "This place is my store now."   ; ja: 僕のお店になったよここは
 
 text_0583:
-    string "ヘイ！悪かったね"                     ; en: Hey! Sorry about that
+    string "Hey! Sorry about that."        ; ja: ヘイ！悪かったね
 
 text_0594:
-    string "ホントあきらめてくれよ♪"                 ; en: Just give up already ♪
+    string "Just give up already ♪"       ; ja: ホントあきらめてくれよ♪
 
 text_05AD:
-    string "お金がないね～"                      ; en: No money~
+    string "No money."                    ; ja: お金がないね～
 
 text_05BC:
-    string "少し節約しなくちゃね～"                  ; en: I have to save a little~
+    string "I have to save a little."     ; ja: 少し節約しなくちゃね～
 
 text_05D3:
-    string "なんでかね～%Kお金使っちゃうのは？"           ; en: Why is it~ / that I end up spending money?
+    string "Why is it that I always%Kend up spending money?"  ; ja: なんでかね～%Kお金使っちゃうのは？
 
 text_05F6:
-    string "半分かーまだまだだね～"                  ; en: Half, huh~ still a long way~
+    string "Half way, huh?%KStill a long way to go."  ; ja: 半分かーまだまだだね～
 
 text_060D:
-    string "ホントここからが勝負かな～"                ; en: This is where it really starts~
+    string "This is where it really starts."  ; ja: ホントここからが勝負かな～
 
 text_0628:
-    string "半分なんて大した事ないでしょ"               ; en: Half is no big deal
+    string "Half way is no big deal."          ; ja: 半分なんて大した事ないでしょ
 
 text_0645:
-    string "ホント最近ついてないね～"                 ; en: I've had no luck lately~
+    string "I've had no luck lately."     ; ja: ホント最近ついてないね～
 
 text_065E:
-    string "まぁ、必要ないけどね・・・"                ; en: Well, I don't need it anyway...
+    string "Well, I don't need it anyway..."  ; ja: まぁ、必要ないけどね・・・
 
 text_0679:
-    string "お店がお金に変わったね～"                 ; en: The store turned into money~
+    string "The store turned into money."  ; ja: お店がお金に変わったね～
 
 text_0692:
-    string "ホントお金がないんだよね～"                ; en: I really have no money~
+    string "I really have no money."      ; ja: ホントお金がないんだよね～
 
 text_06AD:
-    string "カードも使えないなんてダメだね"              ; en: Can't even use a card, no good
+    string "Can't even use a card, no good."  ; ja: カードも使えないなんてダメだね
 
 text_06CC:
-    string "お店、買えなかったね～"                  ; en: Couldn't buy the store~
+    string "Couldn't buy the store."      ; ja: お店、買えなかったね～
 
 text_06E3:
-    string "新しいボードも欲しいし%K今日はガマンだね～"       ; en: I want a new board too, / so I'll hold back today~
+    string "I want a new board too,%Kso I'll hold off today."  ; ja: 新しいボードも欲しいし%K今日はガマンだね～
 
 text_070E:
-    string "ホント余裕でもみせよ～か？"                ; en: Shall I show I can afford it~?
+    string "I'd buy it if I wanted to."  ; ja: ホント余裕でもみせよ～か？
 
 text_0729:
-    string "ちょっとクールじゃないね～"                ; en: That's not very cool~
+    string "That wasn't very cool."        ; ja: ちょっとクールじゃないね～
 
 text_0744:
-    string "スノボしたいよん"                     ; en: I want to go snowboarding
+    string "I want to go snowboarding."    ; ja: スノボしたいよん
 
 text_0755:
-    string "ひざかゆ！！"                       ; en: Itchy knees!!
+    string "Itchy knees!!"                ; ja: ひざかゆ！！
 
 text_0762:
-    string "%NMYだ"                        ; en: It's <player>
+    string "It's %NMY"                    ; ja: %NMYだ
     bytes 0x00, 0x00, 0x00    ; padding

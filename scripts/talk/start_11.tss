@@ -1,5 +1,9 @@
 ; TALK.J entry 11 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Squosh says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,7 +60,7 @@
     talk_wait_open
     play_xa 11, $l2                       ; voice: XA track 11 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -64,22 +68,22 @@
 
 table_0090:
     words text_01F8, 3, 12                ; 0.0 the first month: I like clean water, mo
-    words text_020D, 3, 12                ; 0.1 the first month: If I'm doing it, I'll go all out, mo
+    words text_020D, 3, 12                ; 0.1 the first month: If I'm doing it, I'll go all out, / mo
     words text_0226, 3, 12                ; 0.2 the first month: <player> will do its best, mo
-    words text_0237, 3, 1                 ; 1.0 assets at 7/8 of the goal: Soon I can go back to the lake, mo ★
-    words text_0250, 3, 1                 ; 1.1 assets at 7/8 of the goal: Is it okay if I just win like this, mo?
+    words text_0237, 3, 1                 ; 1.0 assets at 7/8 of the goal: Soon I can go back to the lake, / mo ★
+    words text_0250, 3, 1                 ; 1.1 assets at 7/8 of the goal: Is it okay if I just win like / this, mo?
     words text_026F, 3, 1                 ; 1.2 assets at 7/8 of the goal: Easy-peasy, mo ♪
-    words text_0282, 3, 1                 ; 2.0 last at the start of the round, first now: The flow of the water changed, mo ♭
+    words text_0282, 3, 1                 ; 2.0 last at the start of the round, first now: The flow of the water changed, / mo ♭
     words text_0299, 3, 1                 ; 2.1 last at the start of the round, first now: Lucky, mo
     words text_02A6, 3, 1                 ; 2.2 last at the start of the round, first now: Being number 1 is fun, mo ★
     words text_02BD, 4, 4                 ; 3.0 first at the start of the round, last now: Roll roll roll.... ≦
     words text_02D4, 4, 4                 ; 3.1 first at the start of the round, last now: I rolled down, mo
-    words text_02E5, 4, 4                 ; 3.2 first at the start of the round, last now: Something unbelievable happened, mo ∵
+    words text_02E5, 4, 4                 ; 3.2 first at the start of the round, last now: Something unbelievable happened, / mo ∵
     words text_0304, 4, 4                 ; 4.0 ahead: a rival store it can't afford: If I stop I'll be sent back, mo ∵
-    words text_031D, 1, 2                 ; 4.1 ahead: a rival store it can't afford: Maybe I can't dodge it?
+    words text_031D, 1, 2                 ; 4.1 ahead: a rival store it can't afford: Maybe I can't avoid it?
     words text_0330, 1, 2                 ; 4.2 ahead: a rival store it can't afford: No way out!! Maybe...?
-    words text_0349, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Big stores are hard to avoid, mo ≦
-    words text_0366, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: <player> can't stop suddenly, mo!
+    words text_0349, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Big stores are hard to avoid, / mo ≦
+    words text_0366, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: <player> can't stop suddenly, / mo!
     words text_0381, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: What happens if I stop, mo?
     words text_0398, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: Happiness, mo
     words text_03A3, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: I'm happy, mo ♪
@@ -92,214 +96,214 @@ table_0090:
     words text_0446, 0, 0                 ; 8.2 the bank on the next square: I get money, mo ♪
     words text_0459, 3, 1                 ; 9.0 ranked better than at the start of the round: On the way up, mo
     words text_0466, 3, 1                 ; 9.1 ranked better than at the start of the round: The water's getting clean, mo
-    words text_047F, 3, 1                 ; 9.2 ranked better than at the start of the round: Nice weather, mo-o....
+    words text_047F, 3, 1                 ; 9.2 ranked better than at the start of the round: Nice weather, mooo....
     words text_0496, 1, 2                 ; 10.0 ranked worse: <player> rolls easily, mo..
     words text_04B1, 0, 0                 ; 10.1 ranked worse: My rank went down, mo!
-    words text_04C4, 1, 2                 ; 10.2 ranked worse: I want someone to splash water on me, mo...
+    words text_04C4, 1, 2                 ; 10.2 ranked worse: I want someone to splash water on / me, mo...
     words text_04DB, 1, 2                 ; 11.0 ahead: a rival store in a chain: It's nothing, mo
     words text_04EA, 1, 2                 ; 11.1 ahead: a rival store in a chain: Bubble bubble bubble bubble....
     words text_0503, 1, 2                 ; 11.2 ahead: a rival store in a chain: Dodging it would be a bonus, mo
-    words text_0522, 0, 0                 ; 12.0 ahead: a vacant lot: I'll buy a store and become its manager, mo ★
+    words text_0522, 0, 0                 ; 12.0 ahead: a vacant lot: I'll buy a store and become its / manager, mo ★
     words text_053B, 0, 0                 ; 12.1 ahead: a vacant lot: Heading there in a hurry, mo!
     words text_054C, 0, 0                 ; 12.2 ahead: a vacant lot: I want a store with a pool, mo ♪
     words text_0567, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: Maybe I shouldn't go to the store?
-    words text_0580, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Maybe I'll learn a little from it....
-    words text_0597, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: If I stop at the store it's a pinch, mo ∵
+    words text_0580, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Maybe I'll learn a little from / it....
+    words text_0597, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: If I stop at the store it's a / pinch, mo ∵
     words text_05B2, 0, 0                 ; 14.0 ahead: the bank: I'll stop by the bank, mo ★
-    words text_05C7, 0, 0                 ; 14.1 ahead: the bank: I'll try to stop by the bank, mo ♪
+    words text_05C7, 0, 0                 ; 14.1 ahead: the bank: I'll try to stop by the bank, / mo ♪
     words text_05E8, 0, 0                 ; 14.2 ahead: the bank: I want money, mooo!
     words text_05FF, 1, 2                 ; 15.0 none of its stores ahead: I'll get away from here fast, mo
-    words text_0616, 1, 2                 ; 15.1 none of its stores ahead: Hey, where are <player>'s stores?
-    words text_062B, 1, 2                 ; 15.2 none of its stores ahead: If I'm running away, it's now or never, mo...
+    words text_0616, 1, 2                 ; 15.1 none of its stores ahead: Hey, where are <player>'s / stores?
+    words text_062B, 1, 2                 ; 15.2 none of its stores ahead: If I'm running away, it's now or / never, mo...
     words text_064A, 0, 0                 ; 16.0 ahead: its own store with free goods slots: Hmm, what should I restock... mo?
     words text_066B, 0, 0                 ; 16.1 ahead: its own store with free goods slots: I'll stock goldfish food, mo ♪
     words text_0684, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Restocking is fun, mo
     words text_069B, 0, 0                 ; 17.0 no direction (after the bank): Have I been over there, mo?
     words text_06BA, 0, 0                 ; 17.1 no direction (after the bank): I'll head over there, mo
-    words text_06D1, 0, 0                 ; 17.2 no direction (after the bank): I'll decide by the stick-falling game, mo
+    words text_06D1, 0, 0                 ; 17.2 no direction (after the bank): I'll decide by the stick-falling / game, mo
     words text_06EA, 0, 0                 ; 18.0 no direction, on an elevator square: I'll go to the elevator, mo...
-    words text_0705, 0, 0                 ; 18.1 no direction, on an elevator square: Um... I'll ride the elevator, mo ★
+    words text_0705, 0, 0                 ; 18.1 no direction, on an elevator square: Um... I'll ride the elevator, / mo ★
     words text_0726, 0, 0                 ; 18.2 no direction, on an elevator square: What shall I do today, mo?
     words text_073B, 3, 10                ; 19.0 none of these: Puku puku (bubbles)
     words text_0744, 3, 10                ; 19.1 none of these: Mo? Momomo?
     words text_0751, 3, 10                ; 19.2 none of these: Don't untie me, mo!
 
 text_01F8:
-    string "キレイな水が好きだも"                   ; en: I like clean water, mo
+    string "I like clean water, mo"       ; ja: キレイな水が好きだも
 
 text_020D:
-    string "やるからには全力で行くも"                 ; en: If I'm doing it, I'll go all out, mo
+    string "If I'm doing it, I'll go all out,%Kmo"  ; ja: やるからには全力で行くも
 
 text_0226:
-    string "%NMYはがんばるも"                   ; en: <player> will do its best, mo
+    string "%NMY will do its best, mo"    ; ja: %NMYはがんばるも
 
 text_0237:
-    string "もうすぐ湖にかえれるも★"                 ; en: Soon I can go back to the lake, mo ★
+    string "Soon I can go back to the lake,%Kmo ★"  ; ja: もうすぐ湖にかえれるも★
 
 text_0250:
-    string "このまま勝っちゃっていいかも？"              ; en: Is it okay if I just win like this, mo?
+    string "Is it okay if I just win like%Kthis, mo?"  ; ja: このまま勝っちゃっていいかも？
 
 text_026F:
-    string "らっくしょ～だも♪"                    ; en: Easy-peasy, mo ♪
+    string "Easy-peasy, mo ♪"             ; ja: らっくしょ～だも♪
 
 text_0282:
-    string "水の流れが変わったも♭"                  ; en: The flow of the water changed, mo ♭
+    string "The flow of the water changed,%Kmo ♭"  ; ja: 水の流れが変わったも♭
 
 text_0299:
-    string "ラッキーだも"                       ; en: Lucky, mo
+    string "Lucky, mo"                    ; ja: ラッキーだも
 
 text_02A6:
-    string "１番って楽しいんだも★"                  ; en: Being number 1 is fun, mo ★
+    string "Being number 1 is fun, mo ★"  ; ja: １番って楽しいんだも★
 
 text_02BD:
-    string "コロコロコロ・・・・≦"                  ; en: Roll roll roll.... ≦
+    string "Roll roll roll.... ≦"         ; ja: コロコロコロ・・・・≦
 
 text_02D4:
-    string "転げ落ちゃったも"                     ; en: I rolled down, mo
+    string "I rolled down, mo"            ; ja: 転げ落ちゃったも
 
 text_02E5:
-    string "信じられないことが起こったも∵"              ; en: Something unbelievable happened, mo ∵
+    string "Something unbelievable happened,%Kmo ∵"  ; ja: 信じられないことが起こったも∵
 
 text_0304:
-    string "止まったら強制送還だも∵"                 ; en: If I stop I'll be sent back, mo ∵
+    string "If I stop I'll be sent back, mo ∵"  ; ja: 止まったら強制送還だも∵
 
 text_031D:
-    string "よけてけないかも？"                    ; en: Maybe I can't dodge it?
+    string "Maybe I can't avoid it?"      ; ja: よけてけないかも？
 
 text_0330:
-    string "絶体絶命！！かも・・・？"                 ; en: No way out!! Maybe...?
+    string "No way out!! Maybe...?"       ; ja: 絶体絶命！！かも・・・？
 
 text_0349:
-    string "おっきなお店は避けにくいも≦"               ; en: Big stores are hard to avoid, mo ≦
+    string "Big stores are hard to avoid,%Kmo ≦"  ; ja: おっきなお店は避けにくいも≦
 
 text_0366:
-    string "%NMYは急には止まらないも！"              ; en: <player> can't stop suddenly, mo!
+    string "%NMY can't stop suddenly,%Kmo!"  ; ja: %NMYは急には止まらないも！
 
 text_0381:
-    string "止まったらどうなるも？"                  ; en: What happens if I stop, mo?
+    string "What happens if I stop, mo?"  ; ja: 止まったらどうなるも？
 
 text_0398:
-    string "しあわせも"                        ; en: Happiness, mo
+    string "Happiness, mo"                ; ja: しあわせも
 
 text_03A3:
-    string "うれしいも♪"                       ; en: I'm happy, mo ♪
+    string "I'm happy, mo ♪"              ; ja: うれしいも♪
 
 text_03B0:
-    string "お店に止まりたいも★"                   ; en: I want to stop at a store, mo ★
+    string "I want to stop at a store, mo ★"  ; ja: お店に止まりたいも★
 
 text_03C5:
-    string "お店が取られちゃうも・・・・"               ; en: My store will be taken, mo....
+    string "My store will be taken, mo...."  ; ja: お店が取られちゃうも・・・・
 
 text_03E2:
-    string "補充の必要があるも∈"                   ; en: It needs restocking, mo ∈
+    string "It needs restocking, mo ∈"    ; ja: 補充の必要があるも∈
 
 text_03F7:
-    string "カラッポになっちゃったも"                 ; en: It's gone empty, mo
+    string "It's gone empty, mo"          ; ja: カラッポになっちゃったも
 
 text_0410:
-    string "うれしい給料日だも"                    ; en: A happy payday, mo
+    string "A happy payday, mo"           ; ja: うれしい給料日だも
 
 text_0423:
-    string "ミネラルウォーターでも買っちゃうも"            ; en: Maybe I'll buy mineral water, mo
+    string "Maybe I'll buy mineral water, mo"  ; ja: ミネラルウォーターでも買っちゃうも
 
 text_0446:
-    string "お金がもらえるも♪"                    ; en: I get money, mo ♪
+    string "I get money, mo ♪"            ; ja: お金がもらえるも♪
 
 text_0459:
-    string "上り調子だも"                       ; en: On the way up, mo
+    string "On the way up, mo"            ; ja: 上り調子だも
 
 text_0466:
-    string "水がキレイになってきたも"                 ; en: The water's getting clean, mo
+    string "The water's getting clean, mo"  ; ja: 水がキレイになってきたも
 
 text_047F:
-    string "いー天気だもぉ・・・・"                  ; en: Nice weather, mo-o....
+    string "Nice weather, mooo...."       ; ja: いー天気だもぉ・・・・
 
 text_0496:
-    string "%NMYはころがりやすいも・・"              ; en: <player> rolls easily, mo..
+    string "%NMY rolls easily, mo.."      ; ja: %NMYはころがりやすいも・・
 
 text_04B1:
-    string "順位が下がったも！"                    ; en: My rank went down, mo!
+    string "My rank went down, mo!"       ; ja: 順位が下がったも！
 
 text_04C4:
-    string "水かけて欲しいも・・・"                  ; en: I want someone to splash water on me, mo...
+    string "I want someone to splash water on%Kme, mo..."  ; ja: 水かけて欲しいも・・・
 
 text_04DB:
-    string "なんでもないも"                      ; en: It's nothing, mo
+    string "It's nothing, mo"             ; ja: なんでもないも
 
 text_04EA:
-    string "ぶくぶくぶくぶく・・・・"                 ; en: Bubble bubble bubble bubble....
+    string "Bubble bubble bubble bubble...."  ; ja: ぶくぶくぶくぶく・・・・
 
 text_0503:
-    string "避けて行けたらボーナスものだも"              ; en: Dodging it would be a bonus, mo
+    string "Dodging it would be a bonus, mo"  ; ja: 避けて行けたらボーナスものだも
 
 text_0522:
-    string "店を買って店長になるも★"                 ; en: I'll buy a store and become its manager, mo ★
+    string "I'll buy a store and become its%Kmanager, mo ★"  ; ja: 店を買って店長になるも★
 
 text_053B:
-    string "急いで向かうも！"                     ; en: Heading there in a hurry, mo!
+    string "Heading there in a hurry, mo!"  ; ja: 急いで向かうも！
 
 text_054C:
-    string "プール付きの店が欲しいも♪"                ; en: I want a store with a pool, mo ♪
+    string "I want a store with a pool, mo ♪"  ; ja: プール付きの店が欲しいも♪
 
 text_0567:
-    string "お店に行ったらダメかも？"                 ; en: Maybe I shouldn't go to the store?
+    string "Maybe I shouldn't go to the store?"  ; ja: お店に行ったらダメかも？
 
 text_0580:
-    string "少し見習うかも・・・・"                  ; en: Maybe I'll learn a little from it....
+    string "Maybe I'll learn a little from%Kit...."  ; ja: 少し見習うかも・・・・
 
 text_0597:
-    string "店に止まったらぴんちだも∵"                ; en: If I stop at the store it's a pinch, mo ∵
+    string "If I stop at the store it's a%Kpinch, mo ∵"  ; ja: 店に止まったらぴんちだも∵
 
 text_05B2:
-    string "銀行に寄ってくだも★"                   ; en: I'll stop by the bank, mo ★
+    string "I'll stop by the bank, mo ★"  ; ja: 銀行に寄ってくだも★
 
 text_05C7:
-    string "銀行によってけるようガンバルも♪"             ; en: I'll try to stop by the bank, mo ♪
+    string "I'll try to stop by the bank,%Kmo ♪"  ; ja: 銀行によってけるようガンバルも♪
 
 text_05E8:
-    string "お金が欲しいもぉぉぉ！"                  ; en: I want money, mooo!
+    string "I want money, mooo!"          ; ja: お金が欲しいもぉぉぉ！
 
 text_05FF:
-    string "ここから早く逃げ出すも"                  ; en: I'll get away from here fast, mo
+    string "I'll get away from here fast, mo"  ; ja: ここから早く逃げ出すも
 
 text_0616:
-    string "ねえ、%NMYのお店は？"                 ; en: Hey, where are <player>'s stores?
+    string "Hey, where are %NMY's%Kstores?"  ; ja: ねえ、%NMYのお店は？
 
 text_062B:
-    string "逃げ出すなら今のうちだも・・・"              ; en: If I'm running away, it's now or never, mo...
+    string "If I'm running away, it's now or%Knever, mo..."  ; ja: 逃げ出すなら今のうちだも・・・
 
 text_064A:
-    string "う～ん、何を仕入れるか・・・も？"             ; en: Hmm, what should I restock... mo?
+    string "Hmm, what should I restock... mo?"  ; ja: う～ん、何を仕入れるか・・・も？
 
 text_066B:
-    string "金魚のエサを仕入れるも♪"                 ; en: I'll stock goldfish food, mo ♪
+    string "I'll stock goldfish food, mo ♪"  ; ja: 金魚のエサを仕入れるも♪
 
 text_0684:
-    string "仕入れっておもしろいも"                  ; en: Restocking is fun, mo
+    string "Restocking is fun, mo"        ; ja: 仕入れっておもしろいも
 
 text_069B:
-    string "あっちには行ったことがあるも？"              ; en: Have I been over there, mo?
+    string "Have I been over there, mo?"  ; ja: あっちには行ったことがあるも？
 
 text_06BA:
-    string "あっちに向かってくだも"                  ; en: I'll head over there, mo
+    string "I'll head over there, mo"     ; ja: あっちに向かってくだも
 
 text_06D1:
-    string "どっちか棒倒しで決めるも"                 ; en: I'll decide by the stick-falling game, mo
+    string "I'll decide by the stick-falling%Kgame, mo"  ; ja: どっちか棒倒しで決めるも
 
 text_06EA:
-    string "エレベーターに行くも・・・"                ; en: I'll go to the elevator, mo...
+    string "I'll go to the elevator, mo..."  ; ja: エレベーターに行くも・・・
 
 text_0705:
-    string "えっと・・・エレベーター乗るも★"             ; en: Um... I'll ride the elevator, mo ★
+    string "Um... I'll ride the elevator,%Kmo ★"  ; ja: えっと・・・エレベーター乗るも★
 
 text_0726:
-    string "今日は何をするかも？"                   ; en: What shall I do today, mo?
+    string "What shall I do today, mo?"   ; ja: 今日は何をするかも？
 
 text_073B:
-    string "ぷくぷく"                         ; en: Puku puku (bubbles)
+    string "Puku puku (bubbles)"          ; ja: ぷくぷく
 
 text_0744:
-    string "も？ももも？"                       ; en: Mo? Momomo?
+    string "Mo? Momomo?"                  ; ja: も？ももも？
 
 text_0751:
-    string "ほどいちゃ、いやだも！"                  ; en: Don't untie me, mo!
+    string "Don't untie me, mo!"          ; ja: ほどいちゃ、いやだも！

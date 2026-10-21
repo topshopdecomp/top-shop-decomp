@@ -1,5 +1,9 @@
 ; TALK.J entry 2 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Dona says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,7 +60,7 @@
     talk_wait_open
     play_xa 2, $l2                        ; voice: XA track 2 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -64,31 +68,31 @@
 
 table_0090:
     words text_01F8, 3, 12                ; 0.0 the first month: Photosynthesis starting, nari ♪
-    words text_0209, 3, 12                ; 0.1 the first month: I don't want much water, nari ♪ / I'd rot, nari ♪
+    words text_0209, 3, 12                ; 0.1 the first month: I don't want too much water, / nari ♪ I'd rot, nari ♪
     words text_023A, 3, 12                ; 0.2 the first month: I'm <player>, nari ♭ / Nice to meet you, nari ♪
-    words text_0261, 3, 1                 ; 1.0 assets at 7/8 of the goal: Soon I can go back to the desert country, nari
+    words text_0261, 3, 1                 ; 1.0 assets at 7/8 of the goal: Soon I can go back to the desert / country, nari
     words text_0280, 3, 1                 ; 1.1 assets at 7/8 of the goal: Mom! Dad! / I'll be home soon, nari ♪
     words text_02AD, 3, 1                 ; 1.2 assets at 7/8 of the goal: Everyone in the desert! / Wait for me to come home, nari ♭
-    words text_02D8, 3, 1                 ; 2.0 last at the start of the round, first now: Wa-hoo, nari~ ♭
-    words text_02EB, 3, 1                 ; 2.1 last at the start of the round, first now: I'm so happy, nari~ ♪
-    words text_02FE, 3, 1                 ; 2.2 last at the start of the round, first now: It's like a miracle, nari~ ★
+    words text_02D8, 3, 1                 ; 2.0 last at the start of the round, first now: Wa-hoo, nariii ♭
+    words text_02EB, 3, 1                 ; 2.1 last at the start of the round, first now: I'm so happy, nariii ♪
+    words text_02FE, 3, 1                 ; 2.2 last at the start of the round, first now: It's like a miracle, nariii ★
     words text_0313, 4, 4                 ; 3.0 first at the start of the round, last now: The CO2 is too strong, nari
     words text_032E, 4, 4                 ; 3.1 first at the start of the round, last now: I tumbled down, nari ≦
     words text_0347, 4, 4                 ; 3.2 first at the start of the round, last now: No more water, nari ∵
-    words text_0360, 0, 0                 ; 4.0 ahead: a rival store it can't afford: That doesn't work on me, nari~
-    words text_037B, 1, 2                 ; 4.1 ahead: a rival store it can't afford: That's got nothing to do with me, nari~
-    words text_0394, 1, 2                 ; 4.2 ahead: a rival store it can't afford: If I don't do something / it's game over, nari~ ≦≦
-    words text_03BF, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Isn't someone cheating, nari?
+    words text_0360, 0, 0                 ; 4.0 ahead: a rival store it can't afford: That doesn't work on me, nariii
+    words text_037B, 1, 2                 ; 4.1 ahead: a rival store it can't afford: That's got nothing to do with me, / nariii
+    words text_0394, 1, 2                 ; 4.2 ahead: a rival store it can't afford: If I don't do something / it's game over, nari ≦≦
+    words text_03BF, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: Is someone cheating, nari?
     words text_03DA, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: What happens if I go on, nari?
     words text_03F5, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: I want to walk right past, nari ≦
-    words text_040A, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: There's a store taking a break, nari ♪
+    words text_040A, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: There's a store taking a break, / nari ♪
     words text_0425, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: No good, nari ★
     words text_0434, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: There's a sloppy store, nari ♪
     words text_044F, 1, 2                 ; 7.0 ahead: its own store without goods: CLOSED, nari?
-    words text_0466, 1, 2                 ; 7.1 ahead: its own store without goods: Who's in charge of restocking, nari?
-    words text_047F, 1, 2                 ; 7.2 ahead: its own store without goods: The goods are all gone, nari~ ≦
+    words text_0466, 1, 2                 ; 7.1 ahead: its own store without goods: Who's in charge of restocking, / nari?
+    words text_047F, 1, 2                 ; 7.2 ahead: its own store without goods: The goods are all gone, nari ≦
     words text_049C, 0, 0                 ; 8.0 the bank on the next square: Today is salary day, nari
-    words text_04B1, 0, 0                 ; 8.1 the bank on the next square: This is in front of the bank, nari
+    words text_04B1, 0, 0                 ; 8.1 the bank on the next square: I'm right next to the bank, nari
     words text_04C6, 0, 0                 ; 8.2 the bank on the next square: Payday at last, nari
     words text_04E1, 3, 1                 ; 9.0 ranked better than at the start of the round: Face up, nari
     words text_04F6, 3, 1                 ; 9.1 ranked better than at the start of the round: Label up, nari
@@ -103,203 +107,203 @@ table_0090:
     words text_05BF, 0, 0                 ; 12.1 ahead: a vacant lot: I really want a store by now, nari
     words text_05DA, 0, 0                 ; 12.2 ahead: a vacant lot: I really want a store / that suits a cactus, nari
     words text_0605, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I hate it, nari!!
-    words text_0614, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I found a store that's lost its spirit, nari
+    words text_0614, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I found a store that's lost its / spirit, nari
     words text_0633, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I found a store in trouble, nari
     words text_064E, 0, 0                 ; 14.0 ahead: the bank: Bank boogie-woogie, nari
     words text_0661, 0, 0                 ; 14.1 ahead: the bank: Bank hunter, nari
     words text_0672, 0, 0                 ; 14.2 ahead: the bank: How much is the next pay, nari?
-    words text_0689, 1, 2                 ; 15.0 none of its stores ahead: My stores are nowhere, nari
-    words text_06A6, 1, 2                 ; 15.1 none of its stores ahead: Nothing but strangers around, nari~
-    words text_06C5, 1, 2                 ; 15.2 none of its stores ahead: I can't see my stores anymore, nari
+    words text_0689, 1, 2                 ; 15.0 none of its stores ahead: My stores are nowhere near / here, nari
+    words text_06A6, 1, 2                 ; 15.1 none of its stores ahead: Nothing but strangers around, / nari~
+    words text_06C5, 1, 2                 ; 15.2 none of its stores ahead: I can't see my stores anymore, / nari
     words text_06E4, 0, 0                 ; 16.0 ahead: its own store with free goods slots: The taco spirit is in Mexico, nari
     words text_0701, 0, 0                 ; 16.1 ahead: its own store with free goods slots: I have to land on / <player>'s store, nari
     words text_0728, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Any means to restock, nari ♭
     words text_074B, 0, 0                 ; 17.0 no direction (after the bank): The lost road gets you lost, nari
     words text_075E, 0, 0                 ; 17.1 no direction (after the bank): I'm confused, nari
     words text_076D, 0, 0                 ; 17.2 no direction (after the bank): No use being lost, nari
-    words text_078A, 0, 0                 ; 18.0 no direction, on an elevator square: The elevator is cra-azy~
+    words text_078A, 0, 0                 ; 18.0 no direction, on an elevator square: The elevator is craazzyyy
     words text_07A5, 0, 0                 ; 18.1 no direction, on an elevator square: The elevator is cramped, nari
-    words text_07C0, 0, 0                 ; 18.2 no direction, on an elevator square: The elevator is close, nari~
+    words text_07C0, 0, 0                 ; 18.2 no direction, on an elevator square: The elevator is close, nari
     words text_07DB, 3, 10                ; 19.0 none of these: I'm a proper plant, nari
     words text_07F0, 3, 10                ; 19.1 none of these: Everyone's a nice person, nari
     words text_0803, 3, 10                ; 19.2 none of these: Fight, nari
 
 text_01F8:
-    string "光合成開始なり♪"                     ; en: Photosynthesis starting, nari ♪
+    string "Photosynthesis starting, nari ♪"  ; ja: 光合成開始なり♪
 
 text_0209:
-    string "水分はあまりほしくないなり♪%K腐ってしまうなり♪"    ; en: I don't want much water, nari ♪ / I'd rot, nari ♪
+    string "I don't want too much water,%Knari ♪ I'd rot, nari ♪"  ; ja: 水分はあまりほしくないなり♪%K腐ってしまうなり♪
 
 text_023A:
-    string "%NMYなり♭%Kよろしくおねがいするなり♪"       ; en: I'm <player>, nari ♭ / Nice to meet you, nari ♪
+    string "I'm %NMY, nari ♭%KNice to meet you, nari ♪"  ; ja: %NMYなり♭%Kよろしくおねがいするなり♪
 
 text_0261:
-    string "もう少しで砂漠の国に帰れるなり"              ; en: Soon I can go back to the desert country, nari
+    string "Soon I can go back to the desert%Kcountry, nari"  ; ja: もう少しで砂漠の国に帰れるなり
 
 text_0280:
-    string "お母ちゃんお父ちゃん！%Kもう少しで帰るなり♪"      ; en: Mom! Dad! / I'll be home soon, nari ♪
+    string "Mom! Dad!%KI'll be home soon, nari ♪"  ; ja: お母ちゃんお父ちゃん！%Kもう少しで帰るなり♪
 
 text_02AD:
-    string "砂漠のみんな！%Kボクの帰りを待っててなり♭"       ; en: Everyone in the desert! / Wait for me to come home, nari ♭
+    string "Everyone in the desert!%KWait for me to come home, nari ♭"  ; ja: 砂漠のみんな！%Kボクの帰りを待っててなり♭
 
 text_02D8:
-    string "うわ～いなりィ～♭"                    ; en: Wa-hoo, nari~ ♭
+    string "Wa-hoo, nariii ♭"              ; ja: うわ～いなりィ～♭
 
 text_02EB:
-    string "うれし～なりィ～♪"                    ; en: I'm so happy, nari~ ♪
+    string "I'm so happy, nariii ♪"        ; ja: うれし～なりィ～♪
 
 text_02FE:
-    string "奇跡みたいなりィ～★"                   ; en: It's like a miracle, nari~ ★
+    string "It's like a miracle, nariii ★"  ; ja: 奇跡みたいなりィ～★
 
 text_0313:
-    string "ＣＯ２の濃度が強すぎるなり"                ; en: The CO2 is too strong, nari
+    string "The CO2 is too strong, nari"  ; ja: ＣＯ２の濃度が強すぎるなり
 
 text_032E:
-    string "転げ落ちちゃったなりぃ≦"                 ; en: I tumbled down, nari ≦
+    string "I tumbled down, nari ≦"       ; ja: 転げ落ちちゃったなりぃ≦
 
 text_0347:
-    string "水はもういらないなりぃ∵"                 ; en: No more water, nari ∵
+    string "No more water, nari ∵"        ; ja: 水はもういらないなりぃ∵
 
 text_0360:
-    string "このボクには効かないなり～"                ; en: That doesn't work on me, nari~
+    string "That doesn't work on me, nariii"  ; ja: このボクには効かないなり～
 
 text_037B:
-    string "ボクには関係ないなりィ～"                 ; en: That's got nothing to do with me, nari~
+    string "That's got nothing to do with me,%Knariii"  ; ja: ボクには関係ないなりィ～
 
 text_0394:
-    string "何とかしないと%Kげーむおーばーなりィ～≦≦"       ; en: If I don't do something / it's game over, nari~ ≦≦
+    string "If I don't do something%Kit's game over, nari ≦≦"  ; ja: 何とかしないと%Kげーむおーばーなりィ～≦≦
 
 text_03BF:
-    string "なんかズルしてないなりか？"                ; en: Isn't someone cheating, nari?
+    string "Is someone cheating, nari?"  ; ja: なんかズルしてないなりか？
 
 text_03DA:
-    string "先に進むとどうなるなりか？"                ; en: What happens if I go on, nari?
+    string "What happens if I go on, nari?"  ; ja: 先に進むとどうなるなりか？
 
 text_03F5:
-    string "素通りしたいなりィ≦"                   ; en: I want to walk right past, nari ≦
+    string "I want to walk right past, nari ≦"  ; ja: 素通りしたいなりィ≦
 
 text_040A:
-    string "お休み中のお店があるなり♪"                ; en: There's a store taking a break, nari ♪
+    string "There's a store taking a break,%Knari ♪"  ; ja: お休み中のお店があるなり♪
 
 text_0425:
-    string "だめなりね～★"                      ; en: No good, nari ★
+    string "No good, nari ★"              ; ja: だめなりね～★
 
 text_0434:
-    string "ずぼらなお店があるなりィ♪"                ; en: There's a sloppy store, nari ♪
+    string "There's a sloppy store, nari ♪"  ; ja: ずぼらなお店があるなりィ♪
 
 text_044F:
-    string "ＣＬＯＳＥＤなりかぁ？"                  ; en: CLOSED, nari?
+    string "CLOSED, nari?"                ; ja: ＣＬＯＳＥＤなりかぁ？
 
 text_0466:
-    string "仕入れ担当は誰なりかぁぁ"                 ; en: Who's in charge of restocking, nari?
+    string "Who's in charge of restocking,%Knari?"  ; ja: 仕入れ担当は誰なりかぁぁ
 
 text_047F:
-    string "商品がすっからかんなりィ～≦"               ; en: The goods are all gone, nari~ ≦
+    string "The goods are all gone, nari ≦"  ; ja: 商品がすっからかんなりィ～≦
 
 text_049C:
-    string "本日はサラリーなりィ"                   ; en: Today is salary day, nari
+    string "Today is salary day, nari"    ; ja: 本日はサラリーなりィ
 
 text_04B1:
-    string "ここは銀行の前なりィ"                   ; en: This is in front of the bank, nari
+    string "I'm right next to the bank, nari"  ; ja: ここは銀行の前なりィ
 
 text_04C6:
-    string "やっと給料日になったなりィ"                ; en: Payday at last, nari
+    string "Payday at last, nari"         ; ja: やっと給料日になったなりィ
 
 text_04E1:
-    string "フェイスあっぷなりィ"                   ; en: Face up, nari
+    string "Face up, nari"                ; ja: フェイスあっぷなりィ
 
 text_04F6:
-    string "ラベルあっぷなりィ"                    ; en: Label up, nari
+    string "Label up, nari"               ; ja: ラベルあっぷなりィ
 
 text_0509:
-    string "セブンあっぷなりィ"                    ; en: Seven Up, nari
+    string "Seven Up, nari"               ; ja: セブンあっぷなりィ
 
 text_051C:
-    string "やる気がうせるなりィ"                   ; en: I'm losing my drive, nari
+    string "I'm losing my drive, nari"    ; ja: やる気がうせるなりィ
 
 text_0531:
-    string "何が原因なりィ・・・"                   ; en: What's the cause, nari...
+    string "What's the cause, nari..."    ; ja: 何が原因なりィ・・・
 
 text_0546:
-    string "もうやってられないなりィ"                 ; en: I can't take it anymore, nari
+    string "I can't take it anymore, nari"  ; ja: もうやってられないなりィ
 
 text_055F:
-    string "やんちゃなお店があるなりィ"                ; en: There's a naughty store, nari
+    string "There's a naughty store, nari"  ; ja: やんちゃなお店があるなりィ
 
 text_057A:
-    string "ちょっと大きいお店なりィ"                 ; en: It's a rather big store, nari
+    string "It's a rather big store, nari"  ; ja: ちょっと大きいお店なりィ
 
 text_0593:
-    string "逃げ道はないなりか？"                   ; en: Is there no way out, nari?
+    string "Is there no way out, nari?"   ; ja: 逃げ道はないなりか？
 
 text_05A8:
-    string "今日はお店がほしいなり"                  ; en: I want a store today, nari
+    string "I want a store today, nari"   ; ja: 今日はお店がほしいなり
 
 text_05BF:
-    string "いいかげんお店がほしいなり"                ; en: I really want a store by now, nari
+    string "I really want a store by now, nari"  ; ja: いいかげんお店がほしいなり
 
 text_05DA:
-    string "サボテンが似合うお店が%Kとっても欲しいなり"       ; en: I really want a store / that suits a cactus, nari
+    string "I really want a store%Kthat suits a cactus, nari"  ; ja: サボテンが似合うお店が%Kとっても欲しいなり
 
 text_0605:
-    string "大嫌いなり！！"                      ; en: I hate it, nari!!
+    string "I hate it, nari!!"            ; ja: 大嫌いなり！！
 
 text_0614:
-    string "元気をなくすお店を見つけたなり"              ; en: I found a store that's lost its spirit, nari
+    string "I found a store that's lost its%Kspirit, nari"  ; ja: 元気をなくすお店を見つけたなり
 
 text_0633:
-    string "ピンチなお店を見つけたなり"                ; en: I found a store in trouble, nari
+    string "I found a store in trouble, nari"  ; ja: ピンチなお店を見つけたなり
 
 text_064E:
-    string "銀行ブギウギなりね"                    ; en: Bank boogie-woogie, nari
+    string "Bank boogie-woogie, nari"     ; ja: 銀行ブギウギなりね
 
 text_0661:
-    string "銀行はんた～なり"                     ; en: Bank hunter, nari
+    string "Bank hunter, nari"            ; ja: 銀行はんた～なり
 
 text_0672:
-    string "次の給料はいくらなり？"                  ; en: How much is the next pay, nari?
+    string "How much is the next pay, nari?"  ; ja: 次の給料はいくらなり？
 
 text_0689:
-    string "ボクのお店はどこにもないなり"               ; en: My stores are nowhere, nari
+    string "My stores are nowhere near%Khere, nari"  ; ja: ボクのお店はどこにもないなり
 
 text_06A6:
-    string "周りは知らない人ばっかりなり～"              ; en: Nothing but strangers around, nari~
+    string "Nothing but strangers around,%Knari~"  ; ja: 周りは知らない人ばっかりなり～
 
 text_06C5:
-    string "お店が見えなくなっちゃたなりィ"              ; en: I can't see my stores anymore, nari
+    string "I can't see my stores anymore,%Knari"  ; ja: お店が見えなくなっちゃたなりィ
 
 text_06E4:
-    string "タコス魂はメキシコにあるなり"               ; en: The taco spirit is in Mexico, nari
+    string "The taco spirit is in Mexico, nari"  ; ja: タコス魂はメキシコにあるなり
 
 text_0701:
-    string "%NMYのお店に止まらないと%Kイケナイなり"       ; en: I have to land on / <player>'s store, nari
+    string "I have to land on%K%NMY's store, nari"  ; ja: %NMYのお店に止まらないと%Kイケナイなり
 
 text_0728:
-    string "補充のためには手段を選ばないなり♭"            ; en: Any means to restock, nari ♭
+    string "Any means to restock, nari ♭"  ; ja: 補充のためには手段を選ばないなり♭
 
 text_074B:
-    string "迷い道ぃは迷うなり"                    ; en: The lost road gets you lost, nari
+    string "The lost road gets you lost, nari"  ; ja: 迷い道ぃは迷うなり
 
 text_075E:
-    string "混乱するなりィ"                      ; en: I'm confused, nari
+    string "I'm confused, nari"           ; ja: 混乱するなりィ
 
 text_076D:
-    string "迷っててもしょうがないなりィ"               ; en: No use being lost, nari
+    string "No use being lost, nari"      ; ja: 迷っててもしょうがないなりィ
 
 text_078A:
-    string "エレベーターはくれいじぃ～"                ; en: The elevator is cra-azy~
+    string "The elevator is craazzyyy"     ; ja: エレベーターはくれいじぃ～
 
 text_07A5:
-    string "エレベーターはせまいなりィ"                ; en: The elevator is cramped, nari
+    string "The elevator is cramped, nari"  ; ja: エレベーターはせまいなりィ
 
 text_07C0:
-    string "エレベーターは近いなりィ～"                ; en: The elevator is close, nari~
+    string "The elevator is close, nari"  ; ja: エレベーターは近いなりィ～
 
 text_07DB:
-    string "ちゃんとした植物なり"                   ; en: I'm a proper plant, nari
+    string "I'm a proper plant, nari"     ; ja: ちゃんとした植物なり
 
 text_07F0:
-    string "みんないいひとなり"                    ; en: Everyone's a nice person, nari
+    string "Everyone's a nice person, nari"  ; ja: みんないいひとなり
 
 text_0803:
-    string "ファイトなり"                       ; en: Fight, nari
+    string "Fight, nari"                  ; ja: ファイトなり

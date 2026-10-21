@@ -1,5 +1,9 @@
 ; TALK.J entry 6 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Rob says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,250 +60,250 @@
     talk_wait_open
     play_xa 6, $l2                        ; voice: XA track 6 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01F8, 3, 12                ; 0.0 the first month: Nice to meet you~
-    words text_0203, 3, 12                ; 0.1 the first month: I'll nail it today too~
-    words text_0214, 3, 12                ; 0.2 the first month: Keeping it cool~
+    words text_01F8, 3, 12                ; 0.0 the first month: Nice to meet you.
+    words text_0203, 3, 12                ; 0.1 the first month: I'll nail it today too.
+    words text_0214, 3, 12                ; 0.2 the first month: Keeping it cool.
     words text_0225, 3, 1                 ; 1.0 assets at 7/8 of the goal: Feeling great, yeah!
-    words text_023A, 3, 1                 ; 1.1 assets at 7/8 of the goal: This match is mine~
-    words text_024F, 3, 1                 ; 1.2 assets at 7/8 of the goal: Keeping it cool to the end~
-    words text_0268, 3, 1                 ; 2.0 last at the start of the round, first now: This is what happens when I try~
-    words text_0287, 3, 1                 ; 2.1 last at the start of the round, first now: Jumping up is fun~
-    words text_02A2, 3, 1                 ; 2.2 last at the start of the round, first now: A comeback in one shot~
-    words text_02AD, 4, 4                 ; 3.0 first at the start of the round, last now: This game is seriously boring~
-    words text_02CC, 4, 4                 ; 3.1 first at the start of the round, last now: Why~ how come~
+    words text_023A, 3, 1                 ; 1.1 assets at 7/8 of the goal: This match is mine.
+    words text_024F, 3, 1                 ; 1.2 assets at 7/8 of the goal: Keeping it cool to the end.
+    words text_0268, 3, 1                 ; 2.0 last at the start of the round, first now: This is what happens when I try.
+    words text_0287, 3, 1                 ; 2.1 last at the start of the round, first now: Jumping up is fun.
+    words text_02A2, 3, 1                 ; 2.2 last at the start of the round, first now: A comeback in one shot.
+    words text_02AD, 4, 4                 ; 3.0 first at the start of the round, last now: This game is seriously boring.
+    words text_02CC, 4, 4                 ; 3.1 first at the start of the round, last now: Why? how come?
     words text_02E7, 4, 4                 ; 3.2 first at the start of the round, last now: Did I do something bad?
-    words text_02FE, 4, 4                 ; 4.0 ahead: a rival store it can't afford: Over there... / that's bad~
+    words text_02FE, 4, 4                 ; 4.0 ahead: a rival store it can't afford: Over there... / that's bad.
     words text_031F, 1, 2                 ; 4.1 ahead: a rival store it can't afford: No passing?
-    words text_0332, 1, 2                 ; 4.2 ahead: a rival store it can't afford: I've got a bad feeling~
-    words text_0341, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: I don't want to go on~
-    words text_0358, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: Give me a break, really~
-    words text_0369, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Please don't let me stop / at a big store~
+    words text_0332, 1, 2                 ; 4.2 ahead: a rival store it can't afford: I've got a bad feeling.
+    words text_0341, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: I don't want to go on.
+    words text_0358, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: Give me a break. Really.
+    words text_0369, 1, 2                 ; 5.2 ahead: a rival store in a chain of 4: Please don't let me stop / at a big store.
     words text_0390, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: What I'm aiming for is...
-    words text_03A1, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Of course I'm aiming for the closed store~
-    words text_03BA, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: The closed store / isn't my problem~
-    words text_03D7, 1, 2                 ; 7.0 ahead: its own store without goods: I have to put goods in my store~
-    words text_03F4, 1, 2                 ; 7.1 ahead: its own store without goods: My store is sold out
-    words text_040D, 1, 2                 ; 7.2 ahead: its own store without goods: Why are there no goods in my store~
-    words text_042C, 0, 0                 ; 8.0 the bank on the next square: Oh, it's payday~
-    words text_043B, 0, 0                 ; 8.1 the bank on the next square: What should I buy with my pay~
-    words text_0450, 0, 0                 ; 8.2 the bank on the next square: I'll go to the bank and get rich~
-    words text_046D, 3, 1                 ; 9.0 ranked better than at the start of the round: Oh, my rank's going up~
-    words text_0484, 3, 1                 ; 9.1 ranked better than at the start of the round: A jump up, maybe~
-    words text_0499, 3, 1                 ; 9.2 ranked better than at the start of the round: Sorry, my rank went up~
-    words text_04B2, 1, 2                 ; 10.0 ranked worse: My rank's going down somehow~
-    words text_04CB, 0, 0                 ; 10.1 ranked worse: I feel bad~
-    words text_04DA, 1, 2                 ; 10.2 ranked worse: I'm losing my drive~
-    words text_04ED, 1, 2                 ; 11.0 ahead: a rival store in a chain: I don't want to buy expensive things~
-    words text_0508, 1, 2                 ; 11.1 ahead: a rival store in a chain: I don't want to shop~
-    words text_051D, 1, 2                 ; 11.2 ahead: a rival store in a chain: I don't want to spend money~
-    words text_0532, 0, 0                 ; 12.0 ahead: a vacant lot: I really want a new store~
-    words text_054F, 0, 0                 ; 12.1 ahead: a vacant lot: Maybe I'll become manager / of a new store~
-    words text_0576, 0, 0                 ; 12.2 ahead: a vacant lot: I'm a store manager
-    words text_0589, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I'd rather pass on expensive shopping~
-    words text_05A4, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Expensive goods aren't my specialty~
-    words text_05BB, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: Can't buy good goods like this~
-    words text_05DA, 0, 0                 ; 14.0 ahead: the bank: I want to withdraw money at the bank~
-    words text_05F7, 0, 0                 ; 14.1 ahead: the bank: Can I make it to the bank~
-    words text_060C, 1, 2                 ; 14.2 ahead: the bank: Do I just have to trust to luck~
-    words text_0625, 1, 2                 ; 15.0 none of its stores ahead: I can't find my stores~
-    words text_0640, 1, 2                 ; 15.1 none of its stores ahead: Nothing but rival stores~
-    words text_0659, 1, 2                 ; 15.2 none of its stores ahead: Kind of a pinch~
-    words text_066C, 0, 0                 ; 16.0 ahead: its own store with free goods slots: Maybe I'll go restock~
-    words text_0681, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Restocking really is important~
-    words text_069A, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Can I stop by my store~
-    words text_06B1, 0, 0                 ; 17.0 no direction (after the bank): Is this way better~
-    words text_06C4, 0, 0                 ; 17.1 no direction (after the bank): Both look good~
-    words text_06DB, 0, 0                 ; 17.2 no direction (after the bank): Either one's fine, isn't it~
-    words text_06F8, 0, 0                 ; 18.0 no direction, on an elevator square: Can I get to the elevator~
+    words text_03A1, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Of course I'm aiming for the / closed store.
+    words text_03BA, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: The closed store / isn't my problem.
+    words text_03D7, 1, 2                 ; 7.0 ahead: its own store without goods: I have to put goods in my store.
+    words text_03F4, 1, 2                 ; 7.1 ahead: its own store without goods: My store is sold out.
+    words text_040D, 1, 2                 ; 7.2 ahead: its own store without goods: Why are there no goods in my / store?
+    words text_042C, 0, 0                 ; 8.0 the bank on the next square: Oh, it's payday.
+    words text_043B, 0, 0                 ; 8.1 the bank on the next square: What should I buy with my pay?
+    words text_0450, 0, 0                 ; 8.2 the bank on the next square: I'll go to the bank and get rich.
+    words text_046D, 3, 1                 ; 9.0 ranked better than at the start of the round: Oh, my rank's going up.
+    words text_0484, 3, 1                 ; 9.1 ranked better than at the start of the round: A jump up, maybe.
+    words text_0499, 3, 1                 ; 9.2 ranked better than at the start of the round: Sorry, my rank went up.
+    words text_04B2, 1, 2                 ; 10.0 ranked worse: My rank's going down somehow.
+    words text_04CB, 0, 0                 ; 10.1 ranked worse: I feel bad.
+    words text_04DA, 1, 2                 ; 10.2 ranked worse: I'm losing my drive.
+    words text_04ED, 1, 2                 ; 11.0 ahead: a rival store in a chain: I don't want to buy expensive / things.
+    words text_0508, 1, 2                 ; 11.1 ahead: a rival store in a chain: I don't want to shop.
+    words text_051D, 1, 2                 ; 11.2 ahead: a rival store in a chain: I don't want to spend money.
+    words text_0532, 0, 0                 ; 12.0 ahead: a vacant lot: I really want a new store.
+    words text_054F, 0, 0                 ; 12.1 ahead: a vacant lot: Maybe I'll become manager / of a new store.
+    words text_0576, 0, 0                 ; 12.2 ahead: a vacant lot: I'm a store manager.
+    words text_0589, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I'd rather pass on expensive / shopping.
+    words text_05A4, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: Expensive goods aren't my / specialty.
+    words text_05BB, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: Can't buy good goods like this.
+    words text_05DA, 0, 0                 ; 14.0 ahead: the bank: I want to withdraw money at the / bank.
+    words text_05F7, 0, 0                 ; 14.1 ahead: the bank: Can I make it to the bank.
+    words text_060C, 1, 2                 ; 14.2 ahead: the bank: Do I just have to trust to luck.
+    words text_0625, 1, 2                 ; 15.0 none of its stores ahead: I can't find my stores.
+    words text_0640, 1, 2                 ; 15.1 none of its stores ahead: Nothing but rival stores.
+    words text_0659, 1, 2                 ; 15.2 none of its stores ahead: Kind of a pinch.
+    words text_066C, 0, 0                 ; 16.0 ahead: its own store with free goods slots: Maybe I'll go restock.
+    words text_0681, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Restocking really is important.
+    words text_069A, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Can I stop by my store.
+    words text_06B1, 0, 0                 ; 17.0 no direction (after the bank): Is this way better.
+    words text_06C4, 0, 0                 ; 17.1 no direction (after the bank): Both look good.
+    words text_06DB, 0, 0                 ; 17.2 no direction (after the bank): Either one's fine, isn't it.
+    words text_06F8, 0, 0                 ; 18.0 no direction, on an elevator square: Can I get to the elevator.
     words text_0715, 0, 0                 ; 18.1 no direction, on an elevator square: Where should I go.... / I really can't decide ∵
-    words text_0742, 0, 0                 ; 18.2 no direction, on an elevator square: Take it easy now and it's tough later~
+    words text_0742, 0, 0                 ; 18.2 no direction, on an elevator square: Take it easy now and it's tough / later.
     words text_075B, 3, 10                ; 19.0 none of these: I want to go snowboarding
     words text_076C, 3, 10                ; 19.1 none of these: I'm a surfer
     words text_077D, 3, 10                ; 19.2 none of these: It's <player>
 
 text_01F8:
-    string "よろしく～"                        ; en: Nice to meet you~
+    string "Nice to meet you."            ; ja: よろしく～
 
 text_0203:
-    string "今日も決めるよ～"                     ; en: I'll nail it today too~
+    string "I'll nail it today too."      ; ja: 今日も決めるよ～
 
 text_0214:
-    string "クールに行くよ～"                     ; en: Keeping it cool~
+    string "Keeping it cool."             ; ja: クールに行くよ～
 
 text_0225:
-    string "気分は最高いぇ～い！"                   ; en: Feeling great, yeah!
+    string "Feeling great, yeah!"         ; ja: 気分は最高いぇ～い！
 
 text_023A:
-    string "この勝負もらったよ～"                   ; en: This match is mine~
+    string "This match is mine."          ; ja: この勝負もらったよ～
 
 text_024F:
-    string "最後までクールに行くよ～"                 ; en: Keeping it cool to the end~
+    string "Keeping it cool to the end."  ; ja: 最後までクールに行くよ～
 
 text_0268:
-    string "僕ががんばればこんなもんかな～"              ; en: This is what happens when I try~
+    string "This is what happens when I try."  ; ja: 僕ががんばればこんなもんかな～
 
 text_0287:
-    string "ジャンプアップて楽しいね～"                ; en: Jumping up is fun~
+    string "Jumping up is fun."           ; ja: ジャンプアップて楽しいね～
 
 text_02A2:
-    string "一発逆転～"                        ; en: A comeback in one shot~
+    string "A comeback in one shot."      ; ja: 一発逆転～
 
 text_02AD:
-    string "このゲーム、まじでつまんな～い"              ; en: This game is seriously boring~
+    string "This game is seriously boring."  ; ja: このゲーム、まじでつまんな～い
 
 text_02CC:
-    string "なんでだよ～どうしてだよ～"                ; en: Why~ how come~
+    string "Why? how come?"               ; ja: なんでだよ～どうしてだよ～
 
 text_02E7:
-    string "僕、何か悪いことした？"                  ; en: Did I do something bad?
+    string "Did I do something bad?"      ; ja: 僕、何か悪いことした？
 
 text_02FE:
-    string "あんなところに・・・%Kやばいよ～"            ; en: Over there... / that's bad~
+    string "Over there...%Kthat's bad."   ; ja: あんなところに・・・%Kやばいよ～
 
 text_031F:
-    string "パスってなしなの～"                    ; en: No passing?
+    string "No passing?"                  ; ja: パスってなしなの～
 
 text_0332:
-    string "いやな感じが～"                      ; en: I've got a bad feeling~
+    string "I've got a bad feeling."      ; ja: いやな感じが～
 
 text_0341:
-    string "この先に進むのやだよ～"                  ; en: I don't want to go on~
+    string "I don't want to go on."       ; ja: この先に進むのやだよ～
 
 text_0358:
-    string "ホント勘弁して～"                     ; en: Give me a break, really~
+    string "Give me a break. Really."     ; ja: ホント勘弁して～
 
 text_0369:
-    string "どうか大きいお店には%K止まんないよ～に"         ; en: Please don't let me stop / at a big store~
+    string "Please don't let me stop%Kat a big store."  ; ja: どうか大きいお店には%K止まんないよ～に
 
 text_0390:
-    string "僕の狙いは・・・"                     ; en: What I'm aiming for is...
+    string "What I'm aiming for is..."    ; ja: 僕の狙いは・・・
 
 text_03A1:
-    string "休業中のお店当然狙うよ～"                 ; en: Of course I'm aiming for the closed store~
+    string "Of course I'm aiming for the%Kclosed store."  ; ja: 休業中のお店当然狙うよ～
 
 text_03BA:
-    string "休業中のお店は%K知らないよ～"              ; en: The closed store / isn't my problem~
+    string "The closed store%Kisn't my problem."  ; ja: 休業中のお店は%K知らないよ～
 
 text_03D7:
-    string "僕のお店に商品を入れなきゃ～"               ; en: I have to put goods in my store~
+    string "I have to put goods in my store."  ; ja: 僕のお店に商品を入れなきゃ～
 
 text_03F4:
-    string "僕のお店が売り切れ中だっ"                 ; en: My store is sold out
+    string "My store is sold out."         ; ja: 僕のお店が売り切れ中だっ
 
 text_040D:
-    string "なんで僕のお店に商品がないの～"              ; en: Why are there no goods in my store~
+    string "Why are there no goods in my%Kstore?"  ; ja: なんで僕のお店に商品がないの～
 
 text_042C:
-    string "あっ給料日だ～"                      ; en: Oh, it's payday~
+    string "Oh, it's payday."             ; ja: あっ給料日だ～
 
 text_043B:
-    string "給料で何買おっかな～"                   ; en: What should I buy with my pay~
+    string "What should I buy with my pay?"  ; ja: 給料で何買おっかな～
 
 text_0450:
-    string "銀行にいってお金持ちになろ～"               ; en: I'll go to the bank and get rich~
+    string "I'll go to the bank and get rich."  ; ja: 銀行にいってお金持ちになろ～
 
 text_046D:
-    string "あっ順位があがってる～"                  ; en: Oh, my rank's going up~
+    string "Oh, my rank's going up."      ; ja: あっ順位があがってる～
 
 text_0484:
-    string "ジャンプアップかな～"                   ; en: A jump up, maybe~
+    string "A jump up, maybe."            ; ja: ジャンプアップかな～
 
 text_0499:
-    string "悪いね順位が上がったよ～"                 ; en: Sorry, my rank went up~
+    string "Sorry, my rank went up."      ; ja: 悪いね順位が上がったよ～
 
 text_04B2:
-    string "なんか順位が下がってる～"                 ; en: My rank's going down somehow~
+    string "My rank's going down somehow."  ; ja: なんか順位が下がってる～
 
 text_04CB:
-    string "気分が悪いよ～"                      ; en: I feel bad~
+    string "I feel bad."                  ; ja: 気分が悪いよ～
 
 text_04DA:
-    string "やる気がなくなる～"                    ; en: I'm losing my drive~
+    string "I'm losing my drive."         ; ja: やる気がなくなる～
 
 text_04ED:
-    string "高いものは買いたくないよ～"                ; en: I don't want to buy expensive things~
+    string "I don't want to buy expensive%Kthings."  ; ja: 高いものは買いたくないよ～
 
 text_0508:
-    string "買い物したくないよ～"                   ; en: I don't want to shop~
+    string "I don't want to shop."        ; ja: 買い物したくないよ～
 
 text_051D:
-    string "僕お金使いたくない～"                   ; en: I don't want to spend money~
+    string "I don't want to spend money."  ; ja: 僕お金使いたくない～
 
 text_0532:
-    string "ホント新しいお店がほしいネ～"               ; en: I really want a new store~
+    string "I really want a new store."   ; ja: ホント新しいお店がほしいネ～
 
 text_054F:
-    string "新しいお店の店長に%Kなっちゃおうかな～"         ; en: Maybe I'll become manager / of a new store~
+    string "Maybe I'll become manager%Kof a new store."  ; ja: 新しいお店の店長に%Kなっちゃおうかな～
 
 text_0576:
-    string "僕はお店の店長さん"                    ; en: I'm a store manager
+    string "I'm a store manager."          ; ja: 僕はお店の店長さん
 
 text_0589:
-    string "高い買い物は遠慮したいよ～"                ; en: I'd rather pass on expensive shopping~
+    string "I'd rather pass on expensive%Kshopping."  ; ja: 高い買い物は遠慮したいよ～
 
 text_05A4:
-    string "高い品物は専門外だよ～"                  ; en: Expensive goods aren't my specialty~
+    string "Expensive goods aren't my%Kspecialty."  ; ja: 高い品物は専門外だよ～
 
 text_05BB:
-    string "いい品物もこれじゃ買えないね～"              ; en: Can't buy good goods like this~
+    string "Can't buy good goods like this."  ; ja: いい品物もこれじゃ買えないね～
 
 text_05DA:
-    string "銀行でお金おろしてきたいよ～"               ; en: I want to withdraw money at the bank~
+    string "I want to withdraw money at the%Kbank."  ; ja: 銀行でお金おろしてきたいよ～
 
 text_05F7:
-    string "銀行までつけるかな～"                   ; en: Can I make it to the bank~
+    string "Can I make it to the bank."   ; ja: 銀行までつけるかな～
 
 text_060C:
-    string "運に任せるしかないのか～"                 ; en: Do I just have to trust to luck~
+    string "Do I just have to trust to luck."  ; ja: 運に任せるしかないのか～
 
 text_0625:
-    string "僕のお店が見当たらないよ～"                ; en: I can't find my stores~
+    string "I can't find my stores."      ; ja: 僕のお店が見当たらないよ～
 
 text_0640:
-    string "ライバル店ばっかりだよ～"                 ; en: Nothing but rival stores~
+    string "Nothing but rival stores."    ; ja: ライバル店ばっかりだよ～
 
 text_0659:
-    string "なんかピンチだよ～"                    ; en: Kind of a pinch~
+    string "Kind of a pinch."             ; ja: なんかピンチだよ～
 
 text_066C:
-    string "補充しに行こうかな～"                   ; en: Maybe I'll go restock~
+    string "Maybe I'll go restock."       ; ja: 補充しに行こうかな～
 
 text_0681:
-    string "ホント補充も大切だよな～"                 ; en: Restocking really is important~
+    string "Restocking really is important."  ; ja: ホント補充も大切だよな～
 
 text_069A:
-    string "お店に寄ってけるかな～"                  ; en: Can I stop by my store~
+    string "Can I stop by my store."      ; ja: お店に寄ってけるかな～
 
 text_06B1:
-    string "こっちがいいかな～"                    ; en: Is this way better~
+    string "Is this way better."          ; ja: こっちがいいかな～
 
 text_06C4:
-    string "どっちもよさそうだよ～"                  ; en: Both look good~
+    string "Both look good."              ; ja: どっちもよさそうだよ～
 
 text_06DB:
-    string "どっちでもいいんじゃないか～"               ; en: Either one's fine, isn't it~
+    string "Either one's fine, isn't it."  ; ja: どっちでもいいんじゃないか～
 
 text_06F8:
-    string "エレベーターまで行けるのか～"               ; en: Can I get to the elevator~
+    string "Can I get to the elevator."   ; ja: エレベーターまで行けるのか～
 
 text_0715:
-    string "どこに行こうか・・・・%Kホント迷っちゃうね∵"      ; en: Where should I go.... / I really can't decide ∵
+    string "Where should I go....%KI really can't decide ∵"  ; ja: どこに行こうか・・・・%Kホント迷っちゃうね∵
 
 text_0742:
-    string "楽するとあとがきついね～"                 ; en: Take it easy now and it's tough later~
+    string "Take it easy now and it's tough%Klater."  ; ja: 楽するとあとがきついね～
 
 text_075B:
-    string "スノボしたいよん"                     ; en: I want to go snowboarding
+    string "I want to go snowboarding"    ; ja: スノボしたいよん
 
 text_076C:
-    string "俺ってサーファー"                     ; en: I'm a surfer
+    string "I'm a surfer"                 ; ja: 俺ってサーファー
 
 text_077D:
-    string "%NMYだ"                        ; en: It's <player>
+    string "It's %NMY"                    ; ja: %NMYだ

@@ -1,5 +1,9 @@
 ; TALK.J entry 10 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Bro says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,14 +60,14 @@
     talk_wait_open
     play_xa 10, $l2                       ; voice: XA track 10 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01F8, 3, 12                ; 0.0 the first month: What a drag~ but let's do this!
+    words text_01F8, 3, 12                ; 0.0 the first month: What a drag... but let's do this!
     words text_0215, 3, 12                ; 0.1 the first month: 'Sup! Nice to meet ya!!
     words text_022C, 3, 12                ; 0.2 the first month: Let's get started already!
     words text_0241, 3, 1                 ; 1.0 assets at 7/8 of the goal: Piece of cake! No sweat
@@ -86,9 +90,9 @@ table_0090:
     words text_03DA, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: Don't mess with a fallen angel!!
     words text_03EF, 1, 2                 ; 7.0 ahead: its own store without goods: My store's out of stock!
     words text_0404, 1, 2                 ; 7.1 ahead: its own store without goods: Crap! / My store's out of stock!
-    words text_0425, 1, 2                 ; 7.2 ahead: its own store without goods: My store's so popular it's out of goods!
+    words text_0425, 1, 2                 ; 7.2 ahead: its own store without goods: My store's so popular it's out of / goods!
     words text_0448, 0, 0                 ; 8.0 the bank on the next square: I'll take the pay I worked for!
-    words text_0463, 0, 0                 ; 8.1 the bank on the next square: Shall I blow it all on payday!
+    words text_0463, 0, 0                 ; 8.1 the bank on the next square: Should I blow it all on payday?!
     words text_047E, 0, 0                 ; 8.2 the bank on the next square: It's payday, what should I do?
     words text_0499, 3, 1                 ; 9.0 ranked better than at the start of the round: Sorry about this! / My rank went up
     words text_04C0, 3, 1                 ; 9.1 ranked better than at the start of the round: Ain't I cool!!!
@@ -103,204 +107,204 @@ table_0090:
     words text_059B, 0, 0                 ; 12.1 ahead: a vacant lot: I'm the one buying it!
     words text_05AE, 0, 0                 ; 12.2 ahead: a vacant lot: Maybe I'll buy myself a store!
     words text_05CB, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I'm not buying expensive goods
-    words text_05E6, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I'll steer clear of places I don't like!
-    words text_0605, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I won't stand for it if they sell expensive stuff!
+    words text_05E6, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: I'll steer clear of places I don't / like!
+    words text_0605, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: I won't stand for it if they sell / expensive stuff!
     words text_0626, 0, 0                 ; 14.0 ahead: the bank: Let me go to the bank
     words text_0639, 0, 0                 ; 14.1 ahead: the bank: Can't do anything without money
     words text_0656, 0, 0                 ; 14.2 ahead: the bank: How far is it to the bank?
-    words text_0671, 2, 3                 ; 15.0 none of its stores ahead: What do you mean I don't have a store?
-    words text_0690, 2, 3                 ; 15.1 none of its stores ahead: I'll pay you back for this someday!
+    words text_0671, 2, 3                 ; 15.0 none of its stores ahead: What do you mean I don't have a / store?
+    words text_0690, 2, 3                 ; 15.1 none of its stores ahead: I'll pay you back for this / someday!
     words text_06AB, 2, 3                 ; 15.2 none of its stores ahead: I can't take it anymore
     words text_06BE, 0, 0                 ; 16.0 ahead: its own store with free goods slots: What a drag, restocking?
     words text_06D3, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Hey! / At least restock the goods
     words text_06F6, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Am I the one restocking the goods?
     words text_0713, 0, 0                 ; 17.0 no direction (after the bank): It's obviously this way!
     words text_072C, 0, 0                 ; 17.1 no direction (after the bank): Nothing to worry about
-    words text_0741, 0, 0                 ; 17.2 no direction (after the bank): Neither one's that different, right?
+    words text_0741, 0, 0                 ; 17.2 no direction (after the bank): Neither one's that different, / right?
     words text_075E, 0, 0                 ; 18.0 no direction, on an elevator square: Let's get moving
     words text_076B, 0, 0                 ; 18.1 no direction, on an elevator square: Could you use the elevator?
     words text_0788, 0, 0                 ; 18.2 no direction, on an elevator square: What a drag, I wanna take it easy
-    words text_079B, 3, 10                ; 19.0 none of these: I'm starving~ ∥
+    words text_079B, 3, 10                ; 19.0 none of these: I'm starving.
     words text_07AC, 3, 10                ; 19.1 none of these: Me?
     words text_07B7, 3, 10                ; 19.2 none of these: Iron fist!!
 
 text_01F8:
-    string "だりぃ～けどいっちょやるか！"               ; en: What a drag~ but let's do this!
+    string "What a drag... but let's do this!"  ; ja: だりぃ～けどいっちょやるか！
 
 text_0215:
-    string "チーッス！ヨロシク！！"                  ; en: 'Sup! Nice to meet ya!!
+    string "'Sup! Nice to meet ya!!"      ; ja: チーッス！ヨロシク！！
 
 text_022C:
-    string "とっとと始めようゼ！"                   ; en: Let's get started already!
+    string "Let's get started already!"   ; ja: とっとと始めようゼ！
 
 text_0241:
-    string "楽勝じゃん！よゆうッス"                  ; en: Piece of cake! No sweat
+    string "Piece of cake! No sweat"      ; ja: 楽勝じゃん！よゆうッス
 
 text_0258:
-    string "まじで俺の勝ちが決定じゃん！"               ; en: Seriously, my win is settled!
+    string "Seriously, my win is settled!"  ; ja: まじで俺の勝ちが決定じゃん！
 
 text_0275:
-    string "最後までバシッと決めるよ！"                ; en: I'll nail it right to the end!
+    string "I'll nail it right to the end!"  ; ja: 最後までバシッと決めるよ！
 
 text_0290:
-    string "俺ってスゲーじゃん！"                   ; en: Ain't I awesome!
+    string "Ain't I awesome!"             ; ja: 俺ってスゲーじゃん！
 
 text_02A5:
-    string "まあこんなの楽勝っス！"                  ; en: Well, this is easy!
+    string "Well, this is easy!"          ; ja: まあこんなの楽勝っス！
 
 text_02BC:
-    string "スゴイ！スゴイ！スゴイ！"                 ; en: Awesome! Awesome! Awesome!
+    string "Awesome! Awesome! Awesome!"   ; ja: スゴイ！スゴイ！スゴイ！
 
 text_02D5:
-    string "まじかよっ！"                       ; en: Seriously!?
+    string "Seriously!?"                  ; ja: まじかよっ！
 
 text_02E2:
-    string "ざけんなよっ！"                      ; en: Gimme a break!
+    string "Gimme a break!"               ; ja: ざけんなよっ！
 
 text_02F1:
-    string "ブチきれるよっ俺！"                    ; en: I'm gonna snap!
+    string "I'm gonna snap!"              ; ja: ブチきれるよっ俺！
 
 text_0304:
-    string "俺をはめる気だなっ！！！"                 ; en: You're trying to set me up!!!
+    string "You're trying to set me up!!!"  ; ja: 俺をはめる気だなっ！！！
 
 text_031D:
-    string "まじいよっ！ブチきれるよ！！"               ; en: This sucks! I'm gonna snap!!
+    string "This sucks! I'm gonna snap!!"  ; ja: まじいよっ！ブチきれるよ！！
 
 text_033A:
-    string "このまましょぼくれんのかよっ！"              ; en: Am I just gonna mope like this!
+    string "Am I just gonna mope like this!"  ; ja: このまましょぼくれんのかよっ！
 
 text_0359:
-    string "デッケェ店はなんだよっ！"                 ; en: What's with that huge store!
+    string "What's with that huge store!"  ; ja: デッケェ店はなんだよっ！
 
 text_0372:
-    string "ここは一気に通り抜けるぜっ！"               ; en: I'll blow right through here!
+    string "I'll blow right through here!"  ; ja: ここは一気に通り抜けるぜっ！
 
 text_038F:
-    string "この先危険すぎるぜっ！"                  ; en: It's way too dangerous ahead!
+    string "It's way too dangerous ahead!"  ; ja: この先危険すぎるぜっ！
 
 text_03A6:
-    string "俺は無敵じゃ！"                      ; en: I'm invincible!
+    string "I'm invincible!"              ; ja: 俺は無敵じゃ！
 
 text_03B5:
-    string "クローズ？%Kたるんでんじゃねえよっ！"          ; en: Closed? / Don't slack off!
+    string "Closed?%KDon't slack off!"    ; ja: クローズ？%Kたるんでんじゃねえよっ！
 
 text_03DA:
-    string "堕天使をナメるな！！"                   ; en: Don't mess with a fallen angel!!
+    string "Don't mess with a fallen angel!!"  ; ja: 堕天使をナメるな！！
 
 text_03EF:
-    string "俺の店が品切れだっ！"                   ; en: My store's out of stock!
+    string "My store's out of stock!"     ; ja: 俺の店が品切れだっ！
 
 text_0404:
-    string "やべっ！%K俺の店が品切れ中だっ！"            ; en: Crap! / My store's out of stock!
+    string "Crap!%KMy store's out of stock!"  ; ja: やべっ！%K俺の店が品切れ中だっ！
 
 text_0425:
-    string "俺の店人気があって商品がないぜっ！"            ; en: My store's so popular it's out of goods!
+    string "My store's so popular it's out of%Kgoods!"  ; ja: 俺の店人気があって商品がないぜっ！
 
 text_0448:
-    string "働いた分の給料は頂くかっ！"                ; en: I'll take the pay I worked for!
+    string "I'll take the pay I worked for!"  ; ja: 働いた分の給料は頂くかっ！
 
 text_0463:
-    string "給料日にパーッといくかっ！"                ; en: Shall I blow it all on payday!
+    string "Should I blow it all on payday?!"  ; ja: 給料日にパーッといくかっ！
 
 text_047E:
-    string "給料日だぜっ何しよっかな？"                ; en: It's payday, what should I do?
+    string "It's payday, what should I do?"  ; ja: 給料日だぜっ何しよっかな？
 
 text_0499:
-    string "なんか悪り～な！%K順位があがっちまって"         ; en: Sorry about this! / My rank went up
+    string "Sorry about this!%KMy rank went up"  ; ja: なんか悪り～な！%K順位があがっちまって
 
 text_04C0:
-    string "俺ってクールだろっ！！！"                 ; en: Ain't I cool!!!
+    string "Ain't I cool!!!"              ; ja: 俺ってクールだろっ！！！
 
 text_04D9:
-    string "俺調子いいじゃん！！"                   ; en: I'm on a roll!!
+    string "I'm on a roll!!"              ; ja: 俺調子いいじゃん！！
 
 text_04EE:
-    string "なんで俺の順位がさがってんだよ！"             ; en: Why's my rank dropping!
+    string "Why's my rank dropping!"      ; ja: なんで俺の順位がさがってんだよ！
 
 text_050F:
-    string "調子悪り～よっ！！"                    ; en: I'm off my game!!
+    string "I'm off my game!!"            ; ja: 調子悪り～よっ！！
 
 text_0522:
-    string "ざけんなよっ！！"                     ; en: Gimme a break!!
+    string "Gimme a break!!"              ; ja: ざけんなよっ！！
 
 text_0533:
-    string "俺に高いものを買わせるなよっ！"              ; en: Don't make me buy expensive stuff!
+    string "Don't make me buy expensive stuff!"  ; ja: 俺に高いものを買わせるなよっ！
 
 text_0552:
-    string "俺は買い物しないからなっ！"                ; en: I'm not shopping, got it!
+    string "I'm not shopping, got it!"    ; ja: 俺は買い物しないからなっ！
 
 text_056D:
-    string "さっさと進むかなっ！"                   ; en: Shall I just move on!
+    string "Shall I just move on!"        ; ja: さっさと進むかなっ！
 
 text_0582:
-    string "新しい店でも買うかなっ！"                 ; en: Maybe I'll buy a new store!
+    string "Maybe I'll buy a new store!"  ; ja: 新しい店でも買うかなっ！
 
 text_059B:
-    string "俺が買うからなっ！"                    ; en: I'm the one buying it!
+    string "I'm the one buying it!"       ; ja: 俺が買うからなっ！
 
 text_05AE:
-    string "ちっと店でも買ってやるかっ！"               ; en: Maybe I'll buy myself a store!
+    string "Maybe I'll buy myself a store!"  ; ja: ちっと店でも買ってやるかっ！
 
 text_05CB:
-    string "高い商品は買わないからなっ"                ; en: I'm not buying expensive goods
+    string "I'm not buying expensive goods"  ; ja: 高い商品は買わないからなっ
 
 text_05E6:
-    string "気に入らない所は避けてくぜっ！"              ; en: I'll steer clear of places I don't like!
+    string "I'll steer clear of places I don't%Klike!"  ; ja: 気に入らない所は避けてくぜっ！
 
 text_0605:
-    string "高いもの売ってたら承知しないぞ！"             ; en: I won't stand for it if they sell expensive stuff!
+    string "I won't stand for it if they sell%Kexpensive stuff!"  ; ja: 高いもの売ってたら承知しないぞ！
 
 text_0626:
-    string "銀行に行かせろよっ"                    ; en: Let me go to the bank
+    string "Let me go to the bank"        ; ja: 銀行に行かせろよっ
 
 text_0639:
-    string "金がないとなんも出来ないぜっ"               ; en: Can't do anything without money
+    string "Can't do anything without money"  ; ja: 金がないとなんも出来ないぜっ
 
 text_0656:
-    string "銀行までどのくらいあんだ？"                ; en: How far is it to the bank?
+    string "How far is it to the bank?"   ; ja: 銀行までどのくらいあんだ？
 
 text_0671:
-    string "俺の店がないってど～ゆ～こと？"              ; en: What do you mean I don't have a store?
+    string "What do you mean I don't have a%Kstore?"  ; ja: 俺の店がないってど～ゆ～こと？
 
 text_0690:
-    string "この借りはいつか返すぜっ！"                ; en: I'll pay you back for this someday!
+    string "I'll pay you back for this%Ksomeday!"  ; ja: この借りはいつか返すぜっ！
 
 text_06AB:
-    string "も～やってらんねー"                    ; en: I can't take it anymore
+    string "I can't take it anymore"      ; ja: も～やってらんねー
 
 text_06BE:
-    string "だり～な、補充かよぉ"                   ; en: What a drag, restocking?
+    string "What a drag, restocking?"     ; ja: だり～な、補充かよぉ
 
 text_06D3:
-    string "おい！%K品物の補充くらいやっとけよ"           ; en: Hey! / At least restock the goods
+    string "Hey!%KAt least restock the goods"  ; ja: おい！%K品物の補充くらいやっとけよ
 
 text_06F6:
-    string "商品の補充って俺がやんのか？"               ; en: Am I the one restocking the goods?
+    string "Am I the one restocking the goods?"  ; ja: 商品の補充って俺がやんのか？
 
 text_0713:
-    string "こっちに決まってんだろ！"                 ; en: It's obviously this way!
+    string "It's obviously this way!"     ; ja: こっちに決まってんだろ！
 
 text_072C:
-    string "悩む必要なんかねーな"                   ; en: Nothing to worry about
+    string "Nothing to worry about"       ; ja: 悩む必要なんかねーな
 
 text_0741:
-    string "どっちもそんな差がね～だろ？"               ; en: Neither one's that different, right?
+    string "Neither one's that different,%Kright?"  ; ja: どっちもそんな差がね～だろ？
 
 text_075E:
-    string "早く進もーぜ"                       ; en: Let's get moving
+    string "Let's get moving"             ; ja: 早く進もーぜ
 
 text_076B:
-    string "エレベーターって使えたのか？"               ; en: Could you use the elevator?
+    string "Could you use the elevator?"  ; ja: エレベーターって使えたのか？
 
 text_0788:
-    string "だり～、楽して～ぜ"                    ; en: What a drag, I wanna take it easy
+    string "What a drag, I wanna take it easy"  ; ja: だり～、楽して～ぜ
 
 text_079B:
-    string "はらへったぁ～∥"                     ; en: I'm starving~ ∥
+    string "I'm starving."              ; ja: はらへったぁ～∥
 
 text_07AC:
-    string "オレかぁ？"                        ; en: Me?
+    string "Me?"                          ; ja: オレかぁ？
 
 text_07B7:
-    string "鉄のコブシ！！"                      ; en: Iron fist!!
+    string "Iron fist!!"                  ; ja: 鉄のコブシ！！
     words 0    ; padding

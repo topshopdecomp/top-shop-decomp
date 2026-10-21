@@ -1,5 +1,9 @@
 ; TALK.J entry 27 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Squosh says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,7 +59,7 @@
     talk_wait_open
     play_xa 11, $l2                       ; voice: XA track 11 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -68,226 +72,226 @@ table_0090:
     words text_0215, 3, 6                 ; 1.0 a chain of 4: That was really hard work, mo ★
     words text_0228, 3, 6                 ; 1.1 a chain of 4: Now I can win, mo ♪
     words text_0239, 3, 6                 ; 1.2 a chain of 4: It really got big, mo
-    words text_0250, 0, 5                 ; 2.0 a chain of 2 or 3: Will my income grow with this much, mo?
+    words text_0250, 0, 5                 ; 2.0 a chain of 2 or 3: Will my profits grow with this / big store, mo?
     words text_026F, 3, 6                 ; 2.1 a chain of 2 or 3: I made it a little bigger, mo ♪
     words text_0284, 3, 6                 ; 2.2 a chain of 2 or 3: Just a warm-up, mo ♭
     words text_0299, 0, 5                 ; 3.0 landed on a rival store closed for now: Too bad, mo ★
     words text_02A4, 3, 6                 ; 3.1 landed on a rival store closed for now: May I go for a swim, mo?
-    words text_02BB, 0, 5                 ; 3.2 landed on a rival store closed for now: I want to relax once in a while, mo
-    words text_02D4, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Hm? This is che-eap, mo ♭
+    words text_02BB, 0, 5                 ; 3.2 landed on a rival store closed for now: I want to relax once in a while, / mo
+    words text_02D4, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Hm? This is cheap, mo ♭
     words text_02EB, 0, 5                 ; 4.1 landed on a rival store with lowered prices: What's a bargain sale, mo?
-    words text_0302, 3, 6                 ; 4.2 landed on a rival store with lowered prices: For some reason I bought cheap today, mo ♪
+    words text_0302, 3, 6                 ; 4.2 landed on a rival store with lowered prices: For some reason I bought cheap / today, mo ♪
     words text_031D, 0, 5                 ; 5.0 landed on its own store / opened a store: I'll put water in the tub, mo
-    words text_0334, 1, 7                 ; 5.1 landed on its own store / opened a store: It's okay to take it easy today, mo ♪
+    words text_0334, 1, 7                 ; 5.1 landed on its own store / opened a store: It's okay to take it easy today, / mo ♪
     words text_034F, 3, 6                 ; 5.2 landed on its own store / opened a store: It's <player>'s store, mo ♭
     words text_0360, 4, 9                 ; 6.0 did not take the elevator: I'm not in the mood to ride, mo...
     words text_037D, 1, 7                 ; 6.1 did not take the elevator: It's not that I missed it, mo!
-    words text_0396, 1, 7                 ; 6.2 did not take the elevator: It's hard, mooo... ≦≦
+    words text_0396, 1, 7                 ; 6.2 did not take the elevator: It's too hard, mooo... ≦≦
     words text_03AF, 0, 5                 ; 7.0 landed on the bank: Where shall I go next, mo ♪
     words text_03C8, 3, 6                 ; 7.1 landed on the bank: I got my pay, mo ♪
     words text_03D9, 0, 5                 ; 7.2 landed on the bank: Now I can strike back, mo ∈
     words text_03EE, 1, 7                 ; 8.0 took the elevator: A strange feeling, mo?
-    words text_03FD, 1, 7                 ; 8.1 took the elevator: People are looking at me funny, mo ∵
+    words text_03FD, 1, 7                 ; 8.1 took the elevator: People are looking at me funny, / mo ∵
     words text_041A, 3, 6                 ; 8.2 took the elevator: I've taken a liking to it, mo ♭
-    words text_042F, 1, 7                 ; 9.0 shopping cost a fifth of its money or more: I'll think of some way to get even, mo...
+    words text_042F, 1, 7                 ; 9.0 shopping cost a fifth of its money or more: I'll think of some way to get / even, mo...
     words text_044C, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: Somehow I spent money, mo ≦
     words text_0467, 1, 7                 ; 9.2 shopping cost a fifth of its money or more: Looks kind of risky, mo ∵∵
     words text_047E, 3, 6                 ; 10.0 shopping: got the money back: I got my money back, mo ♪
-    words text_049B, 3, 6                 ; 10.1 shopping: got the money back: The surface world's system is complicated, mo ♪
-    words text_04B6, 0, 5                 ; 10.2 shopping: got the money back: I came out ahead, but what now, mo?
+    words text_049B, 3, 6                 ; 10.1 shopping: got the money back: The surface world's system is / complicated, mo ♪
+    words text_04B6, 0, 5                 ; 10.2 shopping: got the money back: I came out ahead, but what now, / mo?
     words text_04D5, 3, 6                 ; 11.0 shopping: I messed up, mo
-    words text_04EA, 2, 8                 ; 11.1 shopping: Wo~∥! Mo
-    words text_04F9, 4, 9                 ; 11.2 shopping: Things are turning against me, mo ∵∵
-    words text_0516, 3, 6                 ; 12.0 bought a rival's store: I've become the manager here, mo ♪
+    words text_04EA, 2, 8                 ; 11.1 shopping: Woooo! Mo
+    words text_04F9, 4, 9                 ; 11.2 shopping: Things are turning against me, / mo ∵∵
+    words text_0516, 3, 6                 ; 12.0 bought a rival's store: I've become the manager here, / mo ♪
     words text_0533, 0, 5                 ; 12.1 bought a rival's store: A marimo is the manager, mo ♪
-    words text_0546, 3, 6                 ; 12.2 bought a rival's store: Anyway, I have to take one step forward, mo ∵
+    words text_0546, 3, 6                 ; 12.2 bought a rival's store: Anyway, I have to take one step / forward, mo ∵
     words text_0565, 1, 7                 ; 13.0 shopped this turn and the last: Is my money going down fast, mo?
     words text_0580, 1, 7                 ; 13.1 shopped this turn and the last: Too many expenses lately, mo ∵
     words text_059B, 2, 8                 ; 13.2 shopped this turn and the last: I just can't save after all, mo
     words text_05B6, 3, 6                 ; 14.0 assets passed half the goal: Maybe I'm about halfway?
     words text_05CD, 3, 6                 ; 14.1 assets passed half the goal: I can see my home lake, mo ♭
     words text_05E6, 3, 6                 ; 14.2 assets passed half the goal: Halfway at last, mo ★
-    words text_05FB, 2, 8                 ; 15.0 sold a store: I'll send them water weeds to get even, mo!
+    words text_05FB, 2, 8                 ; 15.0 sold a store: I'll send them water weeds to get / even, mo!
     words text_0616, 1, 7                 ; 15.1 sold a store: Business is kind of tough, mo ∵
-    words text_062D, 4, 9                 ; 15.2 sold a store: I'll buy it back, so I'll hold on, mo ≦≦
+    words text_062D, 4, 9                 ; 15.2 sold a store: I'll buy it back, so I'll hold on, / mo ≦≦
     words text_064A, 1, 7                 ; 16.0 declined a vacant lot it could not afford: ...It was only expensive, mo ≦
-    words text_0661, 4, 9                 ; 16.1 declined a vacant lot it could not afford: I don't need a store like this, mo!
+    words text_0661, 4, 9                 ; 16.1 declined a vacant lot it could not afford: I don't need a store like this, / mo!
     words text_067A, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Feels like a pinch, mo
     words text_0695, 0, 5                 ; 17.0 declined a vacant lot: I forgot to buy it, mo.... ∵
-    words text_06AC, 1, 7                 ; 17.1 declined a vacant lot: The store doesn't suit my taste at all, mo ≦
+    words text_06AC, 1, 7                 ; 17.1 declined a vacant lot: The store doesn't suit my taste at / all, mo ≦
     words text_06CD, 3, 6                 ; 17.2 declined a vacant lot: I'll save money, mo ♪
-    words text_06DE, 3, 10                ; 18.0 an event card (the default): Puku-puku~ ∥
+    words text_06DE, 3, 10                ; 18.0 an event card (the default): Puku-pukuuu
     words text_06ED, 0, 10                ; 18.1 an event card (the default): Mo, momomo...
     words text_06FE, 3, 10                ; 18.2 an event card (the default): Roll me up, please, mo!
 
 text_01E6:
-    string "煮るなも！"                        ; en: Don't boil me, mo!
+    string "Don't boil me, mo!"           ; ja: 煮るなも！
 
 text_01F1:
-    string "だめだめも？"                       ; en: No good, mo?
+    string "No good, mo?"                 ; ja: だめだめも？
 
 text_01FE:
-    string "息が出来ないも・・・≦"                  ; en: I can't breathe, mo... ≦
+    string "I can't breathe, mo... ≦"     ; ja: 息が出来ないも・・・≦
 
 text_0215:
-    string "ホント苦労したも★"                    ; en: That was really hard work, mo ★
+    string "That was really hard work, mo ★"  ; ja: ホント苦労したも★
 
 text_0228:
-    string "これで勝てるも♪"                     ; en: Now I can win, mo ♪
+    string "Now I can win, mo ♪"          ; ja: これで勝てるも♪
 
 text_0239:
-    string "ホントに大きくなったも"                  ; en: It really got big, mo
+    string "It really got big, mo"        ; ja: ホントに大きくなったも
 
 text_0250:
-    string "このくらいで収入増えるのかも？"              ; en: Will my income grow with this much, mo?
+    string "Will my profits grow with this%Kbig store, mo?"  ; ja: このくらいで収入増えるのかも？
 
 text_026F:
-    string "少しおっきくしたも♪"                   ; en: I made it a little bigger, mo ♪
+    string "I made it a little bigger, mo ♪"  ; ja: 少しおっきくしたも♪
 
 text_0284:
-    string "まだ、小手調べだも♭"                   ; en: Just a warm-up, mo ♭
+    string "Just a warm-up, mo ♭"         ; ja: まだ、小手調べだも♭
 
 text_0299:
-    string "残念だも★"                        ; en: Too bad, mo ★
+    string "Too bad, mo ★"                ; ja: 残念だも★
 
 text_02A4:
-    string "泳ぎに行っていいかも？"                  ; en: May I go for a swim, mo?
+    string "May I go for a swim, mo?"     ; ja: 泳ぎに行っていいかも？
 
 text_02BB:
-    string "たまにはゆっくりしたいも"                 ; en: I want to relax once in a while, mo
+    string "I want to relax once in a while,%Kmo"  ; ja: たまにはゆっくりしたいも
 
 text_02D4:
-    string "うん？これやす～いも♭"                  ; en: Hm? This is che-eap, mo ♭
+    string "Hm? This is cheap, mo ♭"    ; ja: うん？これやす～いも♭
 
 text_02EB:
-    string "バーゲンとはなんだも？"                  ; en: What's a bargain sale, mo?
+    string "What's a bargain sale, mo?"   ; ja: バーゲンとはなんだも？
 
 text_0302:
-    string "今日は何故か安く買えたも♪"                ; en: For some reason I bought cheap today, mo ♪
+    string "For some reason I bought cheap%Ktoday, mo ♪"  ; ja: 今日は何故か安く買えたも♪
 
 text_031D:
-    string "タライに水を入れとくも"                  ; en: I'll put water in the tub, mo
+    string "I'll put water in the tub, mo"  ; ja: タライに水を入れとくも
 
 text_0334:
-    string "今日くらい楽してもいいも♪"                ; en: It's okay to take it easy today, mo ♪
+    string "It's okay to take it easy today,%Kmo ♪"  ; ja: 今日くらい楽してもいいも♪
 
 text_034F:
-    string "%NMYのお店だも♭"                   ; en: It's <player>'s store, mo ♭
+    string "It's %NMY's store, mo ♭"      ; ja: %NMYのお店だも♭
 
 text_0360:
-    string "乗りたい気分じゃないも・・・"               ; en: I'm not in the mood to ride, mo...
+    string "I'm not in the mood to ride, mo..."  ; ja: 乗りたい気分じゃないも・・・
 
 text_037D:
-    string "乗り遅れた訳じゃないも！"                 ; en: It's not that I missed it, mo!
+    string "It's not that I missed it, mo!"  ; ja: 乗り遅れた訳じゃないも！
 
 text_0396:
-    string "苦しいもぉぉぉ・・・≦≦"                 ; en: It's hard, mooo... ≦≦
+    string "It's too hard, mooo... ≦≦"        ; ja: 苦しいもぉぉぉ・・・≦≦
 
 text_03AF:
-    string "今度はどこに行こうかも♪"                 ; en: Where shall I go next, mo ♪
+    string "Where shall I go next, mo ♪"  ; ja: 今度はどこに行こうかも♪
 
 text_03C8:
-    string "給料を貰ったも♪"                     ; en: I got my pay, mo ♪
+    string "I got my pay, mo ♪"           ; ja: 給料を貰ったも♪
 
 text_03D9:
-    string "これで反撃できるも∈"                   ; en: Now I can strike back, mo ∈
+    string "Now I can strike back, mo ∈"  ; ja: これで反撃できるも∈
 
 text_03EE:
-    string "変な感覚だも？"                      ; en: A strange feeling, mo?
+    string "A strange feeling, mo?"       ; ja: 変な感覚だも？
 
 text_03FD:
-    string "なんか変な目で見られてるも∵"               ; en: People are looking at me funny, mo ∵
+    string "People are looking at me funny,%Kmo ∵"  ; ja: なんか変な目で見られてるも∵
 
 text_041A:
-    string "気に入っちゃったも♭"                   ; en: I've taken a liking to it, mo ♭
+    string "I've taken a liking to it, mo ♭"  ; ja: 気に入っちゃったも♭
 
 text_042F:
-    string "なんか仕返しを考えるも・・・"               ; en: I'll think of some way to get even, mo...
+    string "I'll think of some way to get%Keven, mo..."  ; ja: なんか仕返しを考えるも・・・
 
 text_044C:
-    string "なんかお金使っちゃたもぉ≦"                ; en: Somehow I spent money, mo ≦
+    string "Somehow I spent money, mo ≦"  ; ja: なんかお金使っちゃたもぉ≦
 
 text_0467:
-    string "なんかヤバメだねも∵∵"                  ; en: Looks kind of risky, mo ∵∵
+    string "Looks kind of risky, mo ∵∵"   ; ja: なんかヤバメだねも∵∵
 
 text_047E:
-    string "お金返してもらっちゃったも♪"               ; en: I got my money back, mo ♪
+    string "I got my money back, mo ♪"    ; ja: お金返してもらっちゃったも♪
 
 text_049B:
-    string "地上のシステムは複雑だも♪"                ; en: The surface world's system is complicated, mo ♪
+    string "The surface world's system is%Kcomplicated, mo ♪"  ; ja: 地上のシステムは複雑だも♪
 
 text_04B6:
-    string "得しちゃったけど、どうするも？"              ; en: I came out ahead, but what now, mo?
+    string "I came out ahead, but what now,%Kmo?"  ; ja: 得しちゃったけど、どうするも？
 
 text_04D5:
-    string "しっぱいしちゃったも"                   ; en: I messed up, mo
+    string "I messed up, mo"              ; ja: しっぱいしちゃったも
 
 text_04EA:
-    string "ウオ～∥！だも"                      ; en: Wo~∥! Mo
+    string "Woooo! Mo"                     ; ja: ウオ～∥！だも
 
 text_04F9:
-    string "状況は不利に展開してるも∵∵"               ; en: Things are turning against me, mo ∵∵
+    string "Things are turning against me,%Kmo ∵∵"  ; ja: 状況は不利に展開してるも∵∵
 
 text_0516:
-    string "ここの店長になっちゃったも♪"               ; en: I've become the manager here, mo ♪
+    string "I've become the manager here,%Kmo ♪"  ; ja: ここの店長になっちゃったも♪
 
 text_0533:
-    string "マリモが店長だも♪"                    ; en: A marimo is the manager, mo ♪
+    string "A marimo is the manager, mo ♪"  ; ja: マリモが店長だも♪
 
 text_0546:
-    string "とにかく一歩前進しなくちゃも∵"              ; en: Anyway, I have to take one step forward, mo ∵
+    string "Anyway, I have to take one step%Kforward, mo ∵"  ; ja: とにかく一歩前進しなくちゃも∵
 
 text_0565:
-    string "お金の減りがなんか早いも？"                ; en: Is my money going down fast, mo?
+    string "Is my money going down fast, mo?"  ; ja: お金の減りがなんか早いも？
 
 text_0580:
-    string "このごろ出費が多すぎだも∵"                ; en: Too many expenses lately, mo ∵
+    string "Too many expenses lately, mo ∵"  ; ja: このごろ出費が多すぎだも∵
 
 text_059B:
-    string "やっぱり節約って出来ないも"                ; en: I just can't save after all, mo
+    string "I just can't save after all, mo"  ; ja: やっぱり節約って出来ないも
 
 text_05B6:
-    string "半分くらいに来たかも？"                  ; en: Maybe I'm about halfway?
+    string "Maybe I'm about halfway?"     ; ja: 半分くらいに来たかも？
 
 text_05CD:
-    string "故郷の湖が見えてきたも♭"                 ; en: I can see my home lake, mo ♭
+    string "I can see my home lake, mo ♭"  ; ja: 故郷の湖が見えてきたも♭
 
 text_05E6:
-    string "ようやく半分だもぉ★"                   ; en: Halfway at last, mo ★
+    string "Halfway at last, mo ★"        ; ja: ようやく半分だもぉ★
 
 text_05FB:
-    string "仕返しに水草送ってやるも！"                ; en: I'll send them water weeds to get even, mo!
+    string "I'll send them water weeds to get%Keven, mo!"  ; ja: 仕返しに水草送ってやるも！
 
 text_0616:
-    string "なんか経営が厳しいも∵"                  ; en: Business is kind of tough, mo ∵
+    string "Business is kind of tough, mo ∵"  ; ja: なんか経営が厳しいも∵
 
 text_062D:
-    string "買い戻すからガマンするも≦≦"               ; en: I'll buy it back, so I'll hold on, mo ≦≦
+    string "I'll buy it back, so I'll hold on,%Kmo ≦≦"  ; ja: 買い戻すからガマンするも≦≦
 
 text_064A:
-    string "・・・高かっただけも≦"                  ; en: ...It was only expensive, mo ≦
+    string "...It was only expensive, mo ≦"  ; ja: ・・・高かっただけも≦
 
 text_0661:
-    string "こんなお店はいらないも！"                 ; en: I don't need a store like this, mo!
+    string "I don't need a store like this,%Kmo!"  ; ja: こんなお店はいらないも！
 
 text_067A:
-    string "なんかピンチって感じだもぉ"                ; en: Feels like a pinch, mo
+    string "Feels like a pinch, mo"       ; ja: なんかピンチって感じだもぉ
 
 text_0695:
-    string "買い忘れたも・・・・∵"                  ; en: I forgot to buy it, mo.... ∵
+    string "I forgot to buy it, mo.... ∵"  ; ja: 買い忘れたも・・・・∵
 
 text_06AC:
-    string "お店に感覚がまったくあわないも≦"             ; en: The store doesn't suit my taste at all, mo ≦
+    string "The store doesn't suit my taste at%Kall, mo ≦"  ; ja: お店に感覚がまったくあわないも≦
 
 text_06CD:
-    string "お金を貯めるも♪"                     ; en: I'll save money, mo ♪
+    string "I'll save money, mo ♪"        ; ja: お金を貯めるも♪
 
 text_06DE:
-    string "ぷくぷくぅ～∥"                      ; en: Puku-puku~ ∥
+    string "Puku-pukuuu"                 ; ja: ぷくぷくぅ～∥
 
 text_06ED:
-    string "も、ももも・・・"                     ; en: Mo, momomo...
+    string "Mo, momomo..."                ; ja: も、ももも・・・
 
 text_06FE:
-    string "まるめてぇちょうだいも！"                 ; en: Roll me up, please, mo!
+    string "Roll me up, please, mo!"      ; ja: まるめてぇちょうだいも！
     bytes 0x00    ; padding

@@ -1,5 +1,9 @@
 ; TALK.J entry 5 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Cindy says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,7 +60,7 @@
     talk_wait_open
     play_xa 5, $l2                        ; voice: XA track 5 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -64,28 +68,28 @@
 
 table_0090:
     words text_01F8, 3, 12                ; 0.0 the first month: I'm <player> ☆ / Nice to meet you ★
-    words text_0211, 3, 12                ; 0.1 the first month: Let's do our best today too~ ♪
-    words text_022A, 3, 12                ; 0.2 the first month: <player>'s all fired up~ ☆
+    words text_0211, 3, 12                ; 0.1 the first month: Let's do our best today toooo ♪
+    words text_022A, 3, 12                ; 0.2 the first month: <player>'s all fired uuup ☆
     words text_023F, 3, 1                 ; 1.0 assets at 7/8 of the goal: Somehow <player> feels / victory is near ☆
     words text_025E, 3, 1                 ; 1.1 assets at 7/8 of the goal: Is <player> strong?
-    words text_026D, 3, 1                 ; 1.2 assets at 7/8 of the goal: Just a little more and <player> wins ☆
+    words text_026D, 3, 1                 ; 1.2 assets at 7/8 of the goal: Just a little more and / <player> wins ☆
     words text_0286, 3, 1                 ; 2.0 last at the start of the round, first now: Before I knew it <player> / was number 1 ☆
     words text_02A3, 3, 1                 ; 2.1 last at the start of the round, first now: <player> is a genius ☆
-    words text_02B2, 3, 1                 ; 2.2 last at the start of the round, first now: Somehow <player> is number 1 ☆
-    words text_02C9, 4, 4                 ; 3.0 first at the start of the round, last now: <player> is sad~ ≦
+    words text_02B2, 3, 1                 ; 2.2 last at the start of the round, first now: Somehow <player> is / number 1 ☆
+    words text_02C9, 4, 4                 ; 3.0 first at the start of the round, last now: <player> is saaad ≦
     words text_02DA, 4, 4                 ; 3.1 first at the start of the round, last now: Did <player> do something bad?
-    words text_02F3, 4, 4                 ; 3.2 first at the start of the round, last now: Why is <player> last~?
-    words text_030E, 4, 4                 ; 4.0 ahead: a rival store it can't afford: At this rate <player> / is going to lose~ ≦
-    words text_032F, 1, 2                 ; 4.1 ahead: a rival store it can't afford: Someone help <player>~ ∵
+    words text_02F3, 4, 4                 ; 3.2 first at the start of the round, last now: Why is <player> laaast?
+    words text_030E, 4, 4                 ; 4.0 ahead: a rival store it can't afford: At this rate <player> / is going to lose ≦
+    words text_032F, 1, 2                 ; 4.1 ahead: a rival store it can't afford: Someone help <player> ∵
     words text_0344, 1, 2                 ; 4.2 ahead: a rival store it can't afford: <player> is going to cry ≦
     words text_0359, 1, 2                 ; 5.0 ahead: a rival store in a chain of 4: <player> is going to cry!
-    words text_036C, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: <player> doesn't want to go on anymore~
-    words text_0385, 4, 4                 ; 5.2 ahead: a rival store in a chain of 4: Someone do it for <player>~
+    words text_036C, 1, 2                 ; 5.1 ahead: a rival store in a chain of 4: <player> doesn't want to go on / anymore
+    words text_0385, 4, 4                 ; 5.2 ahead: a rival store in a chain of 4: Someone do it for <player>
     words text_03A0, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: <player> will take over / the closed store ☆
     words text_03C3, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: <player> just loves / closed stores ☆
-    words text_03E4, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: <player>'s aim is to steal stores ☆
+    words text_03E4, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: <player>'s aim is to steal / stores ☆
     words text_0403, 1, 2                 ; 7.0 ahead: its own store without goods: I have to put goods in my store ☆
-    words text_0422, 1, 2                 ; 7.1 ahead: its own store without goods: There's nothing in <player>'s store...
+    words text_0422, 1, 2                 ; 7.1 ahead: its own store without goods: There's nothing in <player>'s / store...
     words text_043D, 1, 2                 ; 7.2 ahead: its own store without goods: <player> has to restock ☆
     words text_0454, 0, 0                 ; 8.0 the bank on the next square: <player>'s happy payday
     words text_0467, 0, 0                 ; 8.1 the bank on the next square: <player> loves payday ☆
@@ -94,30 +98,30 @@ table_0090:
     words text_04A2, 3, 1                 ; 9.1 ranked better than at the start of the round: <player> is happy ☆
     words text_04B1, 3, 1                 ; 9.2 ranked better than at the start of the round: <player> ranks up ☆
     words text_04C4, 4, 4                 ; 10.0 ranked worse: Why? / <player>'s rank is going down!
-    words text_04E7, 4, 4                 ; 10.1 ranked worse: <player> feels kind of off~
-    words text_04FC, 1, 2                 ; 10.2 ranked worse: <player> is sa-ad~
+    words text_04E7, 4, 4                 ; 10.1 ranked worse: <player> feels kind of off
+    words text_04FC, 1, 2                 ; 10.2 ranked worse: <player> is saaad
     words text_0507, 1, 2                 ; 11.0 ahead: a rival store in a chain: <player> doesn't want to buy / expensive things!
     words text_0528, 1, 2                 ; 11.1 ahead: a rival store in a chain: I don't want to shop today!
-    words text_0543, 1, 2                 ; 11.2 ahead: a rival store in a chain: <player> hates expensive stores!
+    words text_0543, 1, 2                 ; 11.2 ahead: a rival store in a chain: <player> hates expensive / stores!
     words text_055A, 0, 0                 ; 12.0 ahead: a vacant lot: <player> / wants to buy a new store ☆
     words text_0579, 0, 0                 ; 12.1 ahead: a vacant lot: <player> will buy a store ☆
-    words text_058A, 0, 0                 ; 12.2 ahead: a vacant lot: <player> wants a store~ ☆
-    words text_059F, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I don't want to go to an expensive store~
-    words text_05B8, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: <player> hates expensive~
-    words text_05CB, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: <player> can't buy if it's expensive ≦
+    words text_058A, 0, 0                 ; 12.2 ahead: a vacant lot: <player> wants a store ☆
+    words text_059F, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: I don't want to go to an expensive / store
+    words text_05B8, 1, 2                 ; 13.1 ahead: a rival store costing over 1/4 of its money: <player> hates expensive
+    words text_05CB, 1, 2                 ; 13.2 ahead: a rival store costing over 1/4 of its money: <player> can't buy if it's / expensive ≦
     words text_05E2, 0, 0                 ; 14.0 ahead: the bank: <player> wants money ☆
     words text_05F5, 0, 0                 ; 14.1 ahead: the bank: I have to get to the bank ★
     words text_060C, 0, 0                 ; 14.2 ahead: the bank: Please ★ let me go to the bank ☆
-    words text_0625, 1, 2                 ; 15.0 none of its stores ahead: Aren't any of <player>'s stores / nearby?
-    words text_0646, 1, 2                 ; 15.1 none of its stores ahead: Please ★ somebody answer~
-    words text_065F, 1, 2                 ; 15.2 none of its stores ahead: I want to get out of here fast~
+    words text_0625, 1, 2                 ; 15.0 none of its stores ahead: Aren't any of <player>'s / stores nearby?
+    words text_0646, 1, 2                 ; 15.1 none of its stores ahead: Please ★ somebody answer
+    words text_065F, 1, 2                 ; 15.2 none of its stores ahead: I want to get out of here fast.
     words text_0682, 0, 0                 ; 16.0 ahead: its own store with free goods slots: I have to restock / <player>'s store ★
     words text_06A1, 0, 0                 ; 16.1 ahead: its own store with free goods slots: Should I stop by the store?
-    words text_06C0, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Watch ☆ / <player> will do it~!
-    words text_06DB, 0, 0                 ; 17.0 no direction (after the bank): <player> can't decide~
-    words text_06EC, 0, 0                 ; 17.1 no direction (after the bank): Which way should I go~
-    words text_0705, 0, 0                 ; 17.2 no direction (after the bank): Someone tell me which is better~ ☆
-    words text_0722, 0, 0                 ; 18.0 no direction, on an elevator square: <player> is getting on / the elevator~
+    words text_06C0, 0, 0                 ; 16.2 ahead: its own store with free goods slots: Watch ☆ / <player> will do it!
+    words text_06DB, 0, 0                 ; 17.0 no direction (after the bank): <player> can't decide
+    words text_06EC, 0, 0                 ; 17.1 no direction (after the bank): Which way should I go?
+    words text_0705, 0, 0                 ; 17.2 no direction (after the bank): Someone tell me which is / better ☆
+    words text_0722, 0, 0                 ; 18.0 no direction, on an elevator square: <player> is getting on / the elevator
     words text_0747, 0, 0                 ; 18.1 no direction, on an elevator square: Where does this elevator go?
     words text_0764, 0, 0                 ; 18.2 no direction, on an elevator square: I want to get off this floor ☆
     words text_0779, 3, 10                ; 19.0 none of these: Kyaha ∝
@@ -125,181 +129,181 @@ table_0090:
     words text_0797, 3, 10                ; 19.2 none of these: ..... dummy ☆
 
 text_01F8:
-    string "%NMYです☆%Kよろしくぅ★"              ; en: I'm <player> ☆ / Nice to meet you ★
+    string "I'm %NMY ☆%KNice to meet you ★"  ; ja: %NMYです☆%Kよろしくぅ★
 
 text_0211:
-    string "今日もがんばっちゃお～♪"                 ; en: Let's do our best today too~ ♪
+    string "Let's do our best today toooo ♪"  ; ja: 今日もがんばっちゃお～♪
 
 text_022A:
-    string "%NMYはりきってこ～☆"                 ; en: <player>'s all fired up~ ☆
+    string "%NMY's all fired uuup ☆"       ; ja: %NMYはりきってこ～☆
 
 text_023F:
-    string "なんか%NMY%K勝利目前って感じ☆"           ; en: Somehow <player> feels / victory is near ☆
+    string "Somehow %NMY feels%Kvictory is near ☆"  ; ja: なんか%NMY%K勝利目前って感じ☆
 
 text_025E:
-    string "%NMYって強い？"                    ; en: Is <player> strong?
+    string "Is %NMY strong?"              ; ja: %NMYって強い？
 
 text_026D:
-    string "あと少しで、%NMYの勝利☆"               ; en: Just a little more and <player> wins ☆
+    string "Just a little more and%K%NMY wins ☆"  ; ja: あと少しで、%NMYの勝利☆
 
 text_0286:
-    string "いつのまにか%NMY%K１位だよ☆"            ; en: Before I knew it <player> / was number 1 ☆
+    string "Before I knew it %NMY%Kwas number 1 ☆"  ; ja: いつのまにか%NMY%K１位だよ☆
 
 text_02A3:
-    string "%NMYって天才☆"                    ; en: <player> is a genius ☆
+    string "%NMY is a genius ☆"           ; ja: %NMYって天才☆
 
 text_02B2:
-    string "なんでか%NMY１位なの☆"                ; en: Somehow <player> is number 1 ☆
+    string "Somehow %NMY is%Knumber 1 ☆"  ; ja: なんでか%NMY１位なの☆
 
 text_02C9:
-    string "%NMYかなしい～≦"                   ; en: <player> is sad~ ≦
+    string "%NMY is saaad ≦"               ; ja: %NMYかなしい～≦
 
 text_02DA:
-    string "%NMYなにか悪いことした？"               ; en: Did <player> do something bad?
+    string "Did %NMY do something bad?"   ; ja: %NMYなにか悪いことした？
 
 text_02F3:
-    string "なんで、%NMYがビリなの～？"              ; en: Why is <player> last~?
+    string "Why is %NMY laaast?"           ; ja: なんで、%NMYがビリなの～？
 
 text_030E:
-    string "%NMYこのままじゃ%K負けちゃう～≦"          ; en: At this rate <player> / is going to lose~ ≦
+    string "At this rate %NMY%Kis going to lose ≦"  ; ja: %NMYこのままじゃ%K負けちゃう～≦
 
 text_032F:
-    string "誰か%NMYを助けて～∵"                 ; en: Someone help <player>~ ∵
+    string "Someone help %NMY ∵"         ; ja: 誰か%NMYを助けて～∵
 
 text_0344:
-    string "%NMY泣いちゃうもん≦"                 ; en: <player> is going to cry ≦
+    string "%NMY is going to cry ≦"       ; ja: %NMY泣いちゃうもん≦
 
 text_0359:
-    string "%NMY泣いちゃうよっ"                  ; en: <player> is going to cry!
+    string "%NMY is going to cry!"        ; ja: %NMY泣いちゃうよっ
 
 text_036C:
-    string "%NMYもう進みたくないよ～"               ; en: <player> doesn't want to go on anymore~
+    string "%NMY doesn't want to go on%Kanymore"  ; ja: %NMYもう進みたくないよ～
 
 text_0385:
-    string "%NMYのかわりに誰かやって～"              ; en: Someone do it for <player>~
+    string "Someone do it for %NMY"      ; ja: %NMYのかわりに誰かやって～
 
 text_03A0:
-    string "%NMYクローズのお店を%K乗っ取るの☆"         ; en: <player> will take over / the closed store ☆
+    string "%NMY will take over%Kthe closed store ☆"  ; ja: %NMYクローズのお店を%K乗っ取るの☆
 
 text_03C3:
-    string "%NMYクローズのお店って%K大好き☆"          ; en: <player> just loves / closed stores ☆
+    string "%NMY just loves%Kclosed stores ☆"  ; ja: %NMYクローズのお店って%K大好き☆
 
 text_03E4:
-    string "%NMYの狙いはお店を奪うことっ☆"            ; en: <player>'s aim is to steal stores ☆
+    string "%NMY's aim is to steal%Kstores ☆"  ; ja: %NMYの狙いはお店を奪うことっ☆
 
 text_0403:
-    string "自分のお店に商品を入れなきゃ☆"              ; en: I have to put goods in my store ☆
+    string "I have to put goods in my store ☆"  ; ja: 自分のお店に商品を入れなきゃ☆
 
 text_0422:
-    string "%NMYのお店に何もないっ・・"              ; en: There's nothing in <player>'s store...
+    string "There's nothing in %NMY's%Kstore..."  ; ja: %NMYのお店に何もないっ・・
 
 text_043D:
-    string "%NMY仕入れをしなきゃ☆"                ; en: <player> has to restock ☆
+    string "%NMY has to restock ☆"        ; ja: %NMY仕入れをしなきゃ☆
 
 text_0454:
-    string "%NMYうれしい給料日"                  ; en: <player>'s happy payday
+    string "%NMY's happy payday"          ; ja: %NMYうれしい給料日
 
 text_0467:
-    string "%NMY給料日大好き☆"                  ; en: <player> loves payday ☆
+    string "%NMY loves payday ☆"          ; ja: %NMY給料日大好き☆
 
 text_047A:
-    string "今日は給料日☆"                      ; en: Today is payday ☆
+    string "Today is payday ☆"            ; ja: 今日は給料日☆
 
 text_0489:
-    string "%NMY順位が上がってるぅ☆"               ; en: <player>'s rank is going up ☆
+    string "%NMY's rank is going up ☆"    ; ja: %NMY順位が上がってるぅ☆
 
 text_04A2:
-    string "%NMYうれしい☆"                    ; en: <player> is happy ☆
+    string "%NMY is happy ☆"              ; ja: %NMYうれしい☆
 
 text_04B1:
-    string "%NMYランクアップ☆"                  ; en: <player> ranks up ☆
+    string "%NMY ranks up ☆"              ; ja: %NMYランクアップ☆
 
 text_04C4:
-    string "なんで？%K%NMYの順位がさがってる！"         ; en: Why? / <player>'s rank is going down!
+    string "Why?%K%NMY's rank is going down!"  ; ja: なんで？%K%NMYの順位がさがってる！
 
 text_04E7:
-    string "%NMYなんか調子悪い～"                 ; en: <player> feels kind of off~
+    string "%NMY feels kind of off"      ; ja: %NMYなんか調子悪い～
 
 text_04FC:
-    string "%NMY悲し～"                      ; en: <player> is sa-ad~
+    string "%NMY is saaad"               ; ja: %NMY悲し～
 
 text_0507:
-    string "%NMY高いものは%K買いたくないよっ"          ; en: <player> doesn't want to buy / expensive things!
+    string "%NMY doesn't want to buy%Kexpensive things!"  ; ja: %NMY高いものは%K買いたくないよっ
 
 text_0528:
-    string "今日は買い物したくないっ！"                ; en: I don't want to shop today!
+    string "I don't want to shop today!"  ; ja: 今日は買い物したくないっ！
 
 text_0543:
-    string "%NMYは高いお店嫌いっ！"                ; en: <player> hates expensive stores!
+    string "%NMY hates expensive%Kstores!"  ; ja: %NMYは高いお店嫌いっ！
 
 text_055A:
-    string "%NMY%K新しいお店を買いたいな☆"           ; en: <player> / wants to buy a new store ☆
+    string "%NMY%Kwants to buy a new store ☆"  ; ja: %NMY%K新しいお店を買いたいな☆
 
 text_0579:
-    string "%NMYお店買おっ☆"                   ; en: <player> will buy a store ☆
+    string "%NMY will buy a store ☆"      ; ja: %NMYお店買おっ☆
 
 text_058A:
-    string "%NMYお店が欲しい～☆"                 ; en: <player> wants a store~ ☆
+    string "%NMY wants a store ☆"        ; ja: %NMYお店が欲しい～☆
 
 text_059F:
-    string "高いお店に行きたくない～"                 ; en: I don't want to go to an expensive store~
+    string "I don't want to go to an expensive%Kstore"  ; ja: 高いお店に行きたくない～
 
 text_05B8:
-    string "%NMY高いのきらい～"                  ; en: <player> hates expensive~
+    string "%NMY hates expensive"        ; ja: %NMY高いのきらい～
 
 text_05CB:
-    string "%NMY高いと買えないよ≦"                ; en: <player> can't buy if it's expensive ≦
+    string "%NMY can't buy if it's%Kexpensive ≦"  ; ja: %NMY高いと買えないよ≦
 
 text_05E2:
-    string "%NMYお金が欲しい☆"                  ; en: <player> wants money ☆
+    string "%NMY wants money ☆"           ; ja: %NMYお金が欲しい☆
 
 text_05F5:
-    string "銀行までいかなくちゃ★"                  ; en: I have to get to the bank ★
+    string "I have to get to the bank ★"  ; ja: 銀行までいかなくちゃ★
 
 text_060C:
-    string "お願い★銀行に行かせて☆"                 ; en: Please ★ let me go to the bank ☆
+    string "Please ★ let me go to the bank ☆"  ; ja: お願い★銀行に行かせて☆
 
 text_0625:
-    string "%NMYのお店って%K近くにないのぉ？"          ; en: Aren't any of <player>'s stores / nearby?
+    string "Aren't any of %NMY's%Kstores nearby?"  ; ja: %NMYのお店って%K近くにないのぉ？
 
 text_0646:
-    string "お願い★だれか返事して～"                 ; en: Please ★ somebody answer~
+    string "Please ★ somebody answer"    ; ja: お願い★だれか返事して～
 
 text_065F:
-    string "はやくこんな所からぬけだしたいよ～"            ; en: I want to get out of here fast~
+    string "I want to get out of here fast."  ; ja: はやくこんな所からぬけだしたいよ～
 
 text_0682:
-    string "%NMYのお店に%K補充しなくちゃ★"           ; en: I have to restock / <player>'s store ★
+    string "I have to restock%K%NMY's store ★"  ; ja: %NMYのお店に%K補充しなくちゃ★
 
 text_06A1:
-    string "お店に寄ってった方がいいかな？"              ; en: Should I stop by the store?
+    string "Should I stop by the store?"  ; ja: お店に寄ってった方がいいかな？
 
 text_06C0:
-    string "見てて☆%K%NMYはやるよ～！"             ; en: Watch ☆ / <player> will do it~!
+    string "Watch ☆%K%NMY will do it!"   ; ja: 見てて☆%K%NMYはやるよ～！
 
 text_06DB:
-    string "%NMY迷っちゃう～"                   ; en: <player> can't decide~
+    string "%NMY can't decide"           ; ja: %NMY迷っちゃう～
 
 text_06EC:
-    string "どっちに行ったらいいの～"                 ; en: Which way should I go~
+    string "Which way should I go?"       ; ja: どっちに行ったらいいの～
 
 text_0705:
-    string "どっちがいいか誰か教えて～☆"               ; en: Someone tell me which is better~ ☆
+    string "Someone tell me which is%Kbetter ☆"  ; ja: どっちがいいか誰か教えて～☆
 
 text_0722:
-    string "%NMYはエレベーターに%Kのっちゃうよ～"        ; en: <player> is getting on / the elevator~
+    string "%NMY is getting on%Kthe elevator"  ; ja: %NMYはエレベーターに%Kのっちゃうよ～
 
 text_0747:
-    string "どこ行きのエレベーターなの？"               ; en: Where does this elevator go?
+    string "Where does this elevator go?"  ; ja: どこ行きのエレベーターなの？
 
 text_0764:
-    string "この階からでたいの☆"                   ; en: I want to get off this floor ☆
+    string "I want to get off this floor ☆"  ; ja: この階からでたいの☆
 
 text_0779:
-    string "きゃは∝"                         ; en: Kyaha ∝
+    string "Kyaha ∝"                      ; ja: きゃは∝
 
 text_0782:
-    string "%NMYです　よろぴくね"                 ; en: I'm <player>, nice to meetcha
+    string "I'm %NMY, nice to meetcha"    ; ja: %NMYです　よろぴくね
 
 text_0797:
-    string "・・・・・ばか☆"                     ; en: ..... dummy ☆
+    string "..... dummy ☆"                ; ja: ・・・・・ばか☆

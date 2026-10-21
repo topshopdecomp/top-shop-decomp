@@ -1,5 +1,9 @@
 ; TALK.J entry 23 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Patty says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,25 +59,25 @@
     talk_wait_open
     play_xa 7, $l2                        ; voice: XA track 7 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01E6, 4, 9                 ; 0.0 (no comment): I hate it~
-    words text_01EF, 4, 9                 ; 0.1 (no comment): No~∥｜
-    words text_01FA, 4, 9                 ; 0.2 (no comment): Mm~∥｜
+    words text_01E6, 4, 9                 ; 0.0 (no comment): I hate it.
+    words text_01EF, 4, 9                 ; 0.1 (no comment): Nooo
+    words text_01FA, 4, 9                 ; 0.2 (no comment): Mmmm
     words text_0205, 3, 6                 ; 1.0 a chain of 4: I'm worried about my waist size ☆
-    words text_0228, 3, 6                 ; 1.1 a chain of 4: I'll beat you all to a pu-lp
+    words text_0228, 3, 6                 ; 1.1 a chain of 4: I'll beat you all to a pulp
     words text_0249, 3, 6                 ; 1.2 a chain of 4: Link complete ♪
     words text_0256, 3, 6                 ; 2.0 a chain of 2 or 3: A grade up
     words text_0269, 3, 6                 ; 2.1 a chain of 2 or 3: The stores merged
-    words text_027A, 3, 6                 ; 2.2 a chain of 2 or 3: Ya~∥｜y
+    words text_027A, 3, 6                 ; 2.2 a chain of 2 or 3: Yaaay
     words text_0285, 3, 6                 ; 3.0 landed on a rival store closed for now: Hooray for days off ☆
-    words text_029A, 3, 6                 ; 3.1 landed on a rival store closed for now: It's closed~ ♪
-    words text_02AD, 3, 6                 ; 3.2 landed on a rival store closed for now: Kyai~∥｜ ☆
+    words text_029A, 3, 6                 ; 3.1 landed on a rival store closed for now: It's closed ♪
+    words text_02AD, 3, 6                 ; 3.2 landed on a rival store closed for now: Kyaiii ☆
     words text_02BC, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Bargain, bargain
     words text_02CF, 0, 5                 ; 4.1 landed on a rival store with lowered prices: Cheap ∴
     words text_02DC, 0, 5                 ; 4.2 landed on a rival store with lowered prices: We did it ∴
@@ -86,208 +90,208 @@ table_0090:
     words text_035B, 3, 6                 ; 7.0 landed on the bank: Ehe ∵ money
     words text_036C, 3, 6                 ; 7.1 landed on the bank: Thank you very much
     words text_0381, 3, 6                 ; 7.2 landed on the bank: Ufufu ☆ payday ♪
-    words text_0394, 0, 5                 ; 8.0 took the elevator: Dozing...
-    words text_03A7, 3, 6                 ; 8.1 took the elevator: Ja-ja-ja-ja~∥｜n ∵
-    words text_03C2, 3, 6                 ; 8.2 took the elevator: Okay, next person
-    words text_03CD, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: That's totally a cheat
+    words text_0394, 0, 5                 ; 8.0 took the elevator: Dozing off...
+    words text_03A7, 3, 6                 ; 8.1 took the elevator: Ja-ja-ja-jaaan ∵
+    words text_03C2, 3, 6                 ; 8.2 took the elevator: Okay, next person.
+    words text_03CD, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: That's cheating.
     words text_03E6, 1, 7                 ; 9.1 shopping cost a fifth of its money or more: No... not like this...
     words text_0405, 4, 9                 ; 9.2 shopping cost a fifth of its money or more: Don't bully me so much
     words text_041C, 3, 6                 ; 10.0 shopping: got the money back: Ahahahaha...
     words text_042F, 3, 6                 ; 10.1 shopping: got the money back: Thank you for your patronage ☆
     words text_044E, 3, 6                 ; 10.2 shopping: got the money back: I'm so happy ☆
-    words text_045D, 1, 7                 ; 11.0 shopping: Nooo~∥｜
-    words text_046A, 3, 6                 ; 11.1 shopping: You can't tell what's ahead yet ☆
+    words text_045D, 1, 7                 ; 11.0 shopping: Nooo
+    words text_046A, 3, 6                 ; 11.1 shopping: I still don't know what / lies ahead ☆
     words text_0487, 3, 6                 ; 11.2 shopping: Cheerful ∴
     words text_048E, 0, 5                 ; 12.0 bought a rival's store: How about it?
     words text_04A1, 0, 5                 ; 12.1 bought a rival's store: I have to try hard again ∵
     words text_04B8, 3, 6                 ; 12.2 bought a rival's store: Happy ☆
-    words text_04C3, 4, 9                 ; 13.0 shopped this turn and the last: My money's dwindling~ ≦≦
+    words text_04C3, 4, 9                 ; 13.0 shopped this turn and the last: My money's dwindling ≦≦
     words text_04DC, 1, 7                 ; 13.1 shopped this turn and the last: I want to go somewhere far away ∴
-    words text_04F9, 4, 9                 ; 13.2 shopped this turn and the last: Waa~∥｜ ≦≦
-    words text_050A, 3, 6                 ; 14.0 assets passed half the goal: Half left to go~
+    words text_04F9, 4, 9                 ; 13.2 shopped this turn and the last: Waaaa ≦≦
+    words text_050A, 3, 6                 ; 14.0 assets passed half the goal: Half left to go.
     words text_0521, 3, 6                 ; 14.1 assets passed half the goal: We've reached the midpoint ∵
     words text_0536, 3, 6                 ; 14.2 assets passed half the goal: Half to go, fight!!
-    words text_054D, 1, 7                 ; 15.0 sold a store: And I didn't want to sell~...
-    words text_0568, 4, 9                 ; 15.1 sold a store: Aa~∥｜ I hate this!!
-    words text_057F, 1, 7                 ; 15.2 sold a store: I want to give up~
-    words text_0594, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I want a store~
+    words text_054D, 1, 7                 ; 15.0 sold a store: And I didn't want to sell...
+    words text_0568, 4, 9                 ; 15.1 sold a store: Aaaa I hate this!!
+    words text_057F, 1, 7                 ; 15.2 sold a store: I want to give up.
+    words text_0594, 1, 7                 ; 16.0 declined a vacant lot it could not afford: I want a store.
     words text_05A5, 2, 8                 ; 16.1 declined a vacant lot it could not afford: Fine, then!!
     words text_05B2, 1, 7                 ; 16.2 declined a vacant lot it could not afford: ...My store... ≦≦
     words text_05C7, 1, 7                 ; 17.0 declined a vacant lot: I wanted to buy a store...
     words text_05E2, 1, 7                 ; 17.1 declined a vacant lot: Ehehehehe...
-    words text_05F3, 1, 7                 ; 17.2 declined a vacant lot: Oh, I forgot to buy a store
-    words text_060A, 3, 10                ; 18.0 an event card (the default): Who's next~ ☆
-    words text_061B, 3, 10                ; 18.1 an event card (the default): Kyaru-un ☆
+    words text_05F3, 1, 7                 ; 17.2 declined a vacant lot: Oh, I forgot to buy a store...
+    words text_060A, 3, 10                ; 18.0 an event card (the default): Who's next? ☆
+    words text_061B, 3, 10                ; 18.1 an event card (the default): Kyaruun ☆
     words text_0628, 3, 10                ; 18.2 an event card (the default): Wobble wobble
 
 text_01E6:
-    string "キラ～イ"                         ; en: I hate it~
+    string "I hate it."                   ; ja: キラ～イ
 
 text_01EF:
-    string "や～∥｜ん"                        ; en: No~∥｜
+    string "Nooo"                        ; ja: や～∥｜ん
 
 text_01FA:
-    string "む～∥｜ん"                        ; en: Mm~∥｜
+    string "Mmmm"                        ; ja: む～∥｜ん
 
 text_0205:
-    string "ウエストのサイズが気になっちゃう☆"            ; en: I'm worried about my waist size ☆
+    string "I'm worried about my waist size ☆"  ; ja: ウエストのサイズが気になっちゃう☆
 
 text_0228:
-    string "みんな、ボコボコにしてあ・げ・る"             ; en: I'll beat you all to a pu-lp
+    string "I'll beat you all to a pulp"  ; ja: みんな、ボコボコにしてあ・げ・る
 
 text_0249:
-    string "リンク完了♪"                       ; en: Link complete ♪
+    string "Link complete ♪"              ; ja: リンク完了♪
 
 text_0256:
-    string "グレードアップだね"                    ; en: A grade up
+    string "A grade up"                   ; ja: グレードアップだね
 
 text_0269:
-    string "お店が合体したネ"                     ; en: The stores merged
+    string "The stores merged"            ; ja: お店が合体したネ
 
 text_027A:
-    string "わ～∥｜い"                        ; en: Ya~∥｜y
+    string "Yaaay"                       ; ja: わ～∥｜い
 
 text_0285:
-    string "お休みバンバンザイ☆"                   ; en: Hooray for days off ☆
+    string "Hooray for days off ☆"        ; ja: お休みバンバンザイ☆
 
 text_029A:
-    string "クローズなのぉ～♪"                    ; en: It's closed~ ♪
+    string "It's closed ♪"               ; ja: クローズなのぉ～♪
 
 text_02AD:
-    string "きゃイ～∥｜☆"                      ; en: Kyai~∥｜ ☆
+    string "Kyaiii ☆"                    ; ja: きゃイ～∥｜☆
 
 text_02BC:
-    string "バーゲン・バーゲン"                    ; en: Bargain, bargain
+    string "Bargain, bargain"             ; ja: バーゲン・バーゲン
 
 text_02CF:
-    string "安上がりネ∴"                       ; en: Cheap ∴
+    string "Cheap ∴"                      ; ja: 安上がりネ∴
 
 text_02DC:
-    string "やったネ∴"                        ; en: We did it ∴
+    string "We did it ∴"                  ; ja: やったネ∴
 
 text_02E7:
-    string "ひとまず安全なのよネ"                   ; en: Safe for now
+    string "Safe for now"                 ; ja: ひとまず安全なのよネ
 
 text_02FC:
-    string "強いのじゃぁ∵"                      ; en: It's strong ∵
+    string "It's strong ∵"                ; ja: 強いのじゃぁ∵
 
 text_030B:
-    string "じぶんのおみせ∵∵"                    ; en: My own store ∵∵
+    string "My own store ∵∵"              ; ja: じぶんのおみせ∵∵
 
 text_031E:
-    string "エレベーターってちょっと苦手"               ; en: I'm not so good with elevators
+    string "I'm not so good with elevators"  ; ja: エレベーターってちょっと苦手
 
 text_033B:
-    string "今日はやめとこ☆"                     ; en: I'll skip it today ☆
+    string "I'll skip it today ☆"         ; ja: 今日はやめとこ☆
 
 text_034C:
-    string "え？なになに？"                      ; en: Huh? What, what?
+    string "Huh? What, what?"             ; ja: え？なになに？
 
 text_035B:
-    string "えへっ∵お金です"                     ; en: Ehe ∵ money
+    string "Ehe ∵ money"                  ; ja: えへっ∵お金です
 
 text_036C:
-    string "ありがとうございます"                   ; en: Thank you very much
+    string "Thank you very much"          ; ja: ありがとうございます
 
 text_0381:
-    string "ウフフ☆給料日ィ♪"                    ; en: Ufufu ☆ payday ♪
+    string "Ufufu ☆ payday ♪"             ; ja: ウフフ☆給料日ィ♪
 
 text_0394:
-    string "うつらうつら・・・"                    ; en: Dozing...
+    string "Dozing off..."                  ; ja: うつらうつら・・・
 
 text_03A7:
-    string "ジャジャジャジャ～∥｜ン∵"                ; en: Ja-ja-ja-ja~∥｜n ∵
+    string "Ja-ja-ja-jaaan ∵"            ; ja: ジャジャジャジャ～∥｜ン∵
 
 text_03C2:
-    string "ハイ次の人"                        ; en: Okay, next person
+    string "Okay, next person."            ; ja: ハイ次の人
 
 text_03CD:
-    string "まったくインチキじゃない"                 ; en: That's totally a cheat
+    string "That's cheating."            ; ja: まったくインチキじゃない
 
 text_03E6:
-    string "やだよぉ・・・こんなのぉ・・・"              ; en: No... not like this...
+    string "No... not like this..."       ; ja: やだよぉ・・・こんなのぉ・・・
 
 text_0405:
-    string "そんなにイジメないでよ"                  ; en: Don't bully me so much
+    string "Don't bully me so much"       ; ja: そんなにイジメないでよ
 
 text_041C:
-    string "あははははは・・・"                    ; en: Ahahahaha...
+    string "Ahahahaha..."                 ; ja: あははははは・・・
 
 text_042F:
-    string "まいどありがとうございました☆"              ; en: Thank you for your patronage ☆
+    string "Thank you for your patronage ☆"  ; ja: まいどありがとうございました☆
 
 text_044E:
-    string "うッれしィな☆"                      ; en: I'm so happy ☆
+    string "I'm so happy ☆"               ; ja: うッれしィな☆
 
 text_045D:
-    string "いや～∥｜ん"                       ; en: Nooo~∥｜
+    string "Nooo"                         ; ja: いや～∥｜ん
 
 text_046A:
-    string "まだまだ先はわかんないわよ☆"               ; en: You can't tell what's ahead yet ☆
+    string "I still don't know what%Klies ahead ☆"  ; ja: まだまだ先はわかんないわよ☆
 
 text_0487:
-    string "元気∴"                          ; en: Cheerful ∴
+    string "Cheerful ∴"                   ; ja: 元気∴
 
 text_048E:
-    string "いかがでしょうか？"                    ; en: How about it?
+    string "How about it?"                ; ja: いかがでしょうか？
 
 text_04A1:
-    string "またガンバらなきゃネ∵"                  ; en: I have to try hard again ∵
+    string "I have to try hard again ∵"   ; ja: またガンバらなきゃネ∵
 
 text_04B8:
-    string "うれしい☆"                        ; en: Happy ☆
+    string "Happy ☆"                      ; ja: うれしい☆
 
 text_04C3:
-    string "お金が減っていくぅ～≦≦"                 ; en: My money's dwindling~ ≦≦
+    string "My money's dwindling ≦≦"     ; ja: お金が減っていくぅ～≦≦
 
 text_04DC:
-    string "もうどこか遠くに行きたいな∴"               ; en: I want to go somewhere far away ∴
+    string "I want to go somewhere far away ∴"  ; ja: もうどこか遠くに行きたいな∴
 
 text_04F9:
-    string "ふえ～∥｜ん≦≦"                     ; en: Waa~∥｜ ≦≦
+    string "Waaaa ≦≦"                    ; ja: ふえ～∥｜ん≦≦
 
 text_050A:
-    string "のこりあと、半分で～す"                  ; en: Half left to go~
+    string "Half left to go."             ; ja: のこりあと、半分で～す
 
 text_0521:
-    string "中間地点に来ました∵"                   ; en: We've reached the midpoint ∵
+    string "We've reached the midpoint ∵"  ; ja: 中間地点に来ました∵
 
 text_0536:
-    string "あと半分、ファイト！！"                  ; en: Half to go, fight!!
+    string "Half to go, fight!!"          ; ja: あと半分、ファイト！！
 
 text_054D:
-    string "売りたくないのにィ～・・・"                ; en: And I didn't want to sell~...
+    string "And I didn't want to sell..."  ; ja: 売りたくないのにィ～・・・
 
 text_0568:
-    string "あ～∥｜んもうイヤ！！"                  ; en: Aa~∥｜ I hate this!!
+    string "Aaaa I hate this!!"          ; ja: あ～∥｜んもうイヤ！！
 
 text_057F:
-    string "諦めちゃいたいよぉ～"                   ; en: I want to give up~
+    string "I want to give up."           ; ja: 諦めちゃいたいよぉ～
 
 text_0594:
-    string "お店ほしいよぉ～"                     ; en: I want a store~
+    string "I want a store."              ; ja: お店ほしいよぉ～
 
 text_05A5:
-    string "いいもん！！"                       ; en: Fine, then!!
+    string "Fine, then!!"                 ; ja: いいもん！！
 
 text_05B2:
-    string "・・・お店ぇぇぇ≦≦"                   ; en: ...My store... ≦≦
+    string "...My store... ≦≦"            ; ja: ・・・お店ぇぇぇ≦≦
 
 text_05C7:
-    string "お店買いたかったなぁ・・・"                ; en: I wanted to buy a store...
+    string "I wanted to buy a store..."   ; ja: お店買いたかったなぁ・・・
 
 text_05E2:
-    string "エヘヘヘヘ・・・"                     ; en: Ehehehehe...
+    string "Ehehehehe..."                 ; ja: エヘヘヘヘ・・・
 
 text_05F3:
-    string "あ、お店買うの忘れたぁ"                  ; en: Oh, I forgot to buy a store
+    string "Oh, I forgot to buy a store..."  ; ja: あ、お店買うの忘れたぁ
 
 text_060A:
-    string "次はだれじゃ～☆"                     ; en: Who's next~ ☆
+    string "Who's next? ☆"                ; ja: 次はだれじゃ～☆
 
 text_061B:
-    string "きゃる～ん☆"                       ; en: Kyaru-un ☆
+    string "Kyaruun ☆"                   ; ja: きゃる～ん☆
 
 text_0628:
-    string "プルンプルン"                       ; en: Wobble wobble
+    string "Wobble wobble"                ; ja: プルンプルン
     bytes 0x00, 0x00, 0x00    ; padding

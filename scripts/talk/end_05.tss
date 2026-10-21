@@ -1,5 +1,9 @@
 ; TALK.J entry 21 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Cindy says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,65 +59,65 @@
     talk_wait_open
     play_xa 5, $l2                        ; voice: XA track 5 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01E6, 4, 9                 ; 0.0 (no comment): Somebody tell me it's a lie~ ≦
-    words text_01FF, 4, 9                 ; 0.1 (no comment): Was <player> unlucky?
-    words text_0216, 4, 9                 ; 0.2 (no comment): Aww, it's hopeless~ ≦≦
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Somebody tell me it's not true ≦
+    words text_01FF, 4, 9                 ; 0.1 (no comment): Was I unlucky?
+    words text_0216, 4, 9                 ; 0.2 (no comment): Aww, it's hopeless ≦≦
     words text_022B, 3, 6                 ; 1.0 a chain of 4: It got really big ☆
-    words text_0246, 3, 6                 ; 1.1 a chain of 4: <player> is so moved
+    words text_0246, 3, 6                 ; 1.1 a chain of 4: I'm thrilled!
     words text_0255, 3, 6                 ; 1.2 a chain of 4: Is it all right now? ♪
     words text_026C, 3, 6                 ; 2.0 a chain of 2 or 3: It got a little bigger ☆
-    words text_0285, 3, 6                 ; 2.1 a chain of 2 or 3: Leave it to <player> ☆
+    words text_0285, 3, 6                 ; 2.1 a chain of 2 or 3: Leave it to me ☆
     words text_0296, 3, 6                 ; 2.2 a chain of 2 or 3: It got a little bigger ☆
-    words text_02AF, 3, 6                 ; 3.0 landed on a rival store closed for now: Really nothing to do
-    words text_02BE, 3, 6                 ; 3.1 landed on a rival store closed for now: <player> takes it easy ♪
-    words text_02CD, 3, 6                 ; 3.2 landed on a rival store closed for now: <player> has nothing to do ★
+    words text_02AF, 3, 6                 ; 3.0 landed on a rival store closed for now: Nothing I can do.
+    words text_02BE, 3, 6                 ; 3.1 landed on a rival store closed for now: I'm taking it easy ♪
+    words text_02CD, 3, 6                 ; 3.2 landed on a rival store closed for now: I have nothing to do ★
     words text_02E2, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Cheap is nice, isn't it?
-    words text_02F5, 3, 6                 ; 4.1 landed on a rival store with lowered prices: <player> got a good deal~
+    words text_02F5, 3, 6                 ; 4.1 landed on a rival store with lowered prices: I got a good deal
     words text_0308, 0, 5                 ; 4.2 landed on a rival store with lowered prices: I don't go to sales much ☆
-    words text_032B, 0, 5                 ; 5.0 landed on its own store / opened a store: <player>'s store is here~ ♭
-    words text_0344, 3, 6                 ; 5.1 landed on its own store / opened a store: This kind of thing is nice sometimes ☆
+    words text_032B, 0, 5                 ; 5.0 landed on its own store / opened a store: My store is here ♭
+    words text_0344, 3, 6                 ; 5.1 landed on its own store / opened a store: This kind of thing is nice / sometimes ☆
     words text_0361, 1, 7                 ; 5.2 landed on its own store / opened a store: I'm not just playing around ∵
-    words text_037A, 4, 9                 ; 6.0 did not take the elevator: I kind of hate elevators~ ∵
-    words text_0399, 1, 7                 ; 6.1 did not take the elevator: <player>'s thinking is....
+    words text_037A, 4, 9                 ; 6.0 did not take the elevator: I kind of hate elevators ∵
+    words text_0399, 1, 7                 ; 6.1 did not take the elevator: My thinking is....
     words text_03B2, 1, 7                 ; 6.2 did not take the elevator: Hmm? What do I do now?
-    words text_03D1, 3, 6                 ; 7.0 landed on the bank: <player> is rich ☆
+    words text_03D1, 3, 6                 ; 7.0 landed on the bank: I'm rich ☆
     words text_03E2, 3, 6                 ; 7.1 landed on the bank: I got my pay ★
     words text_03FB, 3, 6                 ; 7.2 landed on the bank: Today's going to be fun ★
-    words text_0410, 3, 6                 ; 8.0 took the elevator: Elevators are easy~
-    words text_0429, 2, 8                 ; 8.1 took the elevator: I never know where it stops, / so I hate it!
-    words text_0450, 4, 9                 ; 8.2 took the elevator: <player>'s head is spinning ≦
-    words text_0467, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: <player> is in a pi-inch
+    words text_0410, 3, 6                 ; 8.0 took the elevator: Elevators are easy
+    words text_0429, 2, 8                 ; 8.1 took the elevator: I never know where it will / stop, so I hate it!
+    words text_0450, 4, 9                 ; 8.2 took the elevator: My head is spinning ≦
+    words text_0467, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: I'm in a bit of a bind.
     words text_0474, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: I wasted money ≦
     words text_048D, 2, 8                 ; 9.2 shopping cost a fifth of its money or more: Why is there a store like this?
     words text_04AA, 3, 6                 ; 10.0 shopping: got the money back: Is it really okay? ☆
     words text_04BD, 3, 6                 ; 10.1 shopping: got the money back: Could it be / only <player> is special ☆
     words text_04DA, 3, 6                 ; 10.2 shopping: got the money back: Seems I got a good deal ☆
-    words text_04F5, 1, 7                 ; 11.0 shopping: Brrr~...
-    words text_0502, 3, 6                 ; 11.1 shopping: Oh well~, once in a while
-    words text_0519, 1, 7                 ; 11.2 shopping: Geez~, I don't even need this
-    words text_0536, 3, 6                 ; 12.0 bought a rival's store: <player> got it ☆
+    words text_04F5, 1, 7                 ; 11.0 shopping: Brrr...
+    words text_0502, 3, 6                 ; 11.1 shopping: Oh well, just this once
+    words text_0519, 1, 7                 ; 11.2 shopping: Geez, I don't even need this
+    words text_0536, 3, 6                 ; 12.0 bought a rival's store: I got it ☆
     words text_0549, 0, 5                 ; 12.1 bought a rival's store: Anything goes, right?
     words text_055E, 3, 6                 ; 12.2 bought a rival's store: Thanks ☆
-    words text_056B, 1, 7                 ; 13.0 shopped this turn and the last: Money... am I spending too much?
-    words text_0584, 2, 8                 ; 13.1 shopped this turn and the last: It's not <player>'s fault~
-    words text_059D, 1, 7                 ; 13.2 shopped this turn and the last: Is <player> spending too much?
-    words text_05B2, 3, 6                 ; 14.0 assets passed half the goal: <player> made it halfway ☆
-    words text_05C9, 3, 6                 ; 14.1 assets passed half the goal: Just half to go ☆
-    words text_05DA, 3, 6                 ; 14.2 assets passed half the goal: Leave it to <player>! ♪
-    words text_05ED, 4, 9                 ; 15.0 sold a store: <player> is sa-ad~ ≦≦
+    words text_056B, 1, 7                 ; 13.0 shopped this turn and the last: Money... am I spending / too much of it?
+    words text_0584, 2, 8                 ; 13.1 shopped this turn and the last: It's not my fault.
+    words text_059D, 1, 7                 ; 13.2 shopped this turn and the last: Am I spending too much?
+    words text_05B2, 3, 6                 ; 14.0 assets passed half the goal: I made it halfway ☆
+    words text_05C9, 3, 6                 ; 14.1 assets passed half the goal: Just another half to go ☆
+    words text_05DA, 3, 6                 ; 14.2 assets passed half the goal: Leave it to me! ♪
+    words text_05ED, 4, 9                 ; 15.0 sold a store: I'm sad ≦≦
     words text_05FE, 1, 7                 ; 15.1 sold a store: Can't you wait just a little?
-    words text_061B, 4, 9                 ; 15.2 sold a store: Is someone after <player>?
-    words text_0632, 4, 9                 ; 16.0 declined a vacant lot it could not afford: <player> wanted this place ≦
-    words text_064B, 1, 7                 ; 16.1 declined a vacant lot it could not afford: Not enough money~ ≦≦
-    words text_0662, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Somebody lend <player> money ☆
-    words text_0679, 0, 5                 ; 17.0 declined a vacant lot: <player> doesn't seem to need it
+    words text_061B, 4, 9                 ; 15.2 sold a store: Is someone after me?
+    words text_0632, 4, 9                 ; 16.0 declined a vacant lot it could not afford: I wanted this place ≦
+    words text_064B, 1, 7                 ; 16.1 declined a vacant lot it could not afford: Not enough money ≦≦
+    words text_0662, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Somebody lend me money ☆
+    words text_0679, 0, 5                 ; 17.0 declined a vacant lot: I don't seem to need it
     words text_0692, 1, 7                 ; 17.1 declined a vacant lot: Hold back for now? I guess ☆
     words text_06A5, 0, 5                 ; 17.2 declined a vacant lot: Hold back for now? I guess ☆
     words text_06B8, 3, 10                ; 18.0 an event card (the default): Kyaha ∝
@@ -121,173 +125,173 @@ table_0090:
     words text_06D6, 3, 10                ; 18.2 an event card (the default): ..... dummy ☆
 
 text_01E6:
-    string "誰かうそっていってよ～≦"                 ; en: Somebody tell me it's a lie~ ≦
+    string "Somebody tell me it's not true ≦"  ; ja: 誰かうそっていってよ～≦
 
 text_01FF:
-    string "%NMYって不幸だったの？"                ; en: Was <player> unlucky?
+    string "Was I unlucky?"            ; ja: %NMYって不幸だったの？
 
 text_0216:
-    string "あ～んもうだめ～≦≦"                   ; en: Aww, it's hopeless~ ≦≦
+    string "Aww, it's hopeless ≦≦"       ; ja: あ～んもうだめ～≦≦
 
 text_022B:
-    string "とってもおっきくなったね☆"                ; en: It got really big ☆
+    string "It got really big ☆"          ; ja: とってもおっきくなったね☆
 
 text_0246:
-    string "%NMYカンゲキィ"                    ; en: <player> is so moved
+    string "I'm thrilled!"                 ; ja: %NMYカンゲキィ
 
 text_0255:
-    string "これでもう大丈夫かな♪"                  ; en: Is it all right now? ♪
+    string "Is it all right now? ♪"       ; ja: これでもう大丈夫かな♪
 
 text_026C:
-    string "少しだけ大きくなったね☆"                 ; en: It got a little bigger ☆
+    string "It got a little bigger ☆"     ; ja: 少しだけ大きくなったね☆
 
 text_0285:
-    string "%NMYにおまかせ☆"                   ; en: Leave it to <player> ☆
+    string "Leave it to me ☆"           ; ja: %NMYにおまかせ☆
 
 text_0296:
-    string "少しだけ大きくなったね☆"                 ; en: It got a little bigger ☆
+    string "It got a little bigger ☆"     ; ja: 少しだけ大きくなったね☆
 
 text_02AF:
-    string "ホント暇だねぇ"                      ; en: Really nothing to do
+    string "Nothing I can do."         ; ja: ホント暇だねぇ
 
 text_02BE:
-    string "%NMYラック楽♪"                    ; en: <player> takes it easy ♪
+    string "I'm taking it easy ♪"         ; ja: %NMYラック楽♪
 
 text_02CD:
-    string "%NMYやることないよ★"                 ; en: <player> has nothing to do ★
+    string "I have nothing to do ★"     ; ja: %NMYやることないよ★
 
 text_02E2:
-    string "安いっていいよね？"                    ; en: Cheap is nice, isn't it?
+    string "Cheap is nice, isn't it?"     ; ja: 安いっていいよね？
 
 text_02F5:
-    string "%NMY得しちゃった～"                  ; en: <player> got a good deal~
+    string "I got a good deal"        ; ja: %NMY得しちゃった～
 
 text_0308:
-    string "バーゲンってあんまり行かないんだ☆"            ; en: I don't go to sales much ☆
+    string "I don't go to sales much ☆"   ; ja: バーゲンってあんまり行かないんだ☆
 
 text_032B:
-    string "%NMYのお店はここだよ～♭"               ; en: <player>'s store is here~ ♭
+    string "My store is here ♭"      ; ja: %NMYのお店はここだよ～♭
 
 text_0344:
-    string "たまにはこんなのもいいよね☆"               ; en: This kind of thing is nice sometimes ☆
+    string "This kind of thing is nice%Ksometimes ☆"  ; ja: たまにはこんなのもいいよね☆
 
 text_0361:
-    string "遊んでるわけじゃないよ∵"                 ; en: I'm not just playing around ∵
+    string "I'm not just playing around ∵"  ; ja: 遊んでるわけじゃないよ∵
 
 text_037A:
-    string "エレベーターってなんか嫌～い∵"              ; en: I kind of hate elevators~ ∵
+    string "I kind of hate elevators ∵"  ; ja: エレベーターってなんか嫌～い∵
 
 text_0399:
-    string "%NMYのかんがえは・・・・"               ; en: <player>'s thinking is....
+    string "My thinking is...."           ; ja: %NMYのかんがえは・・・・
 
 text_03B2:
-    string "うーん？これからどうしようか？"              ; en: Hmm? What do I do now?
+    string "Hmm? What do I do now?"       ; ja: うーん？これからどうしようか？
 
 text_03D1:
-    string "%NMYお金持ちぃ☆"                   ; en: <player> is rich ☆
+    string "I'm rich ☆"                   ; ja: %NMYお金持ちぃ☆
 
 text_03E2:
-    string "お給料もらっちゃったー★"                 ; en: I got my pay ★
+    string "I got my pay ★"               ; ja: お給料もらっちゃったー★
 
 text_03FB:
-    string "今日は楽しくなるね★"                   ; en: Today's going to be fun ★
+    string "Today's going to be fun ★"    ; ja: 今日は楽しくなるね★
 
 text_0410:
-    string "エレベーターって楽だね～"                 ; en: Elevators are easy~
+    string "Elevators are easy"          ; ja: エレベーターって楽だね～
 
 text_0429:
-    string "何処に止まるかわからないから%Kキライ！"         ; en: I never know where it stops, / so I hate it!
+    string "I never know where it will%Kstop, so I hate it!"  ; ja: 何処に止まるかわからないから%Kキライ！
 
 text_0450:
-    string "%NMY目が回っちゃった≦"                ; en: <player>'s head is spinning ≦
+    string "My head is spinning ≦"    ; ja: %NMY目が回っちゃった≦
 
 text_0467:
-    string "%NMYピーンチ"                     ; en: <player> is in a pi-inch
+    string "I'm in a bit of a bind."         ; ja: %NMYピーンチ
 
 text_0474:
-    string "無駄使いしちゃったよー≦"                 ; en: I wasted money ≦
+    string "I wasted money ≦"             ; ja: 無駄使いしちゃったよー≦
 
 text_048D:
-    string "なんでこんなお店があるのぉ？"               ; en: Why is there a store like this?
+    string "Why is there a store like this?"  ; ja: なんでこんなお店があるのぉ？
 
 text_04AA:
-    string "ほんとにいいのぉ☆"                    ; en: Is it really okay? ☆
+    string "Is it really okay? ☆"         ; ja: ほんとにいいのぉ☆
 
 text_04BD:
-    string "もしかして%K%NMYだけ特別ぅ☆"            ; en: Could it be / only <player> is special ☆
+    string "Could it be%Konly %NMY is special ☆"  ; ja: もしかして%K%NMYだけ特別ぅ☆
 
 text_04DA:
-    string "なんか得しちゃったみたい☆"                ; en: Seems I got a good deal ☆
+    string "Seems I got a good deal ☆"    ; ja: なんか得しちゃったみたい☆
 
 text_04F5:
-    string "ぶる～・・・"                       ; en: Brrr~...
+    string "Brrr..."                     ; ja: ぶる～・・・
 
 text_0502:
-    string "まあいいか～、たまには"                  ; en: Oh well~, once in a while
+    string "Oh well, just this once"    ; ja: まあいいか～、たまには
 
 text_0519:
-    string "もぉ～、こんなのいらないのに"               ; en: Geez~, I don't even need this
+    string "Geez, I don't even need this"  ; ja: もぉ～、こんなのいらないのに
 
 text_0536:
-    string "%NMYがもーらった☆"                  ; en: <player> got it ☆
+    string "I got it ☆"                ; ja: %NMYがもーらった☆
 
 text_0549:
-    string "なんでもありだよね？"                   ; en: Anything goes, right?
+    string "Anything goes, right?"        ; ja: なんでもありだよね？
 
 text_055E:
-    string "ありがとね☆"                       ; en: Thanks ☆
+    string "Thanks ☆"                     ; ja: ありがとね☆
 
 text_056B:
-    string "お金・・・使いすぎかなぁ"                 ; en: Money... am I spending too much?
+    string "Money... am I spending%Ktoo much of it?"  ; ja: お金・・・使いすぎかなぁ
 
 text_0584:
-    string "%NMYが悪いんじゃなぁい～"               ; en: It's not <player>'s fault~
+    string "It's not my fault."       ; ja: %NMYが悪いんじゃなぁい～
 
 text_059D:
-    string "%NMY使いすぎかなぁ？"                 ; en: Is <player> spending too much?
+    string "Am I spending too much?"   ; ja: %NMY使いすぎかなぁ？
 
 text_05B2:
-    string "%NMY半分いっちゃった☆"                ; en: <player> made it halfway ☆
+    string "I made it halfway ☆"       ; ja: %NMY半分いっちゃった☆
 
 text_05C9:
-    string "もうあと半分ね☆"                     ; en: Just half to go ☆
+    string "Just another half to go ☆"            ; ja: もうあと半分ね☆
 
 text_05DA:
-    string "任せてよ！%NMYに♪"                  ; en: Leave it to <player>! ♪
+    string "Leave it to me! ♪"          ; ja: 任せてよ！%NMYに♪
 
 text_05ED:
-    string "%NMYかなし～≦≦"                   ; en: <player> is sa-ad~ ≦≦
+    string "I'm sad ≦≦"            ; ja: %NMYかなし～≦≦
 
 text_05FE:
-    string "ちょっとだけ待ってくれない？"               ; en: Can't you wait just a little?
+    string "Can't you wait just a little?"  ; ja: ちょっとだけ待ってくれない？
 
 text_061B:
-    string "%NMYって狙われてるの？"                ; en: Is someone after <player>?
+    string "Is someone after me?"       ; ja: %NMYって狙われてるの？
 
 text_0632:
-    string "%NMYここ欲しかったのに≦"               ; en: <player> wanted this place ≦
+    string "I wanted this place ≦"     ; ja: %NMYここ欲しかったのに≦
 
 text_064B:
-    string "お金がたりないよ～≦≦"                  ; en: Not enough money~ ≦≦
+    string "Not enough money ≦≦"         ; ja: お金がたりないよ～≦≦
 
 text_0662:
-    string "誰か%NMYにお金貸して☆"                ; en: Somebody lend <player> money ☆
+    string "Somebody lend me money ☆"  ; ja: 誰か%NMYにお金貸して☆
 
 text_0679:
-    string "%NMYには必要なさそうだね"               ; en: <player> doesn't seem to need it
+    string "I don't seem to need it"  ; ja: %NMYには必要なさそうだね
 
 text_0692:
-    string "今はガマン？かな☆"                    ; en: Hold back for now? I guess ☆
+    string "Hold back for now? I guess ☆"  ; ja: 今はガマン？かな☆
 
 text_06A5:
-    string "今はガマン？かな☆"                    ; en: Hold back for now? I guess ☆
+    string "Hold back for now? I guess ☆"  ; ja: 今はガマン？かな☆
 
 text_06B8:
-    string "きゃは∝"                         ; en: Kyaha ∝
+    string "Kyaha ∝"                      ; ja: きゃは∝
 
 text_06C1:
-    string "%NMYです　よろぴくね"                 ; en: I'm <player>, nice to meetcha
+    string "I'm %NMY, nice to meetcha"    ; ja: %NMYです　よろぴくね
 
 text_06D6:
-    string "・・・・・ばか☆"                     ; en: ..... dummy ☆
+    string "..... dummy ☆"                ; ja: ・・・・・ばか☆
     bytes 0x00    ; padding

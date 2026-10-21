@@ -6,7 +6,8 @@
 #                       1. extract your disc image into disc/ (once; see `make extract`)
 #                       2. split the original EXE's PsyQ library code into asm/ (once)
 #                       3. compile and link build/SLUS_013.33
-#                       4. make the disc image build/topshop.bin / build/topshop.cue
+#                       4. make the disc image build/topshop.bin / build/topshop.cue, with
+#                          the scripts built from scripts/ (the talk in English)
 #   make extract      step 1 alone: CUE=path/to/image.cue, or the one .cue in rom/; the .bin
 #                     must have the MD5 below (ROM_MD5) or the build stops with an error
 #   make split        step 2 alone: regenerate asm/ from disc/SLUS_013.33 with splat
@@ -151,10 +152,13 @@ $(TARGET): $(ELF)
 	truncate -s %2048 $@
 	python3 -I $(TOOLS)/fixexe.py $(CROSS)nm $< $@
 
-# the original disc's files and layout (disc.xml) with the EXE from the build (and, in a CPU_TALK
-# build, the voices of voices/ as XA)
-$(IMAGE): $(TARGET) disc.xml $(BUILD_OPTIONS) $(DISC_VOICES)
-	python3 -I $(TOOLS)/mkdisc.py $(MKDISCFLAGS) disc.xml $(TARGET) $(BUILD)/disc.xml
+# the original disc's files and layout (disc.xml) with the EXE from the build, the scripts built
+# from scripts/ (tools/tss.py build: the talk scripts are in English) and, in a CPU_TALK build, the
+# voices of voices/ as XA
+SCRIPT_SOURCES := $(wildcard scripts/*/*.tss)
+$(IMAGE): $(TARGET) disc.xml $(BUILD_OPTIONS) $(DISC_VOICES) $(SCRIPT_SOURCES)
+	python3 -I $(TOOLS)/tss.py build
+	python3 -I $(TOOLS)/mkdisc.py --scripts scripts/build $(MKDISCFLAGS) disc.xml $(TARGET) $(BUILD)/disc.xml
 	$(MKPSXISO) -y -q $(BUILD)/disc.xml
 	@echo "disc image: $(BUILD)/topshop.cue / $(BUILD)/topshop.bin"
 

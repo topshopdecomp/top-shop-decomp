@@ -1,5 +1,9 @@
 ; TALK.J entry 25 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Oilow says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,7 +59,7 @@
     talk_wait_open
     play_xa 9, $l2                        ; voice: XA track 9 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
@@ -64,230 +68,230 @@
 table_0090:
     words text_01E6, 4, 9                 ; 0.0 (no comment): Across the vast plains ≦≦
     words text_01FF, 4, 9                 ; 0.1 (no comment): So plain, ryu... ≦
-    words text_0210, 1, 7                 ; 0.2 (no comment): Fundamental human rights for <player> too...
+    words text_0210, 1, 7                 ; 0.2 (no comment): Fundamental human rights for / <player> too...
     words text_022D, 3, 6                 ; 1.0 a chain of 4: Special class, ryu ♪
     words text_0246, 3, 6                 ; 1.1 a chain of 4: Size is proof of power, ryu ♪
     words text_0261, 3, 6                 ; 1.2 a chain of 4: With this I've won, ryu ★
-    words text_0276, 3, 6                 ; 2.0 a chain of 2 or 3: Now it's a little more decent, ryu ♭
+    words text_0276, 3, 6                 ; 2.0 a chain of 2 or 3: Now it's a little more decent, / ryu ♭
     words text_0295, 3, 6                 ; 2.1 a chain of 2 or 3: Middle class, ryu ★
     words text_02AA, 3, 6                 ; 2.2 a chain of 2 or 3: I'll earn more, ryu ♪
     words text_02BF, 3, 6                 ; 3.0 landed on a rival store closed for now: Serves you right, ryu ★
-    words text_02D4, 3, 6                 ; 3.1 landed on a rival store closed for now: At times like this I repair my body, ryu
-    words text_02F1, 0, 5                 ; 3.2 landed on a rival store closed for now: ...Nice weather, ryu~∥｜
+    words text_02D4, 3, 6                 ; 3.1 landed on a rival store closed for now: At times like this I repair my / body, ryu
+    words text_02F1, 0, 5                 ; 3.2 landed on a rival store closed for now: ...Nice weather, ryu
     words text_030C, 3, 6                 ; 4.0 landed on a rival store with lowered prices: Cheap makes me happy, ryu ♪
     words text_0323, 3, 6                 ; 4.1 landed on a rival store with lowered prices: Buy it all up, ryu
-    words text_0338, 0, 5                 ; 4.2 landed on a rival store with lowered prices: Will you sell to <player> too, ryu?
+    words text_0338, 0, 5                 ; 4.2 landed on a rival store with lowered prices: Will you sell to <player> too, / ryu?
     words text_0351, 2, 8                 ; 5.0 landed on its own store / opened a store: <player>'s store / is not a curiosity shop, ryu!
-    words text_0378, 0, 5                 ; 5.1 landed on its own store / opened a store: I want you to feel the romance of the unknown, ryu
+    words text_0378, 0, 5                 ; 5.1 landed on its own store / opened a store: I want you to feel the romance of / the unknown, ryu
     words text_0395, 3, 6                 ; 5.2 landed on its own store / opened a store: That's the end for now, ryu ♪
     words text_03B4, 1, 7                 ; 6.0 did not take the elevator: All things pass, ryu...
-    words text_03C9, 4, 9                 ; 6.1 did not take the elevator: Just a little more patience, ryu ≦≦≦
+    words text_03C9, 4, 9                 ; 6.1 did not take the elevator: Just a little more patience, / ryu ≦≦≦
     words text_03E2, 2, 8                 ; 6.2 did not take the elevator: Was it okay to ride it, ryu?!
-    words text_03FB, 3, 6                 ; 7.0 landed on the bank: I got my pay, ryu~
-    words text_0410, 3, 6                 ; 7.1 landed on the bank: I'll buy a mysterious object with this money, ryu ♪
-    words text_042F, 3, 6                 ; 7.2 landed on the bank: Pay ★ It's pay, ryu ★
-    words text_0446, 3, 6                 ; 8.0 took the elevator: There was nothing this convenient in the old days, ryu
+    words text_03FB, 3, 6                 ; 7.0 landed on the bank: I got my pay, ryuuu
+    words text_0410, 3, 6                 ; 7.1 landed on the bank: I'll buy a mysterious object with / this money, ryu ♪
+    words text_042F, 3, 6                 ; 7.2 landed on the bank: Pay ★ I got paid, ryu ★
+    words text_0446, 3, 6                 ; 8.0 took the elevator: There was nothing this convenient / in the old days, ryu
     words text_0465, 1, 7                 ; 8.1 took the elevator: Where shall I go next, ryu?
     words text_047E, 3, 6                 ; 8.2 took the elevator: Elevators are fun, ryu ♪
     words text_049B, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: I'll cast an ancient curse, ryu ∵
     words text_04B6, 4, 9                 ; 9.1 shopping cost a fifth of its money or more: This will ruin me, ryu
     words text_04D3, 2, 8                 ; 9.2 shopping cost a fifth of its money or more: I'll surely get even, ryu ≦
-    words text_04EC, 3, 6                 ; 10.0 shopping: got the money back: I'll decide myself whether it's a loss or a gain, ryu
+    words text_04EC, 3, 6                 ; 10.0 shopping: got the money back: I'll decide myself whether it's a / loss or a gain, ryu
     words text_0505, 0, 5                 ; 10.1 shopping: got the money back: A mystery, ryu ★
-    words text_0510, 0, 5                 ; 10.2 shopping: got the money back: I'd be happy if you paid me back this time too, ryu?
+    words text_0510, 0, 5                 ; 10.2 shopping: got the money back: I'd be happy if you paid me back / this time too, ryu?
     words text_0533, 0, 5                 ; 11.0 shopping: No questions asked, ryu...
     words text_0546, 0, 5                 ; 11.1 shopping: I can't relax, ryu
     words text_0557, 4, 9                 ; 11.2 shopping: I hate everyone, ryu...
     words text_056E, 0, 5                 ; 12.0 bought a rival's store: Are you still trying, ryu?
     words text_0585, 3, 6                 ; 12.1 bought a rival's store: It was a bargain, ryu ★
-    words text_059A, 3, 6                 ; 12.2 bought a rival's store: Great god <player>!!!
-    words text_05AD, 1, 7                 ; 13.0 shopped this turn and the last: The expenses aren't going down at all, ryu ≦
-    words text_05C6, 4, 9                 ; 13.1 shopped this turn and the last: <player> has become useless, ryu ≦
-    words text_05DD, 1, 7                 ; 13.2 shopped this turn and the last: I can't save money like this, ryu ≦
+    words text_059A, 3, 6                 ; 12.2 bought a rival's store: <player>, the great deity!!!
+    words text_05AD, 1, 7                 ; 13.0 shopped this turn and the last: The expenses aren't going down at / all, ryu ≦
+    words text_05C6, 4, 9                 ; 13.1 shopped this turn and the last: <player> has become useless, / ryu ≦
+    words text_05DD, 1, 7                 ; 13.2 shopped this turn and the last: I can't save money like this, / ryu ≦
     words text_05FA, 3, 6                 ; 14.0 assets passed half the goal: Half done, ryu ♪
-    words text_060D, 3, 6                 ; 14.1 assets passed half the goal: <player> will keep at it, ryu ★
-    words text_0628, 3, 6                 ; 14.2 assets passed half the goal: I'll keep trying without letting my guard down, ryu ♭
-    words text_0645, 4, 9                 ; 15.0 sold a store: I'll start over with this as capital, ryu ≦
-    words text_0660, 2, 8                 ; 15.1 sold a store: You'd better be careful on the road at night, ryu
+    words text_060D, 3, 6                 ; 14.1 assets passed half the goal: <player> will keep at it, / ryu ★
+    words text_0628, 3, 6                 ; 14.2 assets passed half the goal: I'll keep trying without letting / my guard down, ryu ♭
+    words text_0645, 4, 9                 ; 15.0 sold a store: I'll start over with this as / capital, ryu ≦
+    words text_0660, 2, 8                 ; 15.1 sold a store: You'd better be careful on the / road at night, ryu
     words text_0683, 4, 9                 ; 15.2 sold a store: I wasn't strong enough... / how frustrating, ryu ≦≦
     words text_06A2, 1, 7                 ; 16.0 declined a vacant lot it could not afford: What a waste, ryu...
-    words text_06B9, 1, 7                 ; 16.1 declined a vacant lot it could not afford: As I thought, not enough money, ryu ≦
+    words text_06B9, 1, 7                 ; 16.1 declined a vacant lot it could not afford: As I thought, not enough money, / ryu ≦
     words text_06D6, 1, 7                 ; 16.2 declined a vacant lot it could not afford: I want a store, ryu
-    words text_06E7, 0, 5                 ; 17.0 declined a vacant lot: I'll save a little more money, ryu ♪
-    words text_0702, 1, 7                 ; 17.1 declined a vacant lot: Should I have bought the store, ryu ≦
+    words text_06E7, 0, 5                 ; 17.0 declined a vacant lot: I'll save a little more money, / ryu ♪
+    words text_0702, 1, 7                 ; 17.1 declined a vacant lot: Should I have bought the store, / ryu ≦
     words text_071D, 0, 5                 ; 17.2 declined a vacant lot: No use crying over it, ryu ≦
     words text_0738, 3, 10                ; 18.0 an event card (the default): Nowahha
     words text_0741, 3, 10                ; 18.1 an event card (the default): Tomorrow's weather: sunny
-    words text_0752, 3, 10                ; 18.2 an event card (the default): Kirarin (sparkle)
+    words text_0752, 3, 10                ; 18.2 an event card (the default): sparkle
 
 text_01E6:
-    string "はるかぁ～そうげんを≦≦"                 ; en: Across the vast plains ≦≦
+    string "Across the vast plains ≦≦"    ; ja: はるかぁ～そうげんを≦≦
 
 text_01FF:
-    string "地味りゅ・・・≦"                     ; en: So plain, ryu... ≦
+    string "So plain, ryu... ≦"           ; ja: 地味りゅ・・・≦
 
 text_0210:
-    string "%NMYにも根本的に人権を・・・"             ; en: Fundamental human rights for <player> too...
+    string "Fundamental human rights for%K%NMY too..."  ; ja: %NMYにも根本的に人権を・・・
 
 text_022D:
-    string "スペシャルクラスだりゅ♪"                 ; en: Special class, ryu ♪
+    string "Special class, ryu ♪"         ; ja: スペシャルクラスだりゅ♪
 
 text_0246:
-    string "大きさは権力のあかしりゅ♪"                ; en: Size is proof of power, ryu ♪
+    string "Size is proof of power, ryu ♪"  ; ja: 大きさは権力のあかしりゅ♪
 
 text_0261:
-    string "これなら勝ったりゅ★"                   ; en: With this I've won, ryu ★
+    string "With this I've won, ryu ★"    ; ja: これなら勝ったりゅ★
 
 text_0276:
-    string "これで少しまともになったりゅ♭"              ; en: Now it's a little more decent, ryu ♭
+    string "Now it's a little more decent,%Kryu ♭"  ; ja: これで少しまともになったりゅ♭
 
 text_0295:
-    string "ミドルクラスかりゅ★"                   ; en: Middle class, ryu ★
+    string "Middle class, ryu ★"          ; ja: ミドルクラスかりゅ★
 
 text_02AA:
-    string "もっと稼いでやりゅ♪"                   ; en: I'll earn more, ryu ♪
+    string "I'll earn more, ryu ♪"        ; ja: もっと稼いでやりゅ♪
 
 text_02BF:
-    string "ざまーみやがれりゅ★"                   ; en: Serves you right, ryu ★
+    string "Serves you right, ryu ★"      ; ja: ざまーみやがれりゅ★
 
 text_02D4:
-    string "こんな時は体の補修をするりゅ"               ; en: At times like this I repair my body, ryu
+    string "At times like this I repair my%Kbody, ryu"  ; ja: こんな時は体の補修をするりゅ
 
 text_02F1:
-    string "・・・いい日和だりゅ～∥｜"                ; en: ...Nice weather, ryu~∥｜
+    string "...Nice weather, ryu"      ; ja: ・・・いい日和だりゅ～∥｜
 
 text_030C:
-    string "安いのはうれしいりゅ♪"                  ; en: Cheap makes me happy, ryu ♪
+    string "Cheap makes me happy, ryu ♪"  ; ja: 安いのはうれしいりゅ♪
 
 text_0323:
-    string "買い占めちゃえだりゅ"                   ; en: Buy it all up, ryu
+    string "Buy it all up, ryu"           ; ja: 買い占めちゃえだりゅ
 
 text_0338:
-    string "%NMYでも売ってくれりゅ？"               ; en: Will you sell to <player> too, ryu?
+    string "Will you sell to %NMY too,%Kryu?"  ; ja: %NMYでも売ってくれりゅ？
 
 text_0351:
-    string "%NMYのお店は%K珍品屋さんじゃないりゅ！"       ; en: <player>'s store / is not a curiosity shop, ryu!
+    string "%NMY's store%Kis not a curiosity shop, ryu!"  ; ja: %NMYのお店は%K珍品屋さんじゃないりゅ！
 
 text_0378:
-    string "未知の浪漫を感じて欲しいりゅ"               ; en: I want you to feel the romance of the unknown, ryu
+    string "I want you to feel the romance of%Kthe unknown, ryu"  ; ja: 未知の浪漫を感じて欲しいりゅ
 
 text_0395:
-    string "とりあえずここでオシマイりゅ♪"              ; en: That's the end for now, ryu ♪
+    string "That's the end for now, ryu ♪"  ; ja: とりあえずここでオシマイりゅ♪
 
 text_03B4:
-    string "諸行無常だりゅ・・・"                   ; en: All things pass, ryu...
+    string "All things pass, ryu..."      ; ja: 諸行無常だりゅ・・・
 
 text_03C9:
-    string "もう少しの辛抱りゅ≦≦≦"                 ; en: Just a little more patience, ryu ≦≦≦
+    string "Just a little more patience,%Kryu ≦≦≦"  ; ja: もう少しの辛抱りゅ≦≦≦
 
 text_03E2:
-    string "のってもよかったりゅ？！"                 ; en: Was it okay to ride it, ryu?!
+    string "Was it okay to ride it, ryu?!"  ; ja: のってもよかったりゅ？！
 
 text_03FB:
-    string "給料をもらえたりゅ～"                   ; en: I got my pay, ryu~
+    string "I got my pay, ryuuu"           ; ja: 給料をもらえたりゅ～
 
 text_0410:
-    string "このお金で謎の物体を買うりゅ♪"              ; en: I'll buy a mysterious object with this money, ryu ♪
+    string "I'll buy a mysterious object with%Kthis money, ryu ♪"  ; ja: このお金で謎の物体を買うりゅ♪
 
 text_042F:
-    string "お給料★お給料だりゅ★"                  ; en: Pay ★ It's pay, ryu ★
+    string "Pay ★ I got paid, ryu ★"        ; ja: お給料★お給料だりゅ★
 
 text_0446:
-    string "こんな便利なの昔はなかったりゅ"              ; en: There was nothing this convenient in the old days, ryu
+    string "There was nothing this convenient%Kin the old days, ryu"  ; ja: こんな便利なの昔はなかったりゅ
 
 text_0465:
-    string "次はどこに行こうかりゅ？"                 ; en: Where shall I go next, ryu?
+    string "Where shall I go next, ryu?"  ; ja: 次はどこに行こうかりゅ？
 
 text_047E:
-    string "エレベーターって楽しいりゅ♪"               ; en: Elevators are fun, ryu ♪
+    string "Elevators are fun, ryu ♪"     ; ja: エレベーターって楽しいりゅ♪
 
 text_049B:
-    string "太古の呪いをかけてやりゅ∵"                ; en: I'll cast an ancient curse, ryu ∵
+    string "I'll cast an ancient curse, ryu ∵"  ; ja: 太古の呪いをかけてやりゅ∵
 
 text_04B6:
-    string "これじゃダメになっちゃうりゅ"               ; en: This will ruin me, ryu
+    string "This will ruin me, ryu"       ; ja: これじゃダメになっちゃうりゅ
 
 text_04D3:
-    string "きっと仕返ししてやりゅ≦"                 ; en: I'll surely get even, ryu ≦
+    string "I'll surely get even, ryu ≦"  ; ja: きっと仕返ししてやりゅ≦
 
 text_04EC:
-    string "損か得かは自分で決めりゅ"                 ; en: I'll decide myself whether it's a loss or a gain, ryu
+    string "I'll decide myself whether it's a%Kloss or a gain, ryu"  ; ja: 損か得かは自分で決めりゅ
 
 text_0505:
-    string "謎だりゅ★"                        ; en: A mystery, ryu ★
+    string "A mystery, ryu ★"             ; ja: 謎だりゅ★
 
 text_0510:
-    string "今度も返してくれるとウレシイりゅ？"            ; en: I'd be happy if you paid me back this time too, ryu?
+    string "I'd be happy if you paid me back%Kthis time too, ryu?"  ; ja: 今度も返してくれるとウレシイりゅ？
 
 text_0533:
-    string "問答無用りゅ・・・"                    ; en: No questions asked, ryu...
+    string "No questions asked, ryu..."   ; ja: 問答無用りゅ・・・
 
 text_0546:
-    string "安心できないりゅ"                     ; en: I can't relax, ryu
+    string "I can't relax, ryu"           ; ja: 安心できないりゅ
 
 text_0557:
-    string "みんなキライりゅ・・・"                  ; en: I hate everyone, ryu...
+    string "I hate everyone, ryu..."      ; ja: みんなキライりゅ・・・
 
 text_056E:
-    string "まだガンバルのかりゅ？"                  ; en: Are you still trying, ryu?
+    string "Are you still trying, ryu?"   ; ja: まだガンバルのかりゅ？
 
 text_0585:
-    string "お買い得だったりゅ★"                   ; en: It was a bargain, ryu ★
+    string "It was a bargain, ryu ★"      ; ja: お買い得だったりゅ★
 
 text_059A:
-    string "%NMY大明神様！！！"                  ; en: Great god <player>!!!
+    string "%NMY, the great deity!!!"            ; ja: %NMY大明神様！！！
 
 text_05AD:
-    string "出費が全然減らないりゅ≦"                 ; en: The expenses aren't going down at all, ryu ≦
+    string "The expenses aren't going down at%Kall, ryu ≦"  ; ja: 出費が全然減らないりゅ≦
 
 text_05C6:
-    string "ダメ%NMYになってりゅ≦"                ; en: <player> has become useless, ryu ≦
+    string "%NMY has become useless,%Kryu ≦"  ; ja: ダメ%NMYになってりゅ≦
 
 text_05DD:
-    string "これじゃお金たまんないりゅ≦"               ; en: I can't save money like this, ryu ≦
+    string "I can't save money like this,%Kryu ≦"  ; ja: これじゃお金たまんないりゅ≦
 
 text_05FA:
-    string "半分終わったりゅ♪"                    ; en: Half done, ryu ♪
+    string "Half done, ryu ♪"             ; ja: 半分終わったりゅ♪
 
 text_060D:
-    string "%NMYはこれからもヤルりゅ★"              ; en: <player> will keep at it, ryu ★
+    string "%NMY will keep at it,%Kryu ★"  ; ja: %NMYはこれからもヤルりゅ★
 
 text_0628:
-    string "気抜かずにガンバルぞぉりゅ♭"               ; en: I'll keep trying without letting my guard down, ryu ♭
+    string "I'll keep trying without letting%Kmy guard down, ryu ♭"  ; ja: 気抜かずにガンバルぞぉりゅ♭
 
 text_0645:
-    string "これを元手にやり直すりゅ≦"                ; en: I'll start over with this as capital, ryu ≦
+    string "I'll start over with this as%Kcapital, ryu ≦"  ; ja: これを元手にやり直すりゅ≦
 
 text_0660:
-    string "夜道には、気をつけたほうがいいりゅ"            ; en: You'd better be careful on the road at night, ryu
+    string "You'd better be careful on the%Kroad at night, ryu"  ; ja: 夜道には、気をつけたほうがいいりゅ
 
 text_0683:
-    string "力及ばず・・・%K悔しいりゅ≦≦"             ; en: I wasn't strong enough... / how frustrating, ryu ≦≦
+    string "I wasn't strong enough...%Khow frustrating, ryu ≦≦"  ; ja: 力及ばず・・・%K悔しいりゅ≦≦
 
 text_06A2:
-    string "もったいないりゅ・・・"                  ; en: What a waste, ryu...
+    string "What a waste, ryu..."         ; ja: もったいないりゅ・・・
 
 text_06B9:
-    string "ヤッパリお金が足りないりゅ≦"               ; en: As I thought, not enough money, ryu ≦
+    string "As I thought, not enough money,%Kryu ≦"  ; ja: ヤッパリお金が足りないりゅ≦
 
 text_06D6:
-    string "お店が欲しいりゅ"                     ; en: I want a store, ryu
+    string "I want a store, ryu"          ; ja: お店が欲しいりゅ
 
 text_06E7:
-    string "もちょっとお金を貯めりゅ♪"                ; en: I'll save a little more money, ryu ♪
+    string "I'll save a little more money,%Kryu ♪"  ; ja: もちょっとお金を貯めりゅ♪
 
 text_0702:
-    string "お店買ってもよかったりゅ≦"                ; en: Should I have bought the store, ryu ≦
+    string "Should I have bought the store,%Kryu ≦"  ; ja: お店買ってもよかったりゅ≦
 
 text_071D:
-    string "後悔しても始まらないりゅ≦"                ; en: No use crying over it, ryu ≦
+    string "No use crying over it, ryu ≦"  ; ja: 後悔しても始まらないりゅ≦
 
 text_0738:
-    string "のわっは"                         ; en: Nowahha
+    string "Nowahha"                      ; ja: のわっは
 
 text_0741:
-    string "明日の天気は晴れ"                     ; en: Tomorrow's weather: sunny
+    string "Tomorrow's weather: sunny"    ; ja: 明日の天気は晴れ
 
 text_0752:
-    string "きらりん"                         ; en: Kirarin (sparkle)
+    string "sparkle"            ; ja: きらりん
     bytes 0x00    ; padding

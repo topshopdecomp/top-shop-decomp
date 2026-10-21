@@ -1,5 +1,9 @@
 ; TALK.J entry 0 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Meower says at the start of a turn (Board_Task step 3201): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnStart_PickScript):
@@ -56,251 +60,251 @@
     talk_wait_open
     play_xa 0, $l2                        ; voice: XA track 0 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01F8, 3, 12                ; 0.0 the first month: Do my best, nyan-nyan ≧
-    words text_020F, 3, 12                ; 0.1 the first month: Let's go-o, nyan-nyan ≧
-    words text_022A, 3, 12                ; 0.2 the first month: Off we go-o, nyan-nyan ≧♪
+    words text_01F8, 3, 12                ; 0.0 the first month: I'll do my best, nyan-nyan ≧
+    words text_020F, 3, 12                ; 0.1 the first month: Let's gooo, nyan-nyan ≧
+    words text_022A, 3, 12                ; 0.2 the first month: Off we gooo, nyan-nyan ≧♪
     words text_024D, 3, 1                 ; 1.0 assets at 7/8 of the goal: Almost there! Nyan-nyan ≧
-    words text_0264, 3, 1                 ; 1.1 assets at 7/8 of the goal: Victory is right ahead, nyan ≧
-    words text_0277, 3, 1                 ; 1.2 assets at 7/8 of the goal: Last spu-urt, nyan ≧
+    words text_0264, 3, 1                 ; 1.1 assets at 7/8 of the goal: Victory is right in front / of me, nyan ≧
+    words text_0277, 3, 1                 ; 1.2 assets at 7/8 of the goal: Last spuuurt, nyan ≧
     words text_028E, 3, 1                 ; 2.0 last at the start of the round, first now: Life is topsy-turvy, nyan-nyan ≧
     words text_02AD, 3, 1                 ; 2.1 last at the start of the round, first now: Time for a toast, nyan ≧ / (good kids, don't copy this)
     words text_02E2, 3, 1                 ; 2.2 last at the start of the round, first now: Thank you, god of cats, nyan ♪≧
     words text_0301, 2, 3                 ; 3.0 first at the start of the round, last now: I'm exploding with anger, nyan ≦
     words text_0312, 1, 2                 ; 3.1 first at the start of the round, last now: I feel like chasing mice / nyan ≦
     words text_033B, 1, 2                 ; 3.2 first at the start of the round, last now: I'm losing my drive, nyan.. ≦
-    words text_0356, 4, 4                 ; 4.0 ahead: a rival store it can't afford: How can they stock such pricey stuff, nyan? / Tell me, nyan ≦≦
-    words text_038D, 1, 2                 ; 4.1 ahead: a rival store it can't afford: I sense something bad up ahead, nya
-    words text_03B0, 4, 4                 ; 4.2 ahead: a rival store it can't afford: Please let me avoid it, nyan
+    words text_0356, 4, 4                 ; 4.0 ahead: a rival store it can't afford: How can they stock such pricey / stuff, nyan? Tell me, nyan ≦≦
+    words text_038D, 1, 2                 ; 4.1 ahead: a rival store it can't afford: I sense something bad up ahead, / nya
+    words text_03B0, 4, 4                 ; 4.2 ahead: a rival store it can't afford: Please let me avoid this, nyan
     words text_03CF, 4, 4                 ; 5.0 ahead: a rival store in a chain of 4: I hate big stores, nyan...
-    words text_03EE, 4, 4                 ; 5.1 ahead: a rival store in a chain of 4: I don't want to go any further, nyan ≦
+    words text_03EE, 4, 4                 ; 5.1 ahead: a rival store in a chain of 4: I don't want to go any further, / nyan ≦
     words text_040D, 4, 4                 ; 5.2 ahead: a rival store in a chain of 4: I'm jealous, nyan...
     words text_0426, 0, 0                 ; 6.0 ahead: a rival store closed, without goods: There's a fun-looking store, nyan
-    words text_043F, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Out on a staff trip? / There's a strange store, nyan
+    words text_043F, 0, 0                 ; 6.1 ahead: a rival store closed, without goods: Out on a staff trip? / That's a strange store, nyan
     words text_0462, 0, 0                 ; 6.2 ahead: a rival store closed, without goods: The draft feels nice, nyan
     words text_0479, 0, 0                 ; 7.0 ahead: its own store without goods: Huh? It's empty, nyan ≦
-    words text_0498, 1, 2                 ; 7.1 ahead: its own store without goods: It sold so well the goods ran out, nyan
-    words text_04BB, 4, 4                 ; 7.2 ahead: its own store without goods: It'll be trouble if they don't restock, nyan ≦
-    words text_04D4, 3, 1                 ; 8.0 the bank on the next square: Nya-nyanya~~ ∥∥｜
+    words text_0498, 1, 2                 ; 7.1 ahead: its own store without goods: It sold so well the goods ran out, / nyan
+    words text_04BB, 4, 4                 ; 7.2 ahead: its own store without goods: It'll be trouble if they don't / restock, nyan ≦
+    words text_04D4, 3, 1                 ; 8.0 the bank on the next square: Nya-nyanyaaaaa
     words text_04ED, 3, 1                 ; 8.1 the bank on the next square: It's payday, nyan ≧
-    words text_04FC, 3, 1                 ; 8.2 the bank on the next square: I think I'll go play pachinko today, nyan ≧
-    words text_051B, 3, 1                 ; 9.0 ranked better than at the start of the round: Nyaooo~ ∥｜n ♪≧
-    words text_0532, 3, 1                 ; 9.1 ranked better than at the start of the round: One stick of catnip, nyan ♪
-    words text_0547, 3, 1                 ; 9.2 ranked better than at the start of the round: Nyufufufu, nya~ ∥｜♪
+    words text_04FC, 3, 1                 ; 8.2 the bank on the next square: I think I'll go play pachinko / today, nyan ≧
+    words text_051B, 3, 1                 ; 9.0 ranked better than at the start of the round: Nyaoooooon ♪≧
+    words text_0532, 3, 1                 ; 9.1 ranked better than at the start of the round: One pinch of catnip, nyan ♪
+    words text_0547, 3, 1                 ; 9.2 ranked better than at the start of the round: Nyufufufu, nyaaa♪
     words text_0560, 4, 4                 ; 10.0 ranked worse: My rank is dropping, nyan... ≦
-    words text_057B, 4, 4                 ; 10.1 ranked worse: I've lost my drive this week, nyan ≦
+    words text_057B, 4, 4                 ; 10.1 ranked worse: I've lost my drive this week, / nyan ≦
     words text_0598, 1, 2                 ; 10.2 ranked worse: ..... Nya?
     words text_05A9, 0, 0                 ; 11.0 ahead: a rival store in a chain: Shopping time, nyan
     words text_05B8, 0, 0                 ; 11.1 ahead: a rival store in a chain: I'm going to waste money, nyan
     words text_05CD, 0, 0                 ; 11.2 ahead: a rival store in a chain: Everyone's doing their best, nyan
     words text_05E4, 0, 0                 ; 12.0 ahead: a vacant lot: I want a store, nyan
     words text_05F7, 3, 1                 ; 12.1 ahead: a vacant lot: I'm like a beckoning cat, nyan ≧
-    words text_060E, 1, 2                 ; 12.2 ahead: a vacant lot: Thick clothes are cramped, nyan
-    words text_0627, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: Nya? / I don't want to make an expensive purchase, nyan
+    words text_060E, 1, 2                 ; 12.2 ahead: a vacant lot: These thick clothes are cramped, / nyan
+    words text_0627, 1, 2                 ; 13.0 ahead: a rival store costing over 1/4 of its money: Nya? I don't want to make an / expensive purchase, nyan
     words text_064C, 4, 4                 ; 13.1 ahead: a rival store costing over 1/4 of its money: It's too expensive to buy, nyan
-    words text_0663, 0, 0                 ; 13.2 ahead: a rival store costing over 1/4 of its money: Nya? / I smell fancy canned cat food, nyan
-    words text_0684, 0, 0                 ; 14.0 ahead: the bank: If things go well I can reach the bank, nyan ≧
-    words text_06A7, 0, 0                 ; 14.1 ahead: the bank: I can see the bank over there, nyan
+    words text_0663, 0, 0                 ; 13.2 ahead: a rival store costing over 1/4 of its money: Nya? I smell fancy canned cat / food, nyan
+    words text_0684, 0, 0                 ; 14.0 ahead: the bank: If I'm lucky I can reach the / bank, nyan ≧
+    words text_06A7, 0, 0                 ; 14.1 ahead: the bank: I can see the bank over there, / nyan
     words text_06C2, 3, 1                 ; 14.2 ahead: the bank: I'll beckon good luck, nyan
     words text_06D7, 4, 4                 ; 15.0 none of its stores ahead: Nyanya? Where did <player>'s / stores go, nyan
-    words text_0708, 4, 4                 ; 15.1 none of its stores ahead: Nyanyanya?! / Danger zo-one, nyan
+    words text_0708, 4, 4                 ; 15.1 none of its stores ahead: Nyanyanya?! / Danger zooone, nyan
     words text_0733, 4, 4                 ; 15.2 none of its stores ahead: Nyanyanya?! / Nothing but rivals, nyan
-    words text_075C, 3, 1                 ; 16.0 ahead: its own store with free goods slots: I want to restock dried bonito, nyan
+    words text_075C, 3, 1                 ; 16.0 ahead: its own store with free goods slots: I want to restock dried bonito, / nyan
     words text_0777, 3, 1                 ; 16.1 ahead: its own store with free goods slots: I want to put out goods soon, nyan
     words text_0792, 3, 1                 ; 16.2 ahead: its own store with free goods slots: Miracle beam! Nyan ♪
-    words text_07AB, 3, 1                 ; 17.0 no direction (after the bank): Another cheerful fork in the road today, nyan ♪≧
+    words text_07AB, 3, 1                 ; 17.0 no direction (after the bank): Another cheerful fork in the road / today, nyan ♪≧
     words text_07CA, 3, 1                 ; 17.1 no direction (after the bank): Paw-pad punch, nyan ♪≧
     words text_07DF, 3, 1                 ; 17.2 no direction (after the bank): I'm a fast walker, nyan ♪
-    words text_07F6, 3, 1                 ; 18.0 no direction, on an elevator square: Changing direction by elevator, nyan
-    words text_0813, 3, 1                 ; 18.1 no direction, on an elevator square: Feeling like a spy in the elevator, nyan
+    words text_07F6, 3, 1                 ; 18.0 no direction, on an elevator square: Changing direction by elevator, / nyan
+    words text_0813, 3, 1                 ; 18.1 no direction, on an elevator square: Feeling like a spy in the / elevator, nyan
     words text_0832, 3, 1                 ; 18.2 no direction, on an elevator square: Nya? I smell tuna, nyan
     words text_084D, 3, 10                ; 19.0 none of these: Nya?!
     words text_0856, 3, 10                ; 19.1 none of these: Nyanya
     words text_085F, 3, 10                ; 19.2 none of these: Nyaha
 
 text_01F8:
-    string "ガンバるニャンニャン≧"                  ; en: Do my best, nyan-nyan ≧
+    string "I'll do my best, nyan-nyan ≧"      ; ja: ガンバるニャンニャン≧
 
 text_020F:
-    string "レッツらゴ～ニャンニャン≧"                ; en: Let's go-o, nyan-nyan ≧
+    string "Let's gooo, nyan-nyan ≧"      ; ja: レッツらゴ～ニャンニャン≧
 
 text_022A:
-    string "しゅっぱつしんこ～ニャンニャン≧♪"            ; en: Off we go-o, nyan-nyan ≧♪
+    string "Off we gooo, nyan-nyan ≧♪"    ; ja: しゅっぱつしんこ～ニャンニャン≧♪
 
 text_024D:
-    string "リーチ！ニャンニャン≧"                  ; en: Almost there! Nyan-nyan ≧
+    string "Almost there! Nyan-nyan ≧"    ; ja: リーチ！ニャンニャン≧
 
 text_0264:
-    string "勝利は目前ニャン≧"                    ; en: Victory is right ahead, nyan ≧
+    string "Victory is right in front%Kof me, nyan ≧"  ; ja: 勝利は目前ニャン≧
 
 text_0277:
-    string "らすとすぱ～とニャン≧"                  ; en: Last spu-urt, nyan ≧
+    string "Last spuuurt, nyan ≧"         ; ja: らすとすぱ～とニャン≧
 
 text_028E:
-    string "人生てんやわんやニャンニャン≧"              ; en: Life is topsy-turvy, nyan-nyan ≧
+    string "Life is topsy-turvy, nyan-nyan ≧"  ; ja: 人生てんやわんやニャンニャン≧
 
 text_02AD:
-    string "祝酒じゃ～ニャン≧%K（良い子はマネしちゃいけないよ）"  ; en: Time for a toast, nyan ≧ / (good kids, don't copy this)
+    string "Time for a toast, nyan ≧%K(good kids, don't copy this)"  ; ja: 祝酒じゃ～ニャン≧%K（良い子はマネしちゃいけないよ）
 
 text_02E2:
-    string "ネコの神様、ありがとニャン♪≧"              ; en: Thank you, god of cats, nyan ♪≧
+    string "Thank you, god of cats, nyan ♪≧"  ; ja: ネコの神様、ありがとニャン♪≧
 
 text_0301:
-    string "怒り爆発ニャン≦"                     ; en: I'm exploding with anger, nyan ≦
+    string "I'm exploding with anger, nyan ≦"  ; ja: 怒り爆発ニャン≦
 
 text_0312:
-    string "ねずみでも追い駆けていたい気分%Kニャン≦"        ; en: I feel like chasing mice / nyan ≦
+    string "I feel like chasing mice%Knyan ≦"  ; ja: ねずみでも追い駆けていたい気分%Kニャン≦
 
 text_033B:
-    string "やる気が失せるニャン・・≦"                ; en: I'm losing my drive, nyan.. ≦
+    string "I'm losing my drive, nyan.. ≦"  ; ja: やる気が失せるニャン・・≦
 
 text_0356:
-    string "なんで高いモノが置けるニャン？%K教えてほしいニャン≦≦"  ; en: How can they stock such pricey stuff, nyan? / Tell me, nyan ≦≦
+    string "How can they stock such pricey%Kstuff, nyan? Tell me, nyan ≦≦"  ; ja: なんで高いモノが置けるニャン？%K教えてほしいニャン≦≦
 
 text_038D:
-    string "この先によからぬモノがある予感ニャ"            ; en: I sense something bad up ahead, nya
+    string "I sense something bad up ahead,%Knya"  ; ja: この先によからぬモノがある予感ニャ
 
 text_03B0:
-    string "どうか回避出来ますようにニャン"              ; en: Please let me avoid it, nyan
+    string "Please let me avoid this, nyan"  ; ja: どうか回避出来ますようにニャン
 
 text_03CF:
-    string "大きなお店はキライニャン・・・"              ; en: I hate big stores, nyan...
+    string "I hate big stores, nyan..."   ; ja: 大きなお店はキライニャン・・・
 
 text_03EE:
-    string "もう先には進みたくないニャン≦"              ; en: I don't want to go any further, nyan ≦
+    string "I don't want to go any further,%Knyan ≦"  ; ja: もう先には進みたくないニャン≦
 
 text_040D:
-    string "うらやましいニャン・・・"                 ; en: I'm jealous, nyan...
+    string "I'm jealous, nyan..."         ; ja: うらやましいニャン・・・
 
 text_0426:
-    string "楽しげなお店があるニャン"                 ; en: There's a fun-looking store, nyan
+    string "There's a fun-looking store, nyan"  ; ja: 楽しげなお店があるニャン
 
 text_043F:
-    string "慰安旅行中？%K変なお店があるニャン"           ; en: Out on a staff trip? / There's a strange store, nyan
+    string "Out on a staff trip?%KThat's a strange store, nyan"  ; ja: 慰安旅行中？%K変なお店があるニャン
 
 text_0462:
-    string "隙間風が心地よいニャン"                  ; en: The draft feels nice, nyan
+    string "The draft feels nice, nyan"   ; ja: 隙間風が心地よいニャン
 
 text_0479:
-    string "あれ？空っぽになってるニャン≦"              ; en: Huh? It's empty, nyan ≦
+    string "Huh? It's empty, nyan ≦"      ; ja: あれ？空っぽになってるニャン≦
 
 text_0498:
-    string "売れすぎて商品がなくなってるニャン"            ; en: It sold so well the goods ran out, nyan
+    string "It sold so well the goods ran out,%Knyan"  ; ja: 売れすぎて商品がなくなってるニャン
 
 text_04BB:
-    string "仕入れないと大変ニャン≦"                 ; en: It'll be trouble if they don't restock, nyan ≦
+    string "It'll be trouble if they don't%Krestock, nyan ≦"  ; ja: 仕入れないと大変ニャン≦
 
 text_04D4:
-    string "ニャッニャニャ～～∥∥｜"                 ; en: Nya-nyanya~~ ∥∥｜
+    string "Nya-nyanyaaaaa"             ; ja: ニャッニャニャ～～∥∥｜
 
 text_04ED:
-    string "給料日ニャン≧"                      ; en: It's payday, nyan ≧
+    string "It's payday, nyan ≧"          ; ja: 給料日ニャン≧
 
 text_04FC:
-    string "今日はパチンコでも行くニャン≧"              ; en: I think I'll go play pachinko today, nyan ≧
+    string "I think I'll go play pachinko%Ktoday, nyan ≧"  ; ja: 今日はパチンコでも行くニャン≧
 
 text_051B:
-    string "ニャおおお～∥｜ん♪≧"                  ; en: Nyaooo~ ∥｜n ♪≧
+    string "Nyaoooooon ♪≧"               ; ja: ニャおおお～∥｜ん♪≧
 
 text_0532:
-    string "マタタビ１本ニャン♪"                   ; en: One stick of catnip, nyan ♪
+    string "One pinch of catnip, nyan ♪"  ; ja: マタタビ１本ニャン♪
 
 text_0547:
-    string "にゅふふふふニャ～∥｜♪"                 ; en: Nyufufufu, nya~ ∥｜♪
+    string "Nyufufufu, nyaaa♪"          ; ja: にゅふふふふニャ～∥｜♪
 
 text_0560:
-    string "順位が下がるニャン・・・≦"                ; en: My rank is dropping, nyan... ≦
+    string "My rank is dropping, nyan... ≦"  ; ja: 順位が下がるニャン・・・≦
 
 text_057B:
-    string "今週はやる気が失せたニャン≦"               ; en: I've lost my drive this week, nyan ≦
+    string "I've lost my drive this week,%Knyan ≦"  ; ja: 今週はやる気が失せたニャン≦
 
 text_0598:
-    string "・・・・・ニャ？"                     ; en: ..... Nya?
+    string "..... Nya?"                   ; ja: ・・・・・ニャ？
 
 text_05A9:
-    string "お買い物ニャン"                      ; en: Shopping time, nyan
+    string "Shopping time, nyan"          ; ja: お買い物ニャン
 
 text_05B8:
-    string "無駄使いしそうニャン"                   ; en: I'm going to waste money, nyan
+    string "I'm going to waste money, nyan"  ; ja: 無駄使いしそうニャン
 
 text_05CD:
-    string "みんな頑張ってるニャン"                  ; en: Everyone's doing their best, nyan
+    string "Everyone's doing their best, nyan"  ; ja: みんな頑張ってるニャン
 
 text_05E4:
-    string "お店がほしいニャン"                    ; en: I want a store, nyan
+    string "I want a store, nyan"         ; ja: お店がほしいニャン
 
 text_05F7:
-    string "招きネコみたいニャン≧"                  ; en: I'm like a beckoning cat, nyan ≧
+    string "I'm like a beckoning cat, nyan ≧"  ; ja: 招きネコみたいニャン≧
 
 text_060E:
-    string "厚着はきゅうくつだニャン"                 ; en: Thick clothes are cramped, nyan
+    string "These thick clothes are cramped,%Knyan"  ; ja: 厚着はきゅうくつだニャン
 
 text_0627:
-    string "ニャ？%K高い買い物はしたくないニャン"          ; en: Nya? / I don't want to make an expensive purchase, nyan
+    string "Nya? I don't want to make an%Kexpensive purchase, nyan"  ; ja: ニャ？%K高い買い物はしたくないニャン
 
 text_064C:
-    string "高すぎて買えないニャン"                  ; en: It's too expensive to buy, nyan
+    string "It's too expensive to buy, nyan"  ; ja: 高すぎて買えないニャン
 
 text_0663:
-    string "ニャ？%K高級ネコ缶のにおいニャン"            ; en: Nya? / I smell fancy canned cat food, nyan
+    string "Nya? I smell fancy canned cat%Kfood, nyan"  ; ja: ニャ？%K高級ネコ缶のにおいニャン
 
 text_0684:
-    string "調子が良ければ銀行に行けるニャン≧"            ; en: If things go well I can reach the bank, nyan ≧
+    string "If I'm lucky I can reach the%Kbank, nyan ≧"  ; ja: 調子が良ければ銀行に行けるニャン≧
 
 text_06A7:
-    string "あっちに銀行が見えるニャン"                ; en: I can see the bank over there, nyan
+    string "I can see the bank over there,%Knyan"  ; ja: あっちに銀行が見えるニャン
 
 text_06C2:
-    string "運を招き寄せるニャン"                   ; en: I'll beckon good luck, nyan
+    string "I'll beckon good luck, nyan"  ; ja: 運を招き寄せるニャン
 
 text_06D7:
-    string "ニャニャ？%NMYのお店は%Kどこに行っちゃったニャン"  ; en: Nyanya? Where did <player>'s / stores go, nyan
+    string "Nyanya? Where did %NMY's%Kstores go, nyan"  ; ja: ニャニャ？%NMYのお店は%Kどこに行っちゃったニャン
 
 text_0708:
-    string "ニャニャニャ？！%Kでんじゃらすぞ～んニャン"       ; en: Nyanyanya?! / Danger zo-one, nyan
+    string "Nyanyanya?!%KDanger zooone, nyan"  ; ja: ニャニャニャ？！%Kでんじゃらすぞ～んニャン
 
 text_0733:
-    string "ニャニャニャ？！%Kライバルばっかりニャン"        ; en: Nyanyanya?! / Nothing but rivals, nyan
+    string "Nyanyanya?!%KNothing but rivals, nyan"  ; ja: ニャニャニャ？！%Kライバルばっかりニャン
 
 text_075C:
-    string "かつお節を補充したいニャン"                ; en: I want to restock dried bonito, nyan
+    string "I want to restock dried bonito,%Knyan"  ; ja: かつお節を補充したいニャン
 
 text_0777:
-    string "はやく品物を置きたいニャン"                ; en: I want to put out goods soon, nyan
+    string "I want to put out goods soon, nyan"  ; ja: はやく品物を置きたいニャン
 
 text_0792:
-    string "みらくるビーム！ニャン♪"                 ; en: Miracle beam! Nyan ♪
+    string "Miracle beam! Nyan ♪"         ; ja: みらくるビーム！ニャン♪
 
 text_07AB:
-    string "今日も元気に分かれ道ニャン♪≧"              ; en: Another cheerful fork in the road today, nyan ♪≧
+    string "Another cheerful fork in the road%Ktoday, nyan ♪≧"  ; ja: 今日も元気に分かれ道ニャン♪≧
 
 text_07CA:
-    string "肉球ぱんちニャン♪≧"                   ; en: Paw-pad punch, nyan ♪≧
+    string "Paw-pad punch, nyan ♪≧"       ; ja: 肉球ぱんちニャン♪≧
 
 text_07DF:
-    string "歩くのは早い方ニャン♪"                  ; en: I'm a fast walker, nyan ♪
+    string "I'm a fast walker, nyan ♪"    ; ja: 歩くのは早い方ニャン♪
 
 text_07F6:
-    string "エレベーターで方向転換ニャン"               ; en: Changing direction by elevator, nyan
+    string "Changing direction by elevator,%Knyan"  ; ja: エレベーターで方向転換ニャン
 
 text_0813:
-    string "エレベーターでスパイ気分ニャン"              ; en: Feeling like a spy in the elevator, nyan
+    string "Feeling like a spy in the%Kelevator, nyan"  ; ja: エレベーターでスパイ気分ニャン
 
 text_0832:
-    string "ニャ？マグロのにおいニャン"                ; en: Nya? I smell tuna, nyan
+    string "Nya? I smell tuna, nyan"      ; ja: ニャ？マグロのにおいニャン
 
 text_084D:
-    string "ニャ？！"                         ; en: Nya?!
+    string "Nya?!"                        ; ja: ニャ？！
 
 text_0856:
-    string "ニャニャ"                         ; en: Nyanya
+    string "Nyanya"                       ; ja: ニャニャ
 
 text_085F:
-    string "ニャハ"                          ; en: Nyaha
+    string "Nyaha"                        ; ja: ニャハ
     words 0    ; padding

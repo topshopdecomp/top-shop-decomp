@@ -1,5 +1,9 @@
 ; TALK.J entry 20 (LZSS-packed)
 ;
+; Edited from the disc's: the texts in English (tools/tss_english.json, fitted to the talk
+; panel), the Japanese in the comments, and the text shown three times as long (90 frames,
+; not 30). `tools/tss.py extract DIR` writes the script as it is on the disc.
+;
 ; What Merlin says at the end of a turn (Board_Task step 9200): on a CPU player's turn, and only
 ; while g_optSkipCpuTalk is 0, which the game never sets (scripts/README.md).
 ; $entry (TurnEnd_PickScript, the TURN_* flag):
@@ -55,239 +59,239 @@
     talk_wait_open
     play_xa 4, $l2                        ; voice: XA track 4 * 16 + $l2 (g_xaSets[1])
     yield
-    wait_buttons_for CROSS|0x300, 30      ; wait for cross, 30 frames at most
+    wait_buttons_for CROSS|0x300, 90      ; wait for cross, 90 frames at most (the disc: 30)
     portrait_hide 0
     talk_close
     talk_wait_closed
     end
 
 table_0090:
-    words text_01E6, 4, 9                 ; 0.0 (no comment): Don't think you've won with this, nyo!
+    words text_01E6, 4, 9                 ; 0.0 (no comment): Don't think you've won with this, / nyo!
     words text_0205, 4, 9                 ; 0.1 (no comment): I can still keep trying, nyo
-    words text_0224, 4, 9                 ; 0.2 (no comment): My kingdom is forever immortal, nyo!!
-    words text_0247, 3, 6                 ; 1.0 a chain of 4: Did you see, nyo! / This is the Super Sorcery Merge, nyo!!
-    words text_0272, 3, 6                 ; 1.1 a chain of 4: This is the might of magical power, nyo
-    words text_0295, 3, 6                 ; 1.2 a chain of 4: The absolutely invincible store is complete, nyo
+    words text_0224, 4, 9                 ; 0.2 (no comment): My kingdom will last forever / and ever, nyo!!
+    words text_0247, 3, 6                 ; 1.0 a chain of 4: Did you see, nyo! This is the / Super Sorcery Merge, nyo!!
+    words text_0272, 3, 6                 ; 1.1 a chain of 4: This is the might of magical / power, nyo
+    words text_0295, 3, 6                 ; 1.2 a chain of 4: The absolutely invincible store is / complete, nyo
     words text_02AC, 3, 6                 ; 2.0 a chain of 2 or 3: This is the Sorcery Merge, nyo!
     words text_02C1, 3, 6                 ; 2.1 a chain of 2 or 3: Merging with magical power, nyo
     words text_02DC, 3, 6                 ; 2.2 a chain of 2 or 3: The plan is going smoothly, nyo
     words text_02F1, 0, 5                 ; 3.0 landed on a rival store closed for now: Peace is best, nyo
     words text_0302, 0, 5                 ; 3.1 landed on a rival store closed for now: Peace is important, nyo
     words text_0313, 0, 5                 ; 3.2 landed on a rival store closed for now: Is this a rest area, nyo?
-    words text_032C, 1, 7                 ; 4.0 landed on a rival store with lowered prices: Was it a good deal, nyo?
+    words text_032C, 1, 7                 ; 4.0 landed on a rival store with lowered prices: Was that a good deal, nyo?
     words text_0341, 3, 6                 ; 4.1 landed on a rival store with lowered prices: Sales are nice, nyo ♪
     words text_0356, 3, 6                 ; 4.2 landed on a rival store with lowered prices: The plan worked, nyo
     words text_0365, 0, 5                 ; 5.0 landed on its own store / opened a store: I'm overcome by homesickness, nyo
-    words text_037C, 0, 5                 ; 5.1 landed on its own store / opened a store: I'll rebuild the plan, nyo
+    words text_037C, 0, 5                 ; 5.1 landed on its own store / opened a store: Time to rethink my strategy, nyo
     words text_038F, 1, 7                 ; 5.2 landed on its own store / opened a store: I'm worried about my homeland, nyo
     words text_03A4, 1, 7                 ; 6.0 did not take the elevator: Should I have used it, nyo?
     words text_03BB, 0, 5                 ; 6.1 did not take the elevator: The elevator is cursed, nyo!
-    words text_03DC, 0, 5                 ; 6.2 did not take the elevator: This is part of the strategy too, nyo
+    words text_03DC, 0, 5                 ; 6.2 did not take the elevator: This is part of the plan too, / nyo
     words text_03F3, 0, 5                 ; 7.0 landed on the bank: Sleepy, nyo
-    words text_03FC, 0, 5                 ; 7.1 landed on the bank: I'll rework the plan, nyo
+    words text_03FC, 0, 5                 ; 7.1 landed on the bank: I'll rethink the plan, nyo
     words text_040F, 0, 5                 ; 7.2 landed on the bank: I'll take a short rest, nyo
     words text_041E, 1, 7                 ; 8.0 took the elevator: Is this another world, nyo?
-    words text_0437, 0, 5                 ; 8.1 took the elevator: Is this what they call science, nyo?
+    words text_0437, 0, 5                 ; 8.1 took the elevator: Is this what they call science, / nyo?
     words text_0452, 3, 6                 ; 8.2 took the elevator: Flying by magic is faster, nyo
-    words text_046D, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: May I cast / Fire Missile, nyo?
-    words text_0498, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: May I fire / Lightning Bolt, nyo?
+    words text_046D, 2, 8                 ; 9.0 shopping cost a fifth of its money or more: May I cast a / Fire Missile, nyo?
+    words text_0498, 0, 5                 ; 9.1 shopping cost a fifth of its money or more: May I fire a / Lightning Bolt, nyo?
     words text_04C3, 4, 9                 ; 9.2 shopping cost a fifth of its money or more: The plan failed, nyo
-    words text_04D2, 3, 6                 ; 10.0 shopping: got the money back: Looks like the curse is taking effect, nyo
-    words text_04F5, 3, 6                 ; 10.1 shopping: got the money back: Looks like the magic is taking effect, nyo
+    words text_04D2, 3, 6                 ; 10.0 shopping: got the money back: Looks like the curse is taking / effect, nyo
+    words text_04F5, 3, 6                 ; 10.1 shopping: got the money back: Looks like the magic is taking / effect, nyo
     words text_0516, 3, 6                 ; 10.2 shopping: got the money back: Power explosion, nyo
     words text_0529, 1, 7                 ; 11.0 shopping: Nyo?
     words text_0530, 1, 7                 ; 11.1 shopping: The money's fine, nyo
     words text_0541, 1, 7                 ; 11.2 shopping: I can't control my power, nyo
-    words text_0558, 3, 6                 ; 12.0 bought a rival's store: My kingdom's national strength went up, nyo
+    words text_0558, 3, 6                 ; 12.0 bought a rival's store: My kingdom's national power / went up, nyo
     words text_0577, 0, 5                 ; 12.1 bought a rival's store: Ready to intercept, nyo
     words text_058A, 0, 5                 ; 12.2 bought a rival's store: Sorry for getting in the way, nyo
-    words text_059F, 2, 8                 ; 13.0 shopped this turn and the last: This is a scheme of the Sorcery Principality, nyo
+    words text_059F, 2, 8                 ; 13.0 shopped this turn and the last: This is the work of a dark / sorcerer, nyo
     words text_05BC, 1, 7                 ; 13.1 shopped this turn and the last: Can't magic do something, nyo?
     words text_05D7, 4, 9                 ; 13.2 shopped this turn and the last: Why am I so unlucky, nyo
-    words text_05F0, 3, 6                 ; 14.0 assets passed half the goal: One step closer to founding a sorcery empire, nyo
-    words text_060F, 3, 6                 ; 14.1 assets passed half the goal: One step closer to my ambition, nyo
+    words text_05F0, 3, 6                 ; 14.0 assets passed half the goal: One step closer to founding a / sorcery empire, nyo
+    words text_060F, 3, 6                 ; 14.1 assets passed half the goal: One step closer to my ambition, / nyo
     words text_062A, 3, 6                 ; 14.2 assets passed half the goal: My magical power went up, nyo!
-    words text_064B, 4, 9                 ; 15.0 sold a store: My kingdom's finances are tight, nyo...
+    words text_064B, 4, 9                 ; 15.0 sold a store: My kingdom's finances are tight, / nyo...
     words text_066C, 2, 8                 ; 15.1 sold a store: I'll get it back right away, nyo!
-    words text_0687, 0, 5                 ; 15.2 sold a store: I'm done with this tenant, nyo
-    words text_06A2, 4, 9                 ; 16.0 declined a vacant lot it could not afford: My kingdom's finances are hard, nyo ≦
+    words text_0687, 0, 5                 ; 15.2 sold a store: I'm done with this store, nyo
+    words text_06A2, 4, 9                 ; 16.0 declined a vacant lot it could not afford: My kingdom's finances are in / a tight spot, nyo ≦
     words text_06BF, 1, 7                 ; 16.1 declined a vacant lot it could not afford: Lend me money, nyo
     words text_06D4, 1, 7                 ; 16.2 declined a vacant lot it could not afford: Oops, nyo! No money, nyo
     words text_06F1, 1, 7                 ; 17.0 declined a vacant lot: I'll hold back for now, nyo
     words text_0702, 1, 7                 ; 17.1 declined a vacant lot: It's a strategy, nyo
     words text_070D, 1, 7                 ; 17.2 declined a vacant lot: I decided not to buy, nyo
-    words text_071E, 3, 10                ; 18.0 an event card (the default): Hmph~ nyo
-    words text_072B, 3, 10                ; 18.1 an event card (the default): Da-a, nyo
+    words text_071E, 3, 10                ; 18.0 an event card (the default): Hmph nyo
+    words text_072B, 3, 10                ; 18.1 an event card (the default): Daaa, nyo
     words text_0736, 3, 10                ; 18.2 an event card (the default): I'll do my best, nyo
 
 text_01E6:
-    string "これで勝ったと思うなにょーー！"              ; en: Don't think you've won with this, nyo!
+    string "Don't think you've won with this,%Knyo!"  ; ja: これで勝ったと思うなにょーー！
 
 text_0205:
-    string "ボクちんはまだガンバれるにょー"              ; en: I can still keep trying, nyo
+    string "I can still keep trying, nyo"  ; ja: ボクちんはまだガンバれるにょー
 
 text_0224:
-    string "我が王国は永遠に不滅にょーーー！！"            ; en: My kingdom is forever immortal, nyo!!
+    string "My kingdom will last forever%Kand ever, nyo!!"  ; ja: 我が王国は永遠に不滅にょーーー！！
 
 text_0247:
-    string "見たかにょ！%Kこれぞ超魔導合体にょーー！！"       ; en: Did you see, nyo! / This is the Super Sorcery Merge, nyo!!
+    string "Did you see, nyo! This is the%KSuper Sorcery Merge, nyo!!"  ; ja: 見たかにょ！%Kこれぞ超魔導合体にょーー！！
 
 text_0272:
-    string "これぞマジカルパワーの威力だにょー"            ; en: This is the might of magical power, nyo
+    string "This is the might of magical%Kpower, nyo"  ; ja: これぞマジカルパワーの威力だにょー
 
 text_0295:
-    string "絶対無敵店の完成にょー"                  ; en: The absolutely invincible store is complete, nyo
+    string "The absolutely invincible store is%Kcomplete, nyo"  ; ja: 絶対無敵店の完成にょー
 
 text_02AC:
-    string "これぞ魔導合体にょ！"                   ; en: This is the Sorcery Merge, nyo!
+    string "This is the Sorcery Merge, nyo!"  ; ja: これぞ魔導合体にょ！
 
 text_02C1:
-    string "マジカルパワーで合体だにょ"                ; en: Merging with magical power, nyo
+    string "Merging with magical power, nyo"  ; ja: マジカルパワーで合体だにょ
 
 text_02DC:
-    string "作戦は順調なのだにょ"                   ; en: The plan is going smoothly, nyo
+    string "The plan is going smoothly, nyo"  ; ja: 作戦は順調なのだにょ
 
 text_02F1:
-    string "平和が１番だにょ"                     ; en: Peace is best, nyo
+    string "Peace is best, nyo"           ; ja: 平和が１番だにょ
 
 text_0302:
-    string "平和が大切だにょ"                     ; en: Peace is important, nyo
+    string "Peace is important, nyo"      ; ja: 平和が大切だにょ
 
 text_0313:
-    string "ここは休憩所なのかにょ？"                 ; en: Is this a rest area, nyo?
+    string "Is this a rest area, nyo?"    ; ja: ここは休憩所なのかにょ？
 
 text_032C:
-    string "お得だったのかにょ？"                   ; en: Was it a good deal, nyo?
+    string "Was that a good deal, nyo?"     ; ja: お得だったのかにょ？
 
 text_0341:
-    string "セールっていいにょ♪"                   ; en: Sales are nice, nyo ♪
+    string "Sales are nice, nyo ♪"        ; ja: セールっていいにょ♪
 
 text_0356:
-    string "作戦成功だにょ"                      ; en: The plan worked, nyo
+    string "The plan worked, nyo"         ; ja: 作戦成功だにょ
 
 text_0365:
-    string "望郷の念にかられるにょ"                  ; en: I'm overcome by homesickness, nyo
+    string "I'm overcome by homesickness, nyo"  ; ja: 望郷の念にかられるにょ
 
 text_037C:
-    string "作戦を立て直すにょ"                    ; en: I'll rebuild the plan, nyo
+    string "Time to rethink my strategy, nyo"   ; ja: 作戦を立て直すにょ
 
 text_038F:
-    string "我が祖国が心配だにょ"                   ; en: I'm worried about my homeland, nyo
+    string "I'm worried about my homeland, nyo"  ; ja: 我が祖国が心配だにょ
 
 text_03A4:
-    string "使ってもよかったにょ？"                  ; en: Should I have used it, nyo?
+    string "Should I have used it, nyo?"  ; ja: 使ってもよかったにょ？
 
 text_03BB:
-    string "エレベーターは呪われているにょ！"             ; en: The elevator is cursed, nyo!
+    string "The elevator is cursed, nyo!"  ; ja: エレベーターは呪われているにょ！
 
 text_03DC:
-    string "これも戦略のうちだにょ"                  ; en: This is part of the strategy too, nyo
+    string "This is part of the plan too,%Knyo"  ; ja: これも戦略のうちだにょ
 
 text_03F3:
-    string "眠いにょ"                         ; en: Sleepy, nyo
+    string "Sleepy, nyo"                  ; ja: 眠いにょ
 
 text_03FC:
-    string "作戦を練り直すにょ"                    ; en: I'll rework the plan, nyo
+    string "I'll rethink the plan, nyo"    ; ja: 作戦を練り直すにょ
 
 text_040F:
-    string "一休みするにょ"                      ; en: I'll take a short rest, nyo
+    string "I'll take a short rest, nyo"  ; ja: 一休みするにょ
 
 text_041E:
-    string "ここは別世界なのかにょ？"                 ; en: Is this another world, nyo?
+    string "Is this another world, nyo?"  ; ja: ここは別世界なのかにょ？
 
 text_0437:
-    string "これが科学というものにょ？"                ; en: Is this what they call science, nyo?
+    string "Is this what they call science,%Knyo?"  ; ja: これが科学というものにょ？
 
 text_0452:
-    string "魔法で飛んだほうが速いにょ"                ; en: Flying by magic is faster, nyo
+    string "Flying by magic is faster, nyo"  ; ja: 魔法で飛んだほうが速いにょ
 
 text_046D:
-    string "ファイヤーミサイルを%K唱えてもいいかにょ？"       ; en: May I cast / Fire Missile, nyo?
+    string "May I cast a%KFire Missile, nyo?"  ; ja: ファイヤーミサイルを%K唱えてもいいかにょ？
 
 text_0498:
-    string "ライトニングボルトを%K撃ってもいいかにょ？"       ; en: May I fire / Lightning Bolt, nyo?
+    string "May I fire a%KLightning Bolt, nyo?"  ; ja: ライトニングボルトを%K撃ってもいいかにょ？
 
 text_04C3:
-    string "作戦失敗だにょ"                      ; en: The plan failed, nyo
+    string "The plan failed, nyo"         ; ja: 作戦失敗だにょ
 
 text_04D2:
-    string "ノロイの効果が効いてきたようだにょ"            ; en: Looks like the curse is taking effect, nyo
+    string "Looks like the curse is taking%Keffect, nyo"  ; ja: ノロイの効果が効いてきたようだにょ
 
 text_04F5:
-    string "マホウの効果がでてきたようだにょ"             ; en: Looks like the magic is taking effect, nyo
+    string "Looks like the magic is taking%Keffect, nyo"  ; ja: マホウの効果がでてきたようだにょ
 
 text_0516:
-    string "パワーさくれつにょ"                    ; en: Power explosion, nyo
+    string "Power explosion, nyo"         ; ja: パワーさくれつにょ
 
 text_0529:
-    string "にょ？"                          ; en: Nyo?
+    string "Nyo?"                         ; ja: にょ？
 
 text_0530:
-    string "お金は大丈夫にょ"                     ; en: The money's fine, nyo
+    string "The money's fine, nyo"        ; ja: お金は大丈夫にょ
 
 text_0541:
-    string "力の制御が効かないにょ"                  ; en: I can't control my power, nyo
+    string "I can't control my power, nyo"  ; ja: 力の制御が効かないにょ
 
 text_0558:
-    string "我が王国の国力がアップしたにょ"              ; en: My kingdom's national strength went up, nyo
+    string "My kingdom's national power%Kwent up, nyo"  ; ja: 我が王国の国力がアップしたにょ
 
 text_0577:
-    string "迎撃準備完了だにょ"                    ; en: Ready to intercept, nyo
+    string "Ready to intercept, nyo"      ; ja: 迎撃準備完了だにょ
 
 text_058A:
-    string "ジャマしてゴメンにょ"                   ; en: Sorry for getting in the way, nyo
+    string "Sorry for getting in the way, nyo"  ; ja: ジャマしてゴメンにょ
 
 text_059F:
-    string "これは魔導公国の策略だにょー"               ; en: This is a scheme of the Sorcery Principality, nyo
+    string "This is the work of a dark%Ksorcerer, nyo"  ; ja: これは魔導公国の策略だにょー
 
 text_05BC:
-    string "魔法で何とかならないにょ？"                ; en: Can't magic do something, nyo?
+    string "Can't magic do something, nyo?"  ; ja: 魔法で何とかならないにょ？
 
 text_05D7:
-    string "なんでこんなに不幸なにょ"                 ; en: Why am I so unlucky, nyo
+    string "Why am I so unlucky, nyo"     ; ja: なんでこんなに不幸なにょ
 
 text_05F0:
-    string "魔導帝国設立に１歩前進したにょ"              ; en: One step closer to founding a sorcery empire, nyo
+    string "One step closer to founding a%Ksorcery empire, nyo"  ; ja: 魔導帝国設立に１歩前進したにょ
 
 text_060F:
-    string "我が野望に１歩前進したにょ"                ; en: One step closer to my ambition, nyo
+    string "One step closer to my ambition,%Knyo"  ; ja: 我が野望に１歩前進したにょ
 
 text_062A:
-    string "マジカルパワーがアップしたにょ！"             ; en: My magical power went up, nyo!
+    string "My magical power went up, nyo!"  ; ja: マジカルパワーがアップしたにょ！
 
 text_064B:
-    string "我が王国の財政は苦しいにょ・・・"             ; en: My kingdom's finances are tight, nyo...
+    string "My kingdom's finances are tight,%Knyo..."  ; ja: 我が王国の財政は苦しいにょ・・・
 
 text_066C:
-    string "すぐに取り返してやるにょ！"                ; en: I'll get it back right away, nyo!
+    string "I'll get it back right away, nyo!"  ; ja: すぐに取り返してやるにょ！
 
 text_0687:
-    string "このテナントは用済みだにょ"                ; en: I'm done with this tenant, nyo
+    string "I'm done with this store, nyo"  ; ja: このテナントは用済みだにょ
 
 text_06A2:
-    string "我が王国の財政は厳しいにょ≦"               ; en: My kingdom's finances are hard, nyo ≦
+    string "My kingdom's finances are in%Ka tight spot, nyo ≦"  ; ja: 我が王国の財政は厳しいにょ≦
 
 text_06BF:
-    string "お金貸して欲しいにょ"                   ; en: Lend me money, nyo
+    string "Lend me money, nyo"           ; ja: お金貸して欲しいにょ
 
 text_06D4:
-    string "しまったにょ！お金が無いにょ"               ; en: Oops, nyo! No money, nyo
+    string "Oops, nyo! No money, nyo"     ; ja: しまったにょ！お金が無いにょ
 
 text_06F1:
-    string "今は我慢するにょ"                     ; en: I'll hold back for now, nyo
+    string "I'll hold back for now, nyo"  ; ja: 今は我慢するにょ
 
 text_0702:
-    string "作戦だにょ"                        ; en: It's a strategy, nyo
+    string "It's a strategy, nyo"         ; ja: 作戦だにょ
 
 text_070D:
-    string "買うのやめたにょ"                     ; en: I decided not to buy, nyo
+    string "I decided not to buy, nyo"    ; ja: 買うのやめたにょ
 
 text_071E:
-    string "ふふ～んにょ"                       ; en: Hmph~ nyo
+    string "Hmph nyo"                    ; ja: ふふ～んにょ
 
 text_072B:
-    string "だーーにょ"                        ; en: Da-a, nyo
+    string "Daaa, nyo"                    ; ja: だーーにょ
 
 text_0736:
-    string "ガンバるにょ"                       ; en: I'll do my best, nyo
+    string "I'll do my best, nyo"         ; ja: ガンバるにょ
     bytes 0x00    ; padding
